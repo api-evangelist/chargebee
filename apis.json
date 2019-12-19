@@ -1,0 +1,131 @@
+{
+    "name": "ChargeBee",
+    "description": "Chargebee lets you automate your recurring billing, manage subscriptions at scale and access metrics that matter.",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/1513-chargebee.jpg",
+    "tags": [
+        "api provider",
+        "billing",
+        "customers",
+        "have api",
+        "have swagger",
+        "payments",
+        "profile",
+        "subscriptions",
+        "webhook implementations"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/chargebee\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "Swagger Chargebee",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/1513-chargebee.jpg",
+            "humanURL": "https:\/\/chargebee.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/swagger-chargebee-openapi.json"
+                },
+                {
+                    "type": "x-openapi",
+                    "url": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-evangelist-site\/company\/openapis\/swagger-chargebee.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Authentication",
+            "url": "https:\/\/apidocs.chargebee.com\/docs\/api#api_authentication"
+        },
+        {
+            "type": "Base",
+            "url": "https:\/\/*.chargebee.com\/api\/"
+        },
+        {
+            "type": "Blog",
+            "url": "http:\/\/blog.chargebee.com"
+        },
+        {
+            "type": "Blog RSS",
+            "url": "http:\/\/feeds.feedburner.com\/ChargeBeeBlog"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "http:\/\/www.crunchbase.com\/company\/chargebee"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "https:\/\/crunchbase.com\/organization\/chargebee"
+        },
+        {
+            "type": "Developers",
+            "url": "https:\/\/apidocs.chargebee.com\/docs\/api"
+        },
+        {
+            "type": "Documentation",
+            "url": "https:\/\/apidocs.chargebee.com\/docs\/api"
+        },
+        {
+            "type": "Email",
+            "url": "work@chargebee.com"
+        },
+        {
+            "type": "Email",
+            "url": "privacy@chargebee.com"
+        },
+        {
+            "type": "Email",
+            "url": "support@chargebee.com"
+        },
+        {
+            "type": "Email",
+            "url": "legal@chargebee.com"
+        },
+        {
+            "type": "Email",
+            "url": "compliance@chargebee.com"
+        },
+        {
+            "type": "Errors",
+            "url": "https:\/\/apidocs.chargebee.com\/docs\/api#error_handling"
+        },
+        {
+            "type": "FAQ",
+            "url": "https:\/\/www.chargebee.com\/faq\/"
+        },
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/chargebee"
+        },
+        {
+            "type": "Swagger",
+            "url": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-definitions\/swagger\/1513-2019-09-03-22-18-29.json"
+        },
+        {
+            "type": "Pricing",
+            "url": "https:\/\/www.chargebee.com\/pricing\/"
+        },
+        {
+            "type": "Security",
+            "url": "https:\/\/www.chargebee.com\/security\/"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/chargebee"
+        },
+        {
+            "type": "Webhooks",
+            "url": "https:\/\/www.chargebee.com\/developers\/webhooks\/"
+        },
+        {
+            "type": "Website",
+            "url": "https:\/\/chargebee.com"
+        }
+    ]
+}
