@@ -1,0 +1,74 @@
+{
+    "id": "835e7b28c6bfff0726f98b59b2a3d607",
+    "name": "Swagger Chargebee",
+    "description": null,
+    "auth": null,
+    "events": null,
+    "variables": [],
+    "order": [],
+    "folders_order": [],
+    "folders": [],
+    "requests": [
+        {
+            "id": "f37c45f2fd5aa3705fd103dca7586319",
+            "name": "",
+            "url": "http:\/\/site.chargebee.com\/api\/v2\/addons",
+            "description": "",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "get",
+            "pathVariableData": [],
+            "queryParams": [
+                {
+                    "key": "limit",
+                    "description": "",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                },
+                {
+                    "key": "offset",
+                    "description": "",
+                    "value": "",
+                    "equals": true,
+                    "enabled": true
+                }
+            ],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "835e7b28c6bfff0726f98b59b2a3d607",
+            "rawModeData": ""
+        },
+        {
+            "id": "ca3d425630bf767c8f04627ef9553d90",
+            "name": "",
+            "url": "http:\/\/site.chargebee.com\/api\/v2\/addons",
+            "description": "",
+            "data": [],
+            "dataMode": "raw",
+            "headerData": null,
+            "method": "post",
+            "pathVariableData": [],
+            "queryParams": [],
+            "auth": null,
+            "events": null,
+            "folder": null,
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "responses": [],
+            "currentHelper": null,
+            "helperAttributes": null,
+            "collectionId": "835e7b28c6bfff0726f98b59b2a3d607",
+            "rawModeData": ""
+        }
+    ]
+}
