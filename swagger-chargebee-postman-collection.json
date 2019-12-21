@@ -1,5 +1,5 @@
 {
-    "id": "835e7b28c6bfff0726f98b59b2a3d607",
+    "id": "61c41cd409216fed300b8fe00457e57b",
     "name": "Swagger Chargebee",
     "description": null,
     "auth": null,
@@ -10,7 +10,7 @@
     "folders": [],
     "requests": [
         {
-            "id": "f37c45f2fd5aa3705fd103dca7586319",
+            "id": "21374d13da056f20846add7c158e533d",
             "name": "",
             "url": "http:\/\/site.chargebee.com\/api\/v2\/addons",
             "description": "",
@@ -44,11 +44,11 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "835e7b28c6bfff0726f98b59b2a3d607",
+            "collectionId": "61c41cd409216fed300b8fe00457e57b",
             "rawModeData": ""
         },
         {
-            "id": "ca3d425630bf767c8f04627ef9553d90",
+            "id": "e4d45a1e2303bc41126462765608094e",
             "name": "",
             "url": "http:\/\/site.chargebee.com\/api\/v2\/addons",
             "description": "",
@@ -67,7 +67,7 @@
             "responses": [],
             "currentHelper": null,
             "helperAttributes": null,
-            "collectionId": "835e7b28c6bfff0726f98b59b2a3d607",
+            "collectionId": "61c41cd409216fed300b8fe00457e57b",
             "rawModeData": ""
         }
     ]
