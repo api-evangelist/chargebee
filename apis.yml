@@ -1,0 +1,90 @@
+aid: chargebee
+name: Chargebee
+description: >-
+  Chargebee is a subscription billing and revenue management platform that
+  enables SaaS and subscription businesses to automate recurring billing,
+  invoicing, payments, dunning, and revenue recognition. The Chargebee REST API
+  v2 provides programmatic access to subscriptions, customers, invoices,
+  payments, plans, addons, coupons, and usage metering, with HTTP Basic Auth
+  using API keys scoped to each Chargebee site.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - Billing
+  - Subscriptions
+  - Recurring Billing
+  - Revenue
+  - Payments
+  - SaaS
+url: >-
+  https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/apis.yml
+created: '2026-05-11'
+modified: '2026-05-11'
+specificationVersion: '0.19'
+apis:
+  - aid: chargebee:chargebee-api
+    name: Chargebee API v2
+    description: >-
+      REST API for managing subscriptions, customers, invoices, payments,
+      product catalog, coupons, usage metering, and revenue recognition.
+      Authentication uses HTTP Basic Auth with a site-scoped API key as the
+      username and an empty password.
+    humanURL: https://apidocs.chargebee.com/docs/api
+    baseURL: https://{site}.chargebee.com/api/v2
+    tags:
+      - Billing
+      - Subscriptions
+      - Invoicing
+      - Payments
+      - Revenue
+    properties:
+      - type: Documentation
+        url: https://apidocs.chargebee.com/docs/api
+      - type: OpenAPI
+        url: https://github.com/chargebee/openapi
+      - type: Getting Started
+        url: https://www.chargebee.com/docs/api/getting-started.html
+
+common:
+  - type: Website
+    url: https://www.chargebee.com
+  - type: Documentation
+    url: https://www.chargebee.com/docs
+  - type: API Reference
+    url: https://apidocs.chargebee.com/docs/api
+  - type: Pricing
+    url: https://www.chargebee.com/pricing/
+  - type: Sign Up
+    url: https://www.chargebee.com/trial-signup/
+  - type: Login
+    url: https://app.chargebee.com/login
+  - type: Authentication
+    url: https://apidocs.chargebee.com/docs/api/auth
+  - type: Rate Limits
+    url: https://apidocs.chargebee.com/docs/api/api-rate-limits
+  - type: Status
+    url: https://status.chargebee.com
+  - type: Support
+    url: https://support.chargebee.com
+  - type: GitHub Organization
+    url: https://github.com/chargebee
+  - type: OpenAPI Source
+    url: https://github.com/chargebee/openapi
+  - type: Node.js SDK
+    url: https://github.com/chargebee/chargebee-node
+  - type: Python SDK
+    url: https://github.com/chargebee/chargebee-python
+  - type: PHP SDK
+    url: https://github.com/chargebee/chargebee-php
+  - type: Java SDK
+    url: https://github.com/chargebee/chargebee-java
+  - type: Ruby SDK
+    url: https://github.com/chargebee/chargebee-ruby
+  - type: Go SDK
+    url: https://github.com/chargebee/chargebee-go
+  - type: .NET SDK
+    url: https://github.com/chargebee/chargebee-dotnet
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
