@@ -46,6 +46,8 @@ apis:
         url: https://www.chargebee.com/docs/api/getting-started.html
 
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/chargebee
   - type: Website
     url: https://www.chargebee.com
   - type: Documentation
