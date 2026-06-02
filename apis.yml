@@ -19,7 +19,7 @@ tags:
 url: >-
   https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/apis.yml
 created: '2026-05-11'
-modified: '2026-05-11'
+modified: '2026-05-30'
 specificationVersion: '0.19'
 apis:
   - aid: chargebee:chargebee-api
@@ -42,6 +42,14 @@ apis:
         url: https://apidocs.chargebee.com/docs/api
       - type: OpenAPI
         url: https://github.com/chargebee/openapi
+      - type: OpenAPI
+        url: https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/openapi/chargebee-openapi.yml
+      - type: AsyncAPI
+        url: https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml
+      - type: Webhooks
+        url: https://apidocs.chargebee.com/docs/api/events
+      - type: EventTypes
+        url: https://apidocs.chargebee.com/docs/api/events/event-types
       - type: GettingStarted
         url: https://www.chargebee.com/docs/api/getting-started.html
 

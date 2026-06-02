@@ -1,0 +1,1674 @@
+asyncapi: 2.6.0
+info:
+  title: Chargebee Webhooks
+  version: "2"
+  description: |
+    AsyncAPI description of Chargebee's webhook (event) surface. When a notable
+    change occurs on a Chargebee site (customer created, subscription cancelled,
+    invoice generated, payment failed, etc.) Chargebee POSTs an Event object to
+    each configured webhook endpoint. This document models the Event envelope
+    and the documented event_type identifiers grouped by resource category.
+
+    Event types are sourced from
+    https://apidocs.chargebee.com/docs/api/events/event-types. The content
+    object carried inside each event holds the relevant resource(s)
+    (subscription, customer, invoice, transaction, credit_note, etc.) — the
+    detailed resource schemas live in the Chargebee REST API reference and the
+    Chargebee OpenAPI repository (https://github.com/chargebee/openapi).
+  contact:
+    name: Chargebee API Support
+    url: https://www.chargebee.com/docs/api
+  externalDocs:
+    description: Chargebee Events documentation
+    url: https://apidocs.chargebee.com/docs/api/events
+defaultContentType: application/json
+servers:
+  webhook:
+    url: '{your_endpoint_url}'
+    protocol: https
+    description: |
+      Customer-hosted HTTPS endpoint registered in the Chargebee site under
+      Settings > Webhooks. Chargebee POSTs each event as JSON to this URL.
+      Endpoints may be secured with HTTP Basic Auth credentials configured on
+      the webhook.
+    variables:
+      your_endpoint_url:
+        default: https://example.com/chargebee/webhook
+        description: The HTTPS URL you registered with Chargebee for webhook delivery.
+    security:
+      - basicAuth: []
+channels:
+  customer:
+    description: Customer lifecycle events.
+    subscribe:
+      operationId: receiveCustomerEvent
+      summary: Receive a Chargebee customer event.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/CustomerChanged'
+          - $ref: '#/components/messages/CustomerCreated'
+          - $ref: '#/components/messages/CustomerDeleted'
+          - $ref: '#/components/messages/CustomerMovedIn'
+          - $ref: '#/components/messages/CustomerMovedOut'
+          - $ref: '#/components/messages/CustomerBusinessEntityChanged'
+          - $ref: '#/components/messages/CustomerEntitlementsUpdated'
+  subscription:
+    description: Subscription lifecycle events.
+    subscribe:
+      operationId: receiveSubscriptionEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/SubscriptionActivated'
+          - $ref: '#/components/messages/SubscriptionActivatedWithBackdating'
+          - $ref: '#/components/messages/SubscriptionAdvanceInvoiceScheduleAdded'
+          - $ref: '#/components/messages/SubscriptionAdvanceInvoiceScheduleRemoved'
+          - $ref: '#/components/messages/SubscriptionAdvanceInvoiceScheduleUpdated'
+          - $ref: '#/components/messages/SubscriptionBusinessEntityChanged'
+          - $ref: '#/components/messages/SubscriptionCanceledWithBackdating'
+          - $ref: '#/components/messages/SubscriptionCancellationReminder'
+          - $ref: '#/components/messages/SubscriptionCancellationScheduled'
+          - $ref: '#/components/messages/SubscriptionCancelled'
+          - $ref: '#/components/messages/SubscriptionChanged'
+          - $ref: '#/components/messages/SubscriptionChangedWithBackdating'
+          - $ref: '#/components/messages/SubscriptionChangesScheduled'
+          - $ref: '#/components/messages/SubscriptionCreated'
+          - $ref: '#/components/messages/SubscriptionCreatedWithBackdating'
+          - $ref: '#/components/messages/SubscriptionDeleted'
+          - $ref: '#/components/messages/SubscriptionEntitlementsCreated'
+          - $ref: '#/components/messages/SubscriptionEntitlementsUpdated'
+          - $ref: '#/components/messages/SubscriptionItemsRenewed'
+          - $ref: '#/components/messages/SubscriptionMovedIn'
+          - $ref: '#/components/messages/SubscriptionMovedOut'
+          - $ref: '#/components/messages/SubscriptionMovementFailed'
+          - $ref: '#/components/messages/SubscriptionPauseScheduled'
+          - $ref: '#/components/messages/SubscriptionPaused'
+          - $ref: '#/components/messages/SubscriptionRampApplied'
+          - $ref: '#/components/messages/SubscriptionRampCreated'
+          - $ref: '#/components/messages/SubscriptionRampDeleted'
+          - $ref: '#/components/messages/SubscriptionRampDrafted'
+          - $ref: '#/components/messages/SubscriptionRampUpdated'
+          - $ref: '#/components/messages/SubscriptionReactivated'
+          - $ref: '#/components/messages/SubscriptionReactivatedWithBackdating'
+          - $ref: '#/components/messages/SubscriptionRenewalReminder'
+          - $ref: '#/components/messages/SubscriptionRenewed'
+          - $ref: '#/components/messages/SubscriptionResumed'
+          - $ref: '#/components/messages/SubscriptionResumptionScheduled'
+          - $ref: '#/components/messages/SubscriptionScheduledCancellationRemoved'
+          - $ref: '#/components/messages/SubscriptionScheduledChangesRemoved'
+          - $ref: '#/components/messages/SubscriptionScheduledPauseRemoved'
+          - $ref: '#/components/messages/SubscriptionScheduledResumptionRemoved'
+          - $ref: '#/components/messages/SubscriptionShippingAddressUpdated'
+          - $ref: '#/components/messages/SubscriptionStarted'
+          - $ref: '#/components/messages/SubscriptionTrialEndReminder'
+          - $ref: '#/components/messages/SubscriptionTrialExtended'
+  invoice:
+    description: Invoice and pending-invoice lifecycle events.
+    subscribe:
+      operationId: receiveInvoiceEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/InvoiceDeleted'
+          - $ref: '#/components/messages/InvoiceGenerated'
+          - $ref: '#/components/messages/InvoiceGeneratedWithBackdating'
+          - $ref: '#/components/messages/InvoiceUpdated'
+          - $ref: '#/components/messages/PendingInvoiceCreated'
+          - $ref: '#/components/messages/PendingInvoiceUpdated'
+  credit_note:
+    description: Credit note lifecycle events.
+    subscribe:
+      operationId: receiveCreditNoteEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/CreditNoteCreated'
+          - $ref: '#/components/messages/CreditNoteCreatedWithBackdating'
+          - $ref: '#/components/messages/CreditNoteDeleted'
+          - $ref: '#/components/messages/CreditNoteUpdated'
+  transaction:
+    description: Transaction lifecycle events.
+    subscribe:
+      operationId: receiveTransactionEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/TransactionCreated'
+          - $ref: '#/components/messages/TransactionDeleted'
+          - $ref: '#/components/messages/TransactionUpdated'
+  payment:
+    description: Payment, refund, and payment intent events.
+    subscribe:
+      operationId: receivePaymentEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/AuthorizationSucceeded'
+          - $ref: '#/components/messages/AuthorizationVoided'
+          - $ref: '#/components/messages/PaymentDueReminder'
+          - $ref: '#/components/messages/PaymentFailed'
+          - $ref: '#/components/messages/PaymentInitiated'
+          - $ref: '#/components/messages/PaymentIntentCreated'
+          - $ref: '#/components/messages/PaymentIntentUpdated'
+          - $ref: '#/components/messages/PaymentRefunded'
+          - $ref: '#/components/messages/PaymentSucceeded'
+          - $ref: '#/components/messages/RefundInitiated'
+  payment_source:
+    description: Payment source (card, bank account, etc.) events.
+    subscribe:
+      operationId: receivePaymentSourceEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/CardAdded'
+          - $ref: '#/components/messages/CardDeleted'
+          - $ref: '#/components/messages/CardExpired'
+          - $ref: '#/components/messages/CardExpiryReminder'
+          - $ref: '#/components/messages/CardUpdated'
+          - $ref: '#/components/messages/PaymentSourceAdded'
+          - $ref: '#/components/messages/PaymentSourceDeleted'
+          - $ref: '#/components/messages/PaymentSourceExpired'
+          - $ref: '#/components/messages/PaymentSourceExpiring'
+          - $ref: '#/components/messages/PaymentSourceLocallyDeleted'
+          - $ref: '#/components/messages/PaymentSourceUpdated'
+          - $ref: '#/components/messages/VirtualBankAccountAdded'
+          - $ref: '#/components/messages/VirtualBankAccountDeleted'
+          - $ref: '#/components/messages/VirtualBankAccountUpdated'
+  payment_schedule:
+    description: Payment schedule scheme and instance events.
+    subscribe:
+      operationId: receivePaymentScheduleEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/PaymentScheduleSchemeCreated'
+          - $ref: '#/components/messages/PaymentScheduleSchemeDeleted'
+          - $ref: '#/components/messages/PaymentSchedulesCreated'
+          - $ref: '#/components/messages/PaymentSchedulesUpdated'
+  gift:
+    description: Gift subscription events.
+    subscribe:
+      operationId: receiveGiftEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/GiftCancelled'
+          - $ref: '#/components/messages/GiftClaimed'
+          - $ref: '#/components/messages/GiftExpired'
+          - $ref: '#/components/messages/GiftScheduled'
+          - $ref: '#/components/messages/GiftUnclaimed'
+          - $ref: '#/components/messages/GiftUpdated'
+  quote:
+    description: Quote lifecycle events.
+    subscribe:
+      operationId: receiveQuoteEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/QuoteCreated'
+          - $ref: '#/components/messages/QuoteDeleted'
+          - $ref: '#/components/messages/QuoteUpdated'
+  coupon:
+    description: Coupon, coupon set, and coupon code events.
+    subscribe:
+      operationId: receiveCouponEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/CouponCreated'
+          - $ref: '#/components/messages/CouponDeleted'
+          - $ref: '#/components/messages/CouponUpdated'
+          - $ref: '#/components/messages/CouponSetCreated'
+          - $ref: '#/components/messages/CouponSetDeleted'
+          - $ref: '#/components/messages/CouponSetUpdated'
+          - $ref: '#/components/messages/CouponCodesAdded'
+          - $ref: '#/components/messages/CouponCodesDeleted'
+          - $ref: '#/components/messages/CouponCodesUpdated'
+  item:
+    description: Product catalog v2 item, item price, item family, and differential price events.
+    subscribe:
+      operationId: receiveItemEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ItemCreated'
+          - $ref: '#/components/messages/ItemDeleted'
+          - $ref: '#/components/messages/ItemUpdated'
+          - $ref: '#/components/messages/ItemFamilyCreated'
+          - $ref: '#/components/messages/ItemFamilyDeleted'
+          - $ref: '#/components/messages/ItemFamilyUpdated'
+          - $ref: '#/components/messages/ItemPriceCreated'
+          - $ref: '#/components/messages/ItemPriceDeleted'
+          - $ref: '#/components/messages/ItemPriceUpdated'
+          - $ref: '#/components/messages/ItemEntitlementsRemoved'
+          - $ref: '#/components/messages/ItemEntitlementsUpdated'
+          - $ref: '#/components/messages/ItemPriceEntitlementsRemoved'
+          - $ref: '#/components/messages/ItemPriceEntitlementsUpdated'
+          - $ref: '#/components/messages/AttachedItemCreated'
+          - $ref: '#/components/messages/AttachedItemDeleted'
+          - $ref: '#/components/messages/AttachedItemUpdated'
+          - $ref: '#/components/messages/DifferentialPriceCreated'
+          - $ref: '#/components/messages/DifferentialPriceDeleted'
+          - $ref: '#/components/messages/DifferentialPriceUpdated'
+          - $ref: '#/components/messages/PriceVariantCreated'
+          - $ref: '#/components/messages/PriceVariantDeleted'
+          - $ref: '#/components/messages/PriceVariantUpdated'
+  feature:
+    description: Entitlement feature lifecycle events.
+    subscribe:
+      operationId: receiveFeatureEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/FeatureActivated'
+          - $ref: '#/components/messages/FeatureArchived'
+          - $ref: '#/components/messages/FeatureCreated'
+          - $ref: '#/components/messages/FeatureDeleted'
+          - $ref: '#/components/messages/FeatureReactivated'
+          - $ref: '#/components/messages/FeatureUpdated'
+  entitlement_override:
+    description: Customer-level entitlement override events.
+    subscribe:
+      operationId: receiveEntitlementOverrideEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/EntitlementOverridesAutoRemoved'
+          - $ref: '#/components/messages/EntitlementOverridesRemoved'
+          - $ref: '#/components/messages/EntitlementOverridesUpdated'
+  order:
+    description: Order and sales order events.
+    subscribe:
+      operationId: receiveOrderEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/OrderCancelled'
+          - $ref: '#/components/messages/OrderCreated'
+          - $ref: '#/components/messages/OrderDeleted'
+          - $ref: '#/components/messages/OrderDelivered'
+          - $ref: '#/components/messages/OrderReadyToProcess'
+          - $ref: '#/components/messages/OrderReadyToShip'
+          - $ref: '#/components/messages/OrderResent'
+          - $ref: '#/components/messages/OrderReturned'
+          - $ref: '#/components/messages/OrderUpdated'
+          - $ref: '#/components/messages/SalesOrderCreated'
+          - $ref: '#/components/messages/SalesOrderUpdated'
+  contract_term:
+    description: Subscription contract term events.
+    subscribe:
+      operationId: receiveContractTermEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ContractTermCancelled'
+          - $ref: '#/components/messages/ContractTermCompleted'
+          - $ref: '#/components/messages/ContractTermCreated'
+          - $ref: '#/components/messages/ContractTermRenewed'
+          - $ref: '#/components/messages/ContractTermTerminated'
+  business_entity:
+    description: Business entity and hierarchy events.
+    subscribe:
+      operationId: receiveBusinessEntityEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/BusinessEntityCreated'
+          - $ref: '#/components/messages/BusinessEntityDeleted'
+          - $ref: '#/components/messages/BusinessEntityUpdated'
+          - $ref: '#/components/messages/HierarchyCreated'
+          - $ref: '#/components/messages/HierarchyDeleted'
+  promotional_credits:
+    description: Promotional credit ledger events.
+    subscribe:
+      operationId: receivePromotionalCreditsEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/PromotionalCreditsAdded'
+          - $ref: '#/components/messages/PromotionalCreditsDeducted'
+  unbilled_charges:
+    description: Unbilled charge lifecycle events.
+    subscribe:
+      operationId: receiveUnbilledChargesEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/UnbilledChargesCreated'
+          - $ref: '#/components/messages/UnbilledChargesDeleted'
+          - $ref: '#/components/messages/UnbilledChargesInvoiced'
+          - $ref: '#/components/messages/UnbilledChargesVoided'
+  token:
+    description: Payment token events (tokenization).
+    subscribe:
+      operationId: receiveTokenEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/TokenConsumed'
+          - $ref: '#/components/messages/TokenCreated'
+          - $ref: '#/components/messages/TokenExpired'
+  voucher:
+    description: Voucher events.
+    subscribe:
+      operationId: receiveVoucherEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/VoucherCreated'
+          - $ref: '#/components/messages/VoucherCreateFailed'
+          - $ref: '#/components/messages/VoucherExpired'
+  tax_withheld:
+    description: Tax withheld lifecycle events.
+    subscribe:
+      operationId: receiveTaxWithheldEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/TaxWithheldDeleted'
+          - $ref: '#/components/messages/TaxWithheldRecorded'
+          - $ref: '#/components/messages/TaxWithheldRefunded'
+  rule:
+    description: Rule lifecycle events.
+    subscribe:
+      operationId: receiveRuleEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/RuleCreated'
+          - $ref: '#/components/messages/RuleDeleted'
+          - $ref: '#/components/messages/RuleUpdated'
+  usage:
+    description: Usage metering events.
+    subscribe:
+      operationId: receiveUsageEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/AddUsagesReminder'
+          - $ref: '#/components/messages/UsageFileIngested'
+  purchase:
+    description: Purchase events.
+    subscribe:
+      operationId: receivePurchaseEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/PurchaseCreated'
+          - $ref: '#/components/messages/RecordPurchaseFailed'
+  omnichannel:
+    description: Omnichannel subscription and transaction events (Chargebee Omnichannel).
+    subscribe:
+      operationId: receiveOmnichannelEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/OmnichannelOneTimeOrderCreated'
+          - $ref: '#/components/messages/OmnichannelOneTimeOrderItemCancelled'
+          - $ref: '#/components/messages/OmnichannelSubscriptionCreated'
+          - $ref: '#/components/messages/OmnichannelSubscriptionImported'
+          - $ref: '#/components/messages/OmnichannelSubscriptionMovedIn'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemCancellationScheduled'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemCancelled'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemChangeScheduled'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemChanged'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemDowngraded'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemDunningExpired'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemDunningStarted'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemExpired'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemGracePeriodExpired'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemGracePeriodStarted'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemPauseScheduled'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemPaused'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemReactivated'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemRecovered'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemRenewed'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemResubscribed'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemResumed'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemScheduledCancellationRemoved'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemScheduledChangeRemoved'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemUpdated'
+          - $ref: '#/components/messages/OmnichannelSubscriptionItemUpgraded'
+          - $ref: '#/components/messages/OmnichannelTransactionCreated'
+  site_signals:
+    description: Site-wide signal events (alerts, dunning, MRR).
+    subscribe:
+      operationId: receiveSiteSignalEvent
+      message:
+        oneOf:
+          - $ref: '#/components/messages/AlertStatusChanged'
+          - $ref: '#/components/messages/DunningUpdated'
+          - $ref: '#/components/messages/MrrUpdated'
+components:
+  securitySchemes:
+    basicAuth:
+      type: userPassword
+      description: |
+        Optional HTTP Basic Auth credentials configured on the webhook endpoint
+        in the Chargebee site UI. Chargebee sends these credentials in the
+        Authorization header on each webhook POST.
+  schemas:
+    EventSource:
+      type: string
+      description: Origin of the operation that produced the event.
+      enum:
+        - admin_console
+        - api
+        - bulk_operation
+        - external_service
+        - hosted_page
+        - migration
+        - portal
+        - scheduled_job
+        - system
+    ApiVersion:
+      type: string
+      description: Indicates whether the event content follows v1 or v2 API structure.
+      enum:
+        - v1
+        - v2
+    WebhookStatus:
+      type: string
+      description: Delivery status for a webhook attempt.
+      enum:
+        - scheduled
+        - succeeded
+        - re_scheduled
+        - failed
+        - skipped
+        - not_configured
+    WebhookCall:
+      type: object
+      description: One row in the event.webhooks array; describes a webhook delivery attempt.
+      properties:
+        id:
+          type: string
+        webhook_status:
+          $ref: '#/components/schemas/WebhookStatus'
+        object:
+          type: string
+          enum: [webhook]
+        webhook_name:
+          type: string
+    EventContent:
+      type: object
+      description: |
+        Resource payload for the event. Chargebee places one or more resource
+        objects (e.g. subscription, customer, invoice, transaction, credit_note,
+        card, payment_source, coupon, item, item_price, quote, gift, order,
+        unbilled_charge, business_entity, etc.) here, keyed by resource name.
+        The exact set of keys depends on event_type. Full resource schemas are
+        published in the Chargebee REST API reference and OpenAPI repository.
+      additionalProperties: true
+    Event:
+      type: object
+      description: |
+        Chargebee Event envelope. Every webhook POST body has shape `{ id, ... ,
+        event_type, content: { ... } }` with these fields.
+      required:
+        - id
+        - occurred_at
+        - source
+        - event_type
+        - api_version
+        - content
+      properties:
+        id:
+          type: string
+          maxLength: 40
+          description: Unique identifier for the event.
+        occurred_at:
+          type: integer
+          format: int64
+          description: UTC seconds at which the event occurred.
+        source:
+          $ref: '#/components/schemas/EventSource'
+        user:
+          type: string
+          description: |
+            Identifier of who triggered the event (email for admin_console,
+            API key name for api, service name for external_service, etc.).
+        webhook_status:
+          $ref: '#/components/schemas/WebhookStatus'
+        webhook_failure_reason:
+          type: string
+          description: Populated when a previous webhook delivery attempt failed.
+        webhooks:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookCall'
+        object:
+          type: string
+          enum: [event]
+        api_version:
+          $ref: '#/components/schemas/ApiVersion'
+        event_type:
+          type: string
+          description: The specific event_type identifier.
+        origin_user:
+          type: string
+          description: Optional email captured via the chargebee-event-origin-user custom header.
+        content:
+          $ref: '#/components/schemas/EventContent'
+  messageTraits:
+    EventEnvelopeTrait:
+      headers:
+        type: object
+        properties:
+          Content-Type:
+            type: string
+            enum: [application/json]
+          User-Agent:
+            type: string
+            description: Chargebee user agent string.
+          Authorization:
+            type: string
+            description: HTTP Basic credentials if configured for the webhook endpoint.
+      contentType: application/json
+  messages:
+    # ---------- Customer ----------
+    CustomerChanged:
+      name: customer_changed
+      title: customer_changed
+      summary: A customer was changed.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CustomerCreated:
+      name: customer_created
+      title: customer_created
+      summary: A new customer was created.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CustomerDeleted:
+      name: customer_deleted
+      title: customer_deleted
+      summary: A customer was deleted.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CustomerMovedIn:
+      name: customer_moved_in
+      title: customer_moved_in
+      summary: A customer was moved into the site.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CustomerMovedOut:
+      name: customer_moved_out
+      title: customer_moved_out
+      summary: A customer was moved out of the site.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CustomerBusinessEntityChanged:
+      name: customer_business_entity_changed
+      title: customer_business_entity_changed
+      summary: A customer's business entity was changed.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CustomerEntitlementsUpdated:
+      name: customer_entitlements_updated
+      title: customer_entitlements_updated
+      summary: A customer's entitlements were updated.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Subscription ----------
+    SubscriptionActivated:
+      name: subscription_activated
+      title: subscription_activated
+      summary: Subscription moved out of trial into active state.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionActivatedWithBackdating:
+      name: subscription_activated_with_backdating
+      title: subscription_activated_with_backdating
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionAdvanceInvoiceScheduleAdded:
+      name: subscription_advance_invoice_schedule_added
+      title: subscription_advance_invoice_schedule_added
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionAdvanceInvoiceScheduleRemoved:
+      name: subscription_advance_invoice_schedule_removed
+      title: subscription_advance_invoice_schedule_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionAdvanceInvoiceScheduleUpdated:
+      name: subscription_advance_invoice_schedule_updated
+      title: subscription_advance_invoice_schedule_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionBusinessEntityChanged:
+      name: subscription_business_entity_changed
+      title: subscription_business_entity_changed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionCanceledWithBackdating:
+      name: subscription_canceled_with_backdating
+      title: subscription_canceled_with_backdating
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionCancellationReminder:
+      name: subscription_cancellation_reminder
+      title: subscription_cancellation_reminder
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionCancellationScheduled:
+      name: subscription_cancellation_scheduled
+      title: subscription_cancellation_scheduled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionCancelled:
+      name: subscription_cancelled
+      title: subscription_cancelled
+      summary: Subscription was cancelled.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionChanged:
+      name: subscription_changed
+      title: subscription_changed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionChangedWithBackdating:
+      name: subscription_changed_with_backdating
+      title: subscription_changed_with_backdating
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionChangesScheduled:
+      name: subscription_changes_scheduled
+      title: subscription_changes_scheduled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionCreated:
+      name: subscription_created
+      title: subscription_created
+      summary: A new subscription was created.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionCreatedWithBackdating:
+      name: subscription_created_with_backdating
+      title: subscription_created_with_backdating
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionDeleted:
+      name: subscription_deleted
+      title: subscription_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionEntitlementsCreated:
+      name: subscription_entitlements_created
+      title: subscription_entitlements_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionEntitlementsUpdated:
+      name: subscription_entitlements_updated
+      title: subscription_entitlements_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionItemsRenewed:
+      name: subscription_items_renewed
+      title: subscription_items_renewed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionMovedIn:
+      name: subscription_moved_in
+      title: subscription_moved_in
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionMovedOut:
+      name: subscription_moved_out
+      title: subscription_moved_out
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionMovementFailed:
+      name: subscription_movement_failed
+      title: subscription_movement_failed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionPauseScheduled:
+      name: subscription_pause_scheduled
+      title: subscription_pause_scheduled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionPaused:
+      name: subscription_paused
+      title: subscription_paused
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionRampApplied:
+      name: subscription_ramp_applied
+      title: subscription_ramp_applied
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionRampCreated:
+      name: subscription_ramp_created
+      title: subscription_ramp_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionRampDeleted:
+      name: subscription_ramp_deleted
+      title: subscription_ramp_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionRampDrafted:
+      name: subscription_ramp_drafted
+      title: subscription_ramp_drafted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionRampUpdated:
+      name: subscription_ramp_updated
+      title: subscription_ramp_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionReactivated:
+      name: subscription_reactivated
+      title: subscription_reactivated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionReactivatedWithBackdating:
+      name: subscription_reactivated_with_backdating
+      title: subscription_reactivated_with_backdating
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionRenewalReminder:
+      name: subscription_renewal_reminder
+      title: subscription_renewal_reminder
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionRenewed:
+      name: subscription_renewed
+      title: subscription_renewed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionResumed:
+      name: subscription_resumed
+      title: subscription_resumed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionResumptionScheduled:
+      name: subscription_resumption_scheduled
+      title: subscription_resumption_scheduled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionScheduledCancellationRemoved:
+      name: subscription_scheduled_cancellation_removed
+      title: subscription_scheduled_cancellation_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionScheduledChangesRemoved:
+      name: subscription_scheduled_changes_removed
+      title: subscription_scheduled_changes_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionScheduledPauseRemoved:
+      name: subscription_scheduled_pause_removed
+      title: subscription_scheduled_pause_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionScheduledResumptionRemoved:
+      name: subscription_scheduled_resumption_removed
+      title: subscription_scheduled_resumption_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionShippingAddressUpdated:
+      name: subscription_shipping_address_updated
+      title: subscription_shipping_address_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionStarted:
+      name: subscription_started
+      title: subscription_started
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionTrialEndReminder:
+      name: subscription_trial_end_reminder
+      title: subscription_trial_end_reminder
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SubscriptionTrialExtended:
+      name: subscription_trial_extended
+      title: subscription_trial_extended
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Invoice ----------
+    InvoiceDeleted:
+      name: invoice_deleted
+      title: invoice_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    InvoiceGenerated:
+      name: invoice_generated
+      title: invoice_generated
+      summary: A new invoice was generated.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    InvoiceGeneratedWithBackdating:
+      name: invoice_generated_with_backdating
+      title: invoice_generated_with_backdating
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    InvoiceUpdated:
+      name: invoice_updated
+      title: invoice_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PendingInvoiceCreated:
+      name: pending_invoice_created
+      title: pending_invoice_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PendingInvoiceUpdated:
+      name: pending_invoice_updated
+      title: pending_invoice_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Credit Note ----------
+    CreditNoteCreated:
+      name: credit_note_created
+      title: credit_note_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CreditNoteCreatedWithBackdating:
+      name: credit_note_created_with_backdating
+      title: credit_note_created_with_backdating
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CreditNoteDeleted:
+      name: credit_note_deleted
+      title: credit_note_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CreditNoteUpdated:
+      name: credit_note_updated
+      title: credit_note_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Transaction ----------
+    TransactionCreated:
+      name: transaction_created
+      title: transaction_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    TransactionDeleted:
+      name: transaction_deleted
+      title: transaction_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    TransactionUpdated:
+      name: transaction_updated
+      title: transaction_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Payment ----------
+    AuthorizationSucceeded:
+      name: authorization_succeeded
+      title: authorization_succeeded
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    AuthorizationVoided:
+      name: authorization_voided
+      title: authorization_voided
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentDueReminder:
+      name: payment_due_reminder
+      title: payment_due_reminder
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentFailed:
+      name: payment_failed
+      title: payment_failed
+      summary: A payment attempt failed.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentInitiated:
+      name: payment_initiated
+      title: payment_initiated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentIntentCreated:
+      name: payment_intent_created
+      title: payment_intent_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentIntentUpdated:
+      name: payment_intent_updated
+      title: payment_intent_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentRefunded:
+      name: payment_refunded
+      title: payment_refunded
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentSucceeded:
+      name: payment_succeeded
+      title: payment_succeeded
+      summary: A payment attempt succeeded.
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    RefundInitiated:
+      name: refund_initiated
+      title: refund_initiated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Payment Source / Cards / Virtual Bank Accounts ----------
+    CardAdded:
+      name: card_added
+      title: card_added
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CardDeleted:
+      name: card_deleted
+      title: card_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CardExpired:
+      name: card_expired
+      title: card_expired
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CardExpiryReminder:
+      name: card_expiry_reminder
+      title: card_expiry_reminder
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CardUpdated:
+      name: card_updated
+      title: card_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentSourceAdded:
+      name: payment_source_added
+      title: payment_source_added
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentSourceDeleted:
+      name: payment_source_deleted
+      title: payment_source_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentSourceExpired:
+      name: payment_source_expired
+      title: payment_source_expired
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentSourceExpiring:
+      name: payment_source_expiring
+      title: payment_source_expiring
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentSourceLocallyDeleted:
+      name: payment_source_locally_deleted
+      title: payment_source_locally_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentSourceUpdated:
+      name: payment_source_updated
+      title: payment_source_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    VirtualBankAccountAdded:
+      name: virtual_bank_account_added
+      title: virtual_bank_account_added
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    VirtualBankAccountDeleted:
+      name: virtual_bank_account_deleted
+      title: virtual_bank_account_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    VirtualBankAccountUpdated:
+      name: virtual_bank_account_updated
+      title: virtual_bank_account_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Payment Schedule ----------
+    PaymentScheduleSchemeCreated:
+      name: payment_schedule_scheme_created
+      title: payment_schedule_scheme_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentScheduleSchemeDeleted:
+      name: payment_schedule_scheme_deleted
+      title: payment_schedule_scheme_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentSchedulesCreated:
+      name: payment_schedules_created
+      title: payment_schedules_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PaymentSchedulesUpdated:
+      name: payment_schedules_updated
+      title: payment_schedules_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Gift ----------
+    GiftCancelled:
+      name: gift_cancelled
+      title: gift_cancelled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    GiftClaimed:
+      name: gift_claimed
+      title: gift_claimed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    GiftExpired:
+      name: gift_expired
+      title: gift_expired
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    GiftScheduled:
+      name: gift_scheduled
+      title: gift_scheduled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    GiftUnclaimed:
+      name: gift_unclaimed
+      title: gift_unclaimed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    GiftUpdated:
+      name: gift_updated
+      title: gift_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Quote ----------
+    QuoteCreated:
+      name: quote_created
+      title: quote_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    QuoteDeleted:
+      name: quote_deleted
+      title: quote_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    QuoteUpdated:
+      name: quote_updated
+      title: quote_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Coupon ----------
+    CouponCreated:
+      name: coupon_created
+      title: coupon_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CouponDeleted:
+      name: coupon_deleted
+      title: coupon_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CouponUpdated:
+      name: coupon_updated
+      title: coupon_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CouponSetCreated:
+      name: coupon_set_created
+      title: coupon_set_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CouponSetDeleted:
+      name: coupon_set_deleted
+      title: coupon_set_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CouponSetUpdated:
+      name: coupon_set_updated
+      title: coupon_set_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CouponCodesAdded:
+      name: coupon_codes_added
+      title: coupon_codes_added
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CouponCodesDeleted:
+      name: coupon_codes_deleted
+      title: coupon_codes_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    CouponCodesUpdated:
+      name: coupon_codes_updated
+      title: coupon_codes_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Item / Item Price / Family / Differential / Variants / Attached ----------
+    ItemCreated:
+      name: item_created
+      title: item_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemDeleted:
+      name: item_deleted
+      title: item_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemUpdated:
+      name: item_updated
+      title: item_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemFamilyCreated:
+      name: item_family_created
+      title: item_family_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemFamilyDeleted:
+      name: item_family_deleted
+      title: item_family_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemFamilyUpdated:
+      name: item_family_updated
+      title: item_family_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemPriceCreated:
+      name: item_price_created
+      title: item_price_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemPriceDeleted:
+      name: item_price_deleted
+      title: item_price_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemPriceUpdated:
+      name: item_price_updated
+      title: item_price_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemEntitlementsRemoved:
+      name: item_entitlements_removed
+      title: item_entitlements_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemEntitlementsUpdated:
+      name: item_entitlements_updated
+      title: item_entitlements_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemPriceEntitlementsRemoved:
+      name: item_price_entitlements_removed
+      title: item_price_entitlements_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ItemPriceEntitlementsUpdated:
+      name: item_price_entitlements_updated
+      title: item_price_entitlements_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    AttachedItemCreated:
+      name: attached_item_created
+      title: attached_item_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    AttachedItemDeleted:
+      name: attached_item_deleted
+      title: attached_item_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    AttachedItemUpdated:
+      name: attached_item_updated
+      title: attached_item_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    DifferentialPriceCreated:
+      name: differential_price_created
+      title: differential_price_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    DifferentialPriceDeleted:
+      name: differential_price_deleted
+      title: differential_price_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    DifferentialPriceUpdated:
+      name: differential_price_updated
+      title: differential_price_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PriceVariantCreated:
+      name: price_variant_created
+      title: price_variant_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PriceVariantDeleted:
+      name: price_variant_deleted
+      title: price_variant_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PriceVariantUpdated:
+      name: price_variant_updated
+      title: price_variant_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Feature ----------
+    FeatureActivated:
+      name: feature_activated
+      title: feature_activated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    FeatureArchived:
+      name: feature_archived
+      title: feature_archived
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    FeatureCreated:
+      name: feature_created
+      title: feature_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    FeatureDeleted:
+      name: feature_deleted
+      title: feature_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    FeatureReactivated:
+      name: feature_reactivated
+      title: feature_reactivated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    FeatureUpdated:
+      name: feature_updated
+      title: feature_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Entitlement Override ----------
+    EntitlementOverridesAutoRemoved:
+      name: entitlement_overrides_auto_removed
+      title: entitlement_overrides_auto_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    EntitlementOverridesRemoved:
+      name: entitlement_overrides_removed
+      title: entitlement_overrides_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    EntitlementOverridesUpdated:
+      name: entitlement_overrides_updated
+      title: entitlement_overrides_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Order ----------
+    OrderCancelled:
+      name: order_cancelled
+      title: order_cancelled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OrderCreated:
+      name: order_created
+      title: order_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OrderDeleted:
+      name: order_deleted
+      title: order_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OrderDelivered:
+      name: order_delivered
+      title: order_delivered
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OrderReadyToProcess:
+      name: order_ready_to_process
+      title: order_ready_to_process
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OrderReadyToShip:
+      name: order_ready_to_ship
+      title: order_ready_to_ship
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OrderResent:
+      name: order_resent
+      title: order_resent
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OrderReturned:
+      name: order_returned
+      title: order_returned
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OrderUpdated:
+      name: order_updated
+      title: order_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SalesOrderCreated:
+      name: sales_order_created
+      title: sales_order_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    SalesOrderUpdated:
+      name: sales_order_updated
+      title: sales_order_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Contract Term ----------
+    ContractTermCancelled:
+      name: contract_term_cancelled
+      title: contract_term_cancelled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ContractTermCompleted:
+      name: contract_term_completed
+      title: contract_term_completed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ContractTermCreated:
+      name: contract_term_created
+      title: contract_term_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ContractTermRenewed:
+      name: contract_term_renewed
+      title: contract_term_renewed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    ContractTermTerminated:
+      name: contract_term_terminated
+      title: contract_term_terminated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Business Entity / Hierarchy ----------
+    BusinessEntityCreated:
+      name: business_entity_created
+      title: business_entity_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    BusinessEntityDeleted:
+      name: business_entity_deleted
+      title: business_entity_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    BusinessEntityUpdated:
+      name: business_entity_updated
+      title: business_entity_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    HierarchyCreated:
+      name: hierarchy_created
+      title: hierarchy_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    HierarchyDeleted:
+      name: hierarchy_deleted
+      title: hierarchy_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Promotional Credits ----------
+    PromotionalCreditsAdded:
+      name: promotional_credits_added
+      title: promotional_credits_added
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    PromotionalCreditsDeducted:
+      name: promotional_credits_deducted
+      title: promotional_credits_deducted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Unbilled Charges ----------
+    UnbilledChargesCreated:
+      name: unbilled_charges_created
+      title: unbilled_charges_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    UnbilledChargesDeleted:
+      name: unbilled_charges_deleted
+      title: unbilled_charges_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    UnbilledChargesInvoiced:
+      name: unbilled_charges_invoiced
+      title: unbilled_charges_invoiced
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    UnbilledChargesVoided:
+      name: unbilled_charges_voided
+      title: unbilled_charges_voided
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Token ----------
+    TokenConsumed:
+      name: token_consumed
+      title: token_consumed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    TokenCreated:
+      name: token_created
+      title: token_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    TokenExpired:
+      name: token_expired
+      title: token_expired
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Voucher ----------
+    VoucherCreated:
+      name: voucher_created
+      title: voucher_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    VoucherCreateFailed:
+      name: voucher_create_failed
+      title: voucher_create_failed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    VoucherExpired:
+      name: voucher_expired
+      title: voucher_expired
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Tax Withheld ----------
+    TaxWithheldDeleted:
+      name: tax_withheld_deleted
+      title: tax_withheld_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    TaxWithheldRecorded:
+      name: tax_withheld_recorded
+      title: tax_withheld_recorded
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    TaxWithheldRefunded:
+      name: tax_withheld_refunded
+      title: tax_withheld_refunded
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Rule ----------
+    RuleCreated:
+      name: rule_created
+      title: rule_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    RuleDeleted:
+      name: rule_deleted
+      title: rule_deleted
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    RuleUpdated:
+      name: rule_updated
+      title: rule_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Usage ----------
+    AddUsagesReminder:
+      name: add_usages_reminder
+      title: add_usages_reminder
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    UsageFileIngested:
+      name: usage_file_ingested
+      title: usage_file_ingested
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Purchase ----------
+    PurchaseCreated:
+      name: purchase_created
+      title: purchase_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    RecordPurchaseFailed:
+      name: record_purchase_failed
+      title: record_purchase_failed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Omnichannel ----------
+    OmnichannelOneTimeOrderCreated:
+      name: omnichannel_one_time_order_created
+      title: omnichannel_one_time_order_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelOneTimeOrderItemCancelled:
+      name: omnichannel_one_time_order_item_cancelled
+      title: omnichannel_one_time_order_item_cancelled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionCreated:
+      name: omnichannel_subscription_created
+      title: omnichannel_subscription_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionImported:
+      name: omnichannel_subscription_imported
+      title: omnichannel_subscription_imported
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionMovedIn:
+      name: omnichannel_subscription_moved_in
+      title: omnichannel_subscription_moved_in
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemCancellationScheduled:
+      name: omnichannel_subscription_item_cancellation_scheduled
+      title: omnichannel_subscription_item_cancellation_scheduled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemCancelled:
+      name: omnichannel_subscription_item_cancelled
+      title: omnichannel_subscription_item_cancelled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemChangeScheduled:
+      name: omnichannel_subscription_item_change_scheduled
+      title: omnichannel_subscription_item_change_scheduled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemChanged:
+      name: omnichannel_subscription_item_changed
+      title: omnichannel_subscription_item_changed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemDowngraded:
+      name: omnichannel_subscription_item_downgraded
+      title: omnichannel_subscription_item_downgraded
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemDunningExpired:
+      name: omnichannel_subscription_item_dunning_expired
+      title: omnichannel_subscription_item_dunning_expired
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemDunningStarted:
+      name: omnichannel_subscription_item_dunning_started
+      title: omnichannel_subscription_item_dunning_started
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemExpired:
+      name: omnichannel_subscription_item_expired
+      title: omnichannel_subscription_item_expired
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemGracePeriodExpired:
+      name: omnichannel_subscription_item_grace_period_expired
+      title: omnichannel_subscription_item_grace_period_expired
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemGracePeriodStarted:
+      name: omnichannel_subscription_item_grace_period_started
+      title: omnichannel_subscription_item_grace_period_started
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemPauseScheduled:
+      name: omnichannel_subscription_item_pause_scheduled
+      title: omnichannel_subscription_item_pause_scheduled
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemPaused:
+      name: omnichannel_subscription_item_paused
+      title: omnichannel_subscription_item_paused
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemReactivated:
+      name: omnichannel_subscription_item_reactivated
+      title: omnichannel_subscription_item_reactivated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemRecovered:
+      name: omnichannel_subscription_item_recovered
+      title: omnichannel_subscription_item_recovered
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemRenewed:
+      name: omnichannel_subscription_item_renewed
+      title: omnichannel_subscription_item_renewed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemResubscribed:
+      name: omnichannel_subscription_item_resubscribed
+      title: omnichannel_subscription_item_resubscribed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemResumed:
+      name: omnichannel_subscription_item_resumed
+      title: omnichannel_subscription_item_resumed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemScheduledCancellationRemoved:
+      name: omnichannel_subscription_item_scheduled_cancellation_removed
+      title: omnichannel_subscription_item_scheduled_cancellation_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemScheduledChangeRemoved:
+      name: omnichannel_subscription_item_scheduled_change_removed
+      title: omnichannel_subscription_item_scheduled_change_removed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemUpdated:
+      name: omnichannel_subscription_item_updated
+      title: omnichannel_subscription_item_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelSubscriptionItemUpgraded:
+      name: omnichannel_subscription_item_upgraded
+      title: omnichannel_subscription_item_upgraded
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    OmnichannelTransactionCreated:
+      name: omnichannel_transaction_created
+      title: omnichannel_transaction_created
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+
+    # ---------- Site signals (alerts, dunning, MRR) ----------
+    AlertStatusChanged:
+      name: alert_status_changed
+      title: alert_status_changed
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    DunningUpdated:
+      name: dunning_updated
+      title: dunning_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
+    MrrUpdated:
+      name: mrr_updated
+      title: mrr_updated
+      traits: [{ $ref: '#/components/messageTraits/EventEnvelopeTrait' }]
+      payload: { $ref: '#/components/schemas/Event' }
