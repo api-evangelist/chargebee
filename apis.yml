@@ -8,7 +8,7 @@ description: >-
   payments, plans, addons, coupons, and usage metering, with HTTP Basic Auth
   using API keys scoped to each Chargebee site.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - Billing
   - Subscriptions
