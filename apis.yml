@@ -64,7 +64,7 @@ common:
     url: https://apidocs.chargebee.com/docs/api
   - type: Pricing
     url: https://www.chargebee.com/pricing/
-  - type: SignUp
+  - type: Signup
     url: https://www.chargebee.com/trial-signup/
   - type: Login
     url: https://app.chargebee.com/login
