@@ -1,0 +1,13 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/chargebee-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: basicAuth
+  type: http
+  scheme: basic
+  description: HTTP Basic Auth. Username is your Chargebee site API key; password is empty.
+  sources:
+  - openapi/chargebee-openapi.yml

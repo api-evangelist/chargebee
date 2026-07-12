@@ -54,6 +54,10 @@ apis:
         url: https://www.chargebee.com/docs/api/getting-started.html
 
 common:
+  - type: DomainSecurity
+    url: security/chargebee-domain-security.yml
+  - type: Authentication
+    url: authentication/chargebee-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/chargebee
   - type: Website
@@ -94,6 +98,8 @@ common:
     url: https://github.com/chargebee/chargebee-go
   - type: .NET SDK
     url: https://github.com/chargebee/chargebee-dotnet
+  - url: https://www.chargebee.com/blog/feed/
+    type: Blog
 
 maintainers:
   - FN: Kin Lane
