@@ -54,6 +54,8 @@ apis:
         url: https://www.chargebee.com/docs/api/getting-started.html
 
 common:
+  - type: AgenticAccess
+    url: agentic-access/chargebee-agentic-access.yml
   - type: DomainSecurity
     url: security/chargebee-domain-security.yml
   - type: Authentication
