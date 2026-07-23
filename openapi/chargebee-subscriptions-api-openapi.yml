@@ -1,0 +1,130 @@
+openapi: 3.1.0
+info:
+  title: Chargebee API v2 Customers Subscriptions API
+  version: '2'
+  description: 'REST API for Chargebee subscription billing covering customers,
+
+    subscriptions, invoices, payments, and product catalog. Authenticates with
+
+    HTTP Basic Auth using a site-scoped API key as the username and an empty
+
+    password. Authoritative OpenAPI spec is published at
+
+    https://github.com/chargebee/openapi (see /spec).
+
+    '
+  contact:
+    name: Chargebee API Support
+    url: https://www.chargebee.com/docs/api
+servers:
+- url: https://{site}.chargebee.com/api/v2
+  description: Site-scoped Chargebee API base URL
+  variables:
+    site:
+      default: yoursite
+      description: Your Chargebee site subdomain
+security:
+- basicAuth: []
+tags:
+- name: Subscriptions
+paths:
+  /subscriptions:
+    get:
+      tags:
+      - Subscriptions
+      summary: List subscriptions
+      operationId: listSubscriptions
+      responses:
+        '200':
+          description: List of subscriptions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionList'
+    post:
+      tags:
+      - Subscriptions
+      summary: Create a subscription for a customer
+      operationId: createSubscription
+      responses:
+        '200':
+          description: Subscription created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionEnvelope'
+  /subscriptions/{subscription_id}:
+    parameters:
+    - in: path
+      name: subscription_id
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Subscriptions
+      summary: Retrieve a subscription
+      operationId: retrieveSubscription
+      responses:
+        '200':
+          description: Subscription
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionEnvelope'
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        company:
+          type: string
+        created_at:
+          type: integer
+          format: int64
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: string
+        customer_id:
+          type: string
+        status:
+          type: string
+        plan_id:
+          type: string
+        currency_code:
+          type: string
+    SubscriptionEnvelope:
+      type: object
+      properties:
+        subscription:
+          $ref: '#/components/schemas/Subscription'
+        customer:
+          $ref: '#/components/schemas/Customer'
+    SubscriptionList:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              subscription:
+                $ref: '#/components/schemas/Subscription'
+        next_offset:
+          type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Auth. Username is your Chargebee site API key; password is empty.

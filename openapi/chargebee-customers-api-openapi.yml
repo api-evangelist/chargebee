@@ -1,0 +1,146 @@
+openapi: 3.1.0
+info:
+  title: Chargebee API v2 Customers API
+  version: '2'
+  description: 'REST API for Chargebee subscription billing covering customers,
+
+    subscriptions, invoices, payments, and product catalog. Authenticates with
+
+    HTTP Basic Auth using a site-scoped API key as the username and an empty
+
+    password. Authoritative OpenAPI spec is published at
+
+    https://github.com/chargebee/openapi (see /spec).
+
+    '
+  contact:
+    name: Chargebee API Support
+    url: https://www.chargebee.com/docs/api
+servers:
+- url: https://{site}.chargebee.com/api/v2
+  description: Site-scoped Chargebee API base URL
+  variables:
+    site:
+      default: yoursite
+      description: Your Chargebee site subdomain
+security:
+- basicAuth: []
+tags:
+- name: Customers
+paths:
+  /customers:
+    get:
+      tags:
+      - Customers
+      summary: List customers
+      operationId: listCustomers
+      parameters:
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          default: 10
+          maximum: 100
+      - in: query
+        name: offset
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerList'
+    post:
+      tags:
+      - Customers
+      summary: Create a customer
+      operationId: createCustomer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerCreate'
+      responses:
+        '200':
+          description: Customer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerEnvelope'
+  /customers/{customer_id}:
+    parameters:
+    - in: path
+      name: customer_id
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Customers
+      summary: Retrieve a customer
+      operationId: retrieveCustomer
+      responses:
+        '200':
+          description: Customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerEnvelope'
+components:
+  schemas:
+    CustomerEnvelope:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+    CustomerList:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              customer:
+                $ref: '#/components/schemas/Customer'
+        next_offset:
+          type: string
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        company:
+          type: string
+        created_at:
+          type: integer
+          format: int64
+    CustomerCreate:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        company:
+          type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Auth. Username is your Chargebee site API key; password is empty.

@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: Chargebee API v2 Customers Invoices API
+  version: '2'
+  description: 'REST API for Chargebee subscription billing covering customers,
+
+    subscriptions, invoices, payments, and product catalog. Authenticates with
+
+    HTTP Basic Auth using a site-scoped API key as the username and an empty
+
+    password. Authoritative OpenAPI spec is published at
+
+    https://github.com/chargebee/openapi (see /spec).
+
+    '
+  contact:
+    name: Chargebee API Support
+    url: https://www.chargebee.com/docs/api
+servers:
+- url: https://{site}.chargebee.com/api/v2
+  description: Site-scoped Chargebee API base URL
+  variables:
+    site:
+      default: yoursite
+      description: Your Chargebee site subdomain
+security:
+- basicAuth: []
+tags:
+- name: Invoices
+paths:
+  /invoices:
+    get:
+      tags:
+      - Invoices
+      summary: List invoices
+      operationId: listInvoices
+      responses:
+        '200':
+          description: List of invoices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceList'
+  /invoices/{invoice_id}:
+    parameters:
+    - in: path
+      name: invoice_id
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Invoices
+      summary: Retrieve an invoice
+      operationId: retrieveInvoice
+      responses:
+        '200':
+          description: Invoice
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceEnvelope'
+components:
+  schemas:
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: string
+        customer_id:
+          type: string
+        status:
+          type: string
+        total:
+          type: integer
+        currency_code:
+          type: string
+    InvoiceEnvelope:
+      type: object
+      properties:
+        invoice:
+          $ref: '#/components/schemas/Invoice'
+    InvoiceList:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              invoice:
+                $ref: '#/components/schemas/Invoice'
+        next_offset:
+          type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Auth. Username is your Chargebee site API key; password is empty.

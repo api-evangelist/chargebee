@@ -1,0 +1,59 @@
+openapi: 3.1.0
+info:
+  title: Chargebee API v2 Customers Quotes API
+  version: '2'
+  description: 'REST API for Chargebee subscription billing covering customers,
+
+    subscriptions, invoices, payments, and product catalog. Authenticates with
+
+    HTTP Basic Auth using a site-scoped API key as the username and an empty
+
+    password. Authoritative OpenAPI spec is published at
+
+    https://github.com/chargebee/openapi (see /spec).
+
+    '
+  contact:
+    name: Chargebee API Support
+    url: https://www.chargebee.com/docs/api
+servers:
+- url: https://{site}.chargebee.com/api/v2
+  description: Site-scoped Chargebee API base URL
+  variables:
+    site:
+      default: yoursite
+      description: Your Chargebee site subdomain
+security:
+- basicAuth: []
+tags:
+- name: Quotes
+paths:
+  /quotes:
+    get:
+      tags:
+      - Quotes
+      summary: List quotes
+      operationId: listQuotes
+      responses:
+        '200':
+          description: List of quotes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericList'
+components:
+  schemas:
+    GenericList:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+        next_offset:
+          type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic Auth. Username is your Chargebee site API key; password is empty.
