@@ -8,7 +8,19 @@ description: >-
   payments, plans, addons, coupons, and usage metering, with HTTP Basic Auth
   using API keys scoped to each Chargebee site.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/chargebee.png
 tags:
   - Billing
   - Subscriptions
@@ -22,37 +34,174 @@ created: '2026-05-11'
 modified: '2026-05-30'
 specificationVersion: '0.19'
 apis:
-  - aid: chargebee:chargebee-api
-    name: Chargebee API v2
-    description: >-
-      REST API for managing subscriptions, customers, invoices, payments,
-      product catalog, coupons, usage metering, and revenue recognition.
-      Authentication uses HTTP Basic Auth with a site-scoped API key as the
-      username and an empty password.
-    humanURL: https://apidocs.chargebee.com/docs/api
-    baseURL: https://{site}.chargebee.com/api/v2
-    tags:
-      - Billing
-      - Subscriptions
-      - Invoicing
-      - Payments
-      - Revenue
-    properties:
-      - type: Documentation
-        url: https://apidocs.chargebee.com/docs/api
-      - type: OpenAPI
-        url: https://github.com/chargebee/openapi
-      - type: OpenAPI
-        url: https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/openapi/chargebee-openapi.yml
-      - type: AsyncAPI
-        url: https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml
-      - type: Webhooks
-        url: https://apidocs.chargebee.com/docs/api/events
-      - type: EventTypes
-        url: https://apidocs.chargebee.com/docs/api/events/event-types
-      - type: GettingStarted
-        url: https://www.chargebee.com/docs/api/getting-started.html
-
+- aid: chargebee:chargebee-customers-api
+  name: Chargebee Customers API
+  description: The Customers API from Chargebee — 2 operation(s) for customers.
+  humanURL: https://apidocs.chargebee.com/docs/api
+  baseURL: https://{site}.chargebee.com/api/v2
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/chargebee-customers-api-openapi.yml
+  - type: Documentation
+    url: https://apidocs.chargebee.com/docs/api
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml
+  - type: Webhooks
+    url: https://apidocs.chargebee.com/docs/api/events
+  - type: EventTypes
+    url: https://apidocs.chargebee.com/docs/api/events/event-types
+  - type: GettingStarted
+    url: https://www.chargebee.com/docs/api/getting-started.html
+- aid: chargebee:chargebee-invoices-api
+  name: Chargebee Invoices API
+  description: The Invoices API from Chargebee — 2 operation(s) for invoices.
+  humanURL: https://apidocs.chargebee.com/docs/api
+  baseURL: https://{site}.chargebee.com/api/v2
+  tags:
+  - Invoices
+  properties:
+  - type: OpenAPI
+    url: openapi/chargebee-invoices-api-openapi.yml
+  - type: Documentation
+    url: https://apidocs.chargebee.com/docs/api
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml
+  - type: Webhooks
+    url: https://apidocs.chargebee.com/docs/api/events
+  - type: EventTypes
+    url: https://apidocs.chargebee.com/docs/api/events/event-types
+  - type: GettingStarted
+    url: https://www.chargebee.com/docs/api/getting-started.html
+- aid: chargebee:chargebee-items-api
+  name: Chargebee Items API
+  description: The Items API from Chargebee — 1 operation(s) for items.
+  humanURL: https://apidocs.chargebee.com/docs/api
+  baseURL: https://{site}.chargebee.com/api/v2
+  tags:
+  - Items
+  properties:
+  - type: OpenAPI
+    url: openapi/chargebee-items-api-openapi.yml
+  - type: Documentation
+    url: https://apidocs.chargebee.com/docs/api
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml
+  - type: Webhooks
+    url: https://apidocs.chargebee.com/docs/api/events
+  - type: EventTypes
+    url: https://apidocs.chargebee.com/docs/api/events/event-types
+  - type: GettingStarted
+    url: https://www.chargebee.com/docs/api/getting-started.html
+- aid: chargebee:chargebee-orders-api
+  name: Chargebee Orders API
+  description: The Orders API from Chargebee — 1 operation(s) for orders.
+  humanURL: https://apidocs.chargebee.com/docs/api
+  baseURL: https://{site}.chargebee.com/api/v2
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/chargebee-orders-api-openapi.yml
+  - type: Documentation
+    url: https://apidocs.chargebee.com/docs/api
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml
+  - type: Webhooks
+    url: https://apidocs.chargebee.com/docs/api/events
+  - type: EventTypes
+    url: https://apidocs.chargebee.com/docs/api/events/event-types
+  - type: GettingStarted
+    url: https://www.chargebee.com/docs/api/getting-started.html
+- aid: chargebee:chargebee-payments-api
+  name: Chargebee Payments API
+  description: The Payments API from Chargebee — 1 operation(s) for payments.
+  humanURL: https://apidocs.chargebee.com/docs/api
+  baseURL: https://{site}.chargebee.com/api/v2
+  tags:
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/chargebee-payments-api-openapi.yml
+  - type: Documentation
+    url: https://apidocs.chargebee.com/docs/api
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml
+  - type: Webhooks
+    url: https://apidocs.chargebee.com/docs/api/events
+  - type: EventTypes
+    url: https://apidocs.chargebee.com/docs/api/events/event-types
+  - type: GettingStarted
+    url: https://www.chargebee.com/docs/api/getting-started.html
+- aid: chargebee:chargebee-plans-api
+  name: Chargebee Plans API
+  description: The Plans API from Chargebee — 1 operation(s) for plans.
+  humanURL: https://apidocs.chargebee.com/docs/api
+  baseURL: https://{site}.chargebee.com/api/v2
+  tags:
+  - Plans
+  properties:
+  - type: OpenAPI
+    url: openapi/chargebee-plans-api-openapi.yml
+  - type: Documentation
+    url: https://apidocs.chargebee.com/docs/api
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml
+  - type: Webhooks
+    url: https://apidocs.chargebee.com/docs/api/events
+  - type: EventTypes
+    url: https://apidocs.chargebee.com/docs/api/events/event-types
+  - type: GettingStarted
+    url: https://www.chargebee.com/docs/api/getting-started.html
+- aid: chargebee:chargebee-quotes-api
+  name: Chargebee Quotes API
+  description: The Quotes API from Chargebee — 1 operation(s) for quotes.
+  humanURL: https://apidocs.chargebee.com/docs/api
+  baseURL: https://{site}.chargebee.com/api/v2
+  tags:
+  - Quotes
+  properties:
+  - type: OpenAPI
+    url: openapi/chargebee-quotes-api-openapi.yml
+  - type: Documentation
+    url: https://apidocs.chargebee.com/docs/api
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml
+  - type: Webhooks
+    url: https://apidocs.chargebee.com/docs/api/events
+  - type: EventTypes
+    url: https://apidocs.chargebee.com/docs/api/events/event-types
+  - type: GettingStarted
+    url: https://www.chargebee.com/docs/api/getting-started.html
+- aid: chargebee:chargebee-subscriptions-api
+  name: Chargebee Subscriptions API
+  description: The Subscriptions API from Chargebee — 2 operation(s) for subscriptions.
+  humanURL: https://apidocs.chargebee.com/docs/api
+  baseURL: https://{site}.chargebee.com/api/v2
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/chargebee-subscriptions-api-openapi.yml
+  - type: Documentation
+    url: https://apidocs.chargebee.com/docs/api
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml
+  - type: Webhooks
+    url: https://apidocs.chargebee.com/docs/api/events
+  - type: EventTypes
+    url: https://apidocs.chargebee.com/docs/api/events/event-types
+  - type: GettingStarted
+    url: https://www.chargebee.com/docs/api/getting-started.html
 common:
   - type: AgenticAccess
     url: agentic-access/chargebee-agentic-access.yml
