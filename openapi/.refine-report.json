@@ -1,0 +1,28 @@
+{
+  "provider": "chargebee",
+  "sources": [
+    "chargebee-customers-api-openapi.yml",
+    "chargebee-invoices-api-openapi.yml",
+    "chargebee-items-api-openapi.yml",
+    "chargebee-orders-api-openapi.yml",
+    "chargebee-payments-api-openapi.yml",
+    "chargebee-plans-api-openapi.yml",
+    "chargebee-quotes-api-openapi.yml",
+    "chargebee-subscriptions-api-openapi.yml"
+  ],
+  "outputs": [
+    "chargebee-customers-api-openapi.yml",
+    "chargebee-invoices-api-openapi.yml",
+    "chargebee-items-api-openapi.yml",
+    "chargebee-orders-api-openapi.yml",
+    "chargebee-payments-api-openapi.yml",
+    "chargebee-plans-api-openapi.yml",
+    "chargebee-quotes-api-openapi.yml",
+    "chargebee-subscriptions-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
