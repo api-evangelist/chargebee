@@ -8,6 +8,18 @@ description: >-
   payments, plans, addons, coupons, and usage metering, with HTTP Basic Auth
   using API keys scoped to each Chargebee site.
 type: Index
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-11'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
