@@ -203,6 +203,16 @@ apis:
   - type: GettingStarted
     url: https://www.chargebee.com/docs/api/getting-started.html
 common:
+  - type: Sandbox
+    url: https://api-explorer.chargebee.com
+  - type: ChangeLog
+    url: https://release-notes.chargebee.com/
+  - type: PrivacyPolicy
+    url: https://www.chargebee.com/privacy/
+  - type: TermsOfService
+    url: https://www.chargebee.com/company/terms/
+  - type: GettingStarted
+    url: https://www.chargebee.com/tutorials
   - type: AgenticAccess
     url: agentic-access/chargebee-agentic-access.yml
   - type: DomainSecurity
