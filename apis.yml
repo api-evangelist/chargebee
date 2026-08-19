@@ -44,7 +44,7 @@ url: >-
   https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/apis.yml
 created: '2026-05-11'
 modified: '2026-05-30'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: chargebee:chargebee-customers-api
   name: Chargebee Customers API
