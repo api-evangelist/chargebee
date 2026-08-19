@@ -1,0 +1,36 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chargebee API v2 Customers Plans API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Plans",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List plans (Product Catalog v1)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{site}.chargebee.com/api/v2/plans"
+          },
+          "docs": "List plans (Product Catalog v1)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,36 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chargebee API v2 Customers Items API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Items",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List items (Product Catalog v2)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{site}.chargebee.com/api/v2/items"
+          },
+          "docs": "List items (Product Catalog v2)"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
