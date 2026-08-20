@@ -35,6 +35,13 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/chargebee.png
 tags:
   - Billing
+  - Subscription
+  - Recurring Billing
+  - Revenue
+  - Payments
+  - Software-as-a-Service
+tags_raw:
+  - Billing
   - Subscriptions
   - Recurring Billing
   - Revenue
@@ -94,6 +101,8 @@ apis:
   humanURL: https://apidocs.chargebee.com/docs/api
   baseURL: https://{site}.chargebee.com/api/v2
   tags:
+  - Item
+  tags_raw:
   - Items
   properties:
   - type: OpenAPI
@@ -115,6 +124,8 @@ apis:
   humanURL: https://apidocs.chargebee.com/docs/api
   baseURL: https://{site}.chargebee.com/api/v2
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
@@ -199,6 +210,8 @@ apis:
   humanURL: https://apidocs.chargebee.com/docs/api
   baseURL: https://{site}.chargebee.com/api/v2
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
