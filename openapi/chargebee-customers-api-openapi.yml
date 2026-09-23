@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Chargebee API v2 Customers API
   version: '2'
@@ -10,9 +10,7 @@ info:
 
     password. Authoritative OpenAPI spec is published at
 
-    https://github.com/chargebee/openapi (see /spec).
-
-    '
+    https://github.com/chargebee/openapi (see /spec).'
   contact:
     name: Chargebee API Support
     url: https://www.chargebee.com/docs/api
@@ -91,11 +89,6 @@ paths:
                 $ref: '#/components/schemas/CustomerEnvelope'
 components:
   schemas:
-    CustomerEnvelope:
-      type: object
-      properties:
-        customer:
-          $ref: '#/components/schemas/Customer'
     CustomerList:
       type: object
       properties:
@@ -108,6 +101,25 @@ components:
                 $ref: '#/components/schemas/Customer'
         next_offset:
           type: string
+    CustomerCreate:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        company:
+          type: string
+    CustomerEnvelope:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
     Customer:
       type: object
       properties:
@@ -125,20 +137,6 @@ components:
         created_at:
           type: integer
           format: int64
-    CustomerCreate:
-      type: object
-      properties:
-        id:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-        email:
-          type: string
-          format: email
-        company:
-          type: string
   securitySchemes:
     basicAuth:
       type: http
