@@ -60,18 +60,11 @@ paths:
                 $ref: '#/components/schemas/InvoiceEnvelope'
 components:
   schemas:
-    InvoiceList:
+    InvoiceEnvelope:
       type: object
       properties:
-        list:
-          type: array
-          items:
-            type: object
-            properties:
-              invoice:
-                $ref: '#/components/schemas/Invoice'
-        next_offset:
-          type: string
+        invoice:
+          $ref: '#/components/schemas/Invoice'
     Invoice:
       type: object
       properties:
@@ -85,11 +78,18 @@ components:
           type: integer
         currency_code:
           type: string
-    InvoiceEnvelope:
+    InvoiceList:
       type: object
       properties:
-        invoice:
-          $ref: '#/components/schemas/Invoice'
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              invoice:
+                $ref: '#/components/schemas/Invoice'
+        next_offset:
+          type: string
   securitySchemes:
     basicAuth:
       type: http
