@@ -89,23 +89,6 @@ paths:
                 $ref: '#/components/schemas/CustomerEnvelope'
 components:
   schemas:
-    Customer:
-      type: object
-      properties:
-        id:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-        email:
-          type: string
-          format: email
-        company:
-          type: string
-        created_at:
-          type: integer
-          format: int64
     CustomerCreate:
       type: object
       properties:
@@ -137,6 +120,23 @@ components:
                 $ref: '#/components/schemas/Customer'
         next_offset:
           type: string
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        company:
+          type: string
+        created_at:
+          type: integer
+          format: int64
   securitySchemes:
     basicAuth:
       type: http

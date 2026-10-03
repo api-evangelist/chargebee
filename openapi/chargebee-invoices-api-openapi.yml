@@ -65,6 +65,18 @@ components:
       properties:
         invoice:
           $ref: '#/components/schemas/Invoice'
+    InvoiceList:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            type: object
+            properties:
+              invoice:
+                $ref: '#/components/schemas/Invoice'
+        next_offset:
+          type: string
     Invoice:
       type: object
       properties:
@@ -77,18 +89,6 @@ components:
         total:
           type: integer
         currency_code:
-          type: string
-    InvoiceList:
-      type: object
-      properties:
-        list:
-          type: array
-          items:
-            type: object
-            properties:
-              invoice:
-                $ref: '#/components/schemas/Invoice'
-        next_offset:
           type: string
   securitySchemes:
     basicAuth:
