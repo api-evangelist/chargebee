@@ -229,6 +229,9 @@ apis:
   - type: GettingStarted
     url: https://www.chargebee.com/docs/api/getting-started.html
 common:
+  - type: CapabilityMap
+    url: capabilities/chargebee-capability-edges.yml
+    name: Chargebee Business Capability Map
   - type: Sandbox
     url: https://api-explorer.chargebee.com
   - type: ChangeLog
