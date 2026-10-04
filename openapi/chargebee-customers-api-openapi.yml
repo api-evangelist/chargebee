@@ -89,25 +89,6 @@ paths:
                 $ref: '#/components/schemas/CustomerEnvelope'
 components:
   schemas:
-    CustomerCreate:
-      type: object
-      properties:
-        id:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-        email:
-          type: string
-          format: email
-        company:
-          type: string
-    CustomerEnvelope:
-      type: object
-      properties:
-        customer:
-          $ref: '#/components/schemas/Customer'
     CustomerList:
       type: object
       properties:
@@ -137,6 +118,25 @@ components:
         created_at:
           type: integer
           format: int64
+    CustomerEnvelope:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+    CustomerCreate:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        company:
+          type: string
   securitySchemes:
     basicAuth:
       type: http
