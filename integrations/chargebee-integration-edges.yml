@@ -1,0 +1,21 @@
+generated: '2026-10-13'
+method: searched
+checked:
+- https://aws.amazon.com/marketplace/
+marketplace_apps: []
+edges:
+- partner_name: AWS Marketplace
+  partner: amazon-web-services
+  partner_match: aggregator
+  type: marketplace
+  marketplace: aws-marketplace
+  channel: distribution
+  relationship: platform-app
+  direction: provider-built
+  evidence: https://aws.amazon.com/marketplace/seller-profile?id=641948a9-9611-4631-ac84-0137852a3c37
+  listing_count: 1
+  apps:
+  - 'Chargebee: Subscription, Usage-Based & AI Billing Platform'
+  seller_name: Chargebee
+  detected_by: sweep-cloud-marketplaces.py
+  detected: '2026-10-13'
