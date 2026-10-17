@@ -72,6 +72,26 @@ paths:
                 $ref: '#/components/schemas/SubscriptionEnvelope'
 components:
   schemas:
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: string
+        customer_id:
+          type: string
+        status:
+          type: string
+        plan_id:
+          type: string
+        currency_code:
+          type: string
+    SubscriptionEnvelope:
+      type: object
+      properties:
+        subscription:
+          $ref: '#/components/schemas/Subscription'
+        customer:
+          $ref: '#/components/schemas/Customer'
     Customer:
       type: object
       properties:
@@ -89,13 +109,6 @@ components:
         created_at:
           type: integer
           format: int64
-    SubscriptionEnvelope:
-      type: object
-      properties:
-        subscription:
-          $ref: '#/components/schemas/Subscription'
-        customer:
-          $ref: '#/components/schemas/Customer'
     SubscriptionList:
       type: object
       properties:
@@ -107,19 +120,6 @@ components:
               subscription:
                 $ref: '#/components/schemas/Subscription'
         next_offset:
-          type: string
-    Subscription:
-      type: object
-      properties:
-        id:
-          type: string
-        customer_id:
-          type: string
-        status:
-          type: string
-        plan_id:
-          type: string
-        currency_code:
           type: string
   securitySchemes:
     basicAuth:
