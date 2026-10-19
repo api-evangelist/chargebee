@@ -11,15 +11,25 @@ checked:
 - https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/
 - https://github.com/meltano/hub
 - https://hightouch.com/docs/destinations/chargebee
+- https://marketplace.chargebee.com
 - https://proxy.golang.org
 - https://pypi.org/pypi
 - https://registry.npmjs.org
 - https://repo1.maven.org/maven2
 - https://rubygems.org/api/v1
+- https://stripe.partners/sitemap.xml
 - https://zapier.com/api/v4/apps/
 - okta/integrations/okta-integration-edges.yml
 - slack/integrations/slack-integration-edges.yml
-marketplace_apps: []
+marketplace_apps:
+- marketplace: own
+  channel: partner-built
+  app: chargebee
+  url: https://marketplace.chargebee.com
+  app_count: 74
+  adapter: sweep-billing-subscriptions.py:chargebee-client-api
+  listed: 19
+  note: 74 listings read; only domain-linked vendors are written
 edges:
 - partner_name: AWS Marketplace
   partner: amazon-web-services
@@ -275,4 +285,498 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-official-sdks.py
   first_seen: '2026-10-18'
+- partner_name: Anrok
+  app: API Key
+  partner: anrok
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['Anrok']
+  category: Tax Management
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Anrok
+    matched_domain: anrok.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - API Key
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Capchase
+  app: Capchase
+  partner: capchase
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['capchase']
+  category: Alternative Financing
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Capchase
+    matched_domain: capchase.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Capchase
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Chartmogul
+  app: Chartmogul
+  partner: chartmogul
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['chartmogul']
+  category: Analytics
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Chartmogul
+    matched_domain: chartmogul.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Chartmogul
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Cyclr
+  app: Cyclr
+  partner: cyclr
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['cyclr']
+  category: Integration platform
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Cyclr
+    matched_domain: cyclr.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Cyclr
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Encharge
+  app: Encharge
+  partner: encharge
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['encharge']
+  category: Marketing Automation
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Encharge
+    matched_domain: encharge.io
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Encharge
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: FirstPromoter
+  app: FirstPromoter
+  partner: firstpromoter
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['firstpromoter']
+  category: Marketing Automation
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: FirstPromoter
+    matched_domain: firstpromoter.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - FirstPromoter
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Impact
+  app: Partner Manager by impact.com
+  partner: impact
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['impact']
+  category: Marketing Automation
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Impact
+    matched_domain: impact.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Partner Manager by impact.com
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: kintsugi
+  app: API Key
+  partner: kintsugi
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['kintsugi']
+  category: Tax Management
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: kintsugi
+    matched_domain: trykintsugi.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - API Key
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Moesif
+  app: Moesif API Monetization
+  partner: moesif
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['moesif-api-monetization']
+  category: Analytics
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Moesif
+    matched_domain: moesif.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Moesif API Monetization
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Numeral
+  app: Numeral
+  partner: numeral
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['numeral']
+  category: Tax Management
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Numeral
+    matched_domain: numeral.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Numeral
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Order Desk
+  app: Order Desk
+  partner: orderdesk
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['orderdesk']
+  category: Ecommerce & Order Management
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Order Desk
+    matched_domain: orderdesk.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Order Desk
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Ortto
+  app: Ortto
+  partner: ortto
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['ortto']
+  category: Marketing Automation
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Ortto
+    matched_domain: ortto.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Ortto
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Pipe
+  app: Pipe
+  partner: pipe
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['pipe']
+  category: Alternative Financing
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Pipe
+    matched_domain: pipe.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Pipe
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Polytomic
+  app: Polytomic
+  partner: polytomic
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['polytomic']
+  category: ETL Tools
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Polytomic
+    matched_domain: polytomic.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Polytomic
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Silvr
+  app: Silvr
+  partner: silvr
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['silvr']
+  category: Alternative Financing
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Silvr
+    matched_domain: silvr.co
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Silvr
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Sphere, Inc.
+  app: Sphere
+  partner: sphere-tax
+  partner_match: domain+verified
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['sphere']
+  category: Tax Management
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Sphere, Inc.
+    matched_domain: getsphere.com
+    matched_by: domain+verified
+    listings: 1
+    sample_apps:
+    - Sphere
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Syncari
+  app: Syncari
+  partner: syncari
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['syncari']
+  category: Integration platform
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Syncari
+    matched_domain: syncari.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Syncari
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Transcend
+  app: Transcend
+  partner: transcend-io
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['transcend']
+  category: Privacy
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Transcend
+    matched_domain: transcend.io
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Transcend
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
+- partner_name: Vitally
+  app: Vitally
+  partner: vitally
+  partner_match: domain
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://marketplace.chargebee.com/apps/['vitally']
+  category: Customer Success & Retention
+  contract_reference:
+    register: Chargebee Marketplace (marketplace.chargebee.com client-api v2 apps JSON)
+    spec_file: null
+    role: chargebee-app
+    registered_name: Vitally
+    matched_domain: vitally.io
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Vitally
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-billing-subscriptions.py
+    detected: '2026-10-19'
+  detected_by: sweep-billing-subscriptions.py
+  detected: '2026-10-19'
 source: https://hightouch.com/docs/destinations/chargebee
