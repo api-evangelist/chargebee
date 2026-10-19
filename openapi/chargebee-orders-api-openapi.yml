@@ -1,57 +1,4928 @@
 openapi: 3.2.0
 info:
-  title: Chargebee API v2 Orders API
-  version: '2'
-  description: 'REST API for Chargebee subscription billing covering customers,
-
-    subscriptions, invoices, payments, and product catalog. Authenticates with
-
-    HTTP Basic Auth using a site-scoped API key as the username and an empty
-
-    password. Authoritative OpenAPI spec is published at
-
-    https://github.com/chargebee/openapi (see /spec).'
+  title: Chargebee Orders API
   contact:
-    name: Chargebee API Support
-    url: https://www.chargebee.com/docs/api
+    name: Chargebee Support
+    url: https://www.chargebee.com
+    email: support@chargebee.com
+  version: 2026-09-24.553c79154f0075cfbab35271eeff8b63a3ed6a86
+  x-cb-product-catalog-version: 2
+  x-cb-api-version: 2
 servers:
-- url: https://{site}.chargebee.com/api/v2
-  description: Site-scoped Chargebee API base URL
+- url: '{protocol}://{site}.{environment}:{port}/api/v2'
   variables:
+    protocol:
+      default: https
+      enum:
+      - https
     site:
-      default: yoursite
-      description: Your Chargebee site subdomain
-security:
-- basicAuth: []
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+- url: '{protocol}://{site}-test.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
 tags:
 - name: Orders
 paths:
   /orders:
     get:
-      tags:
-      - Orders
       summary: List orders
-      operationId: listOrders
+      operationId: list_orders
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - name: include_deleted
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+          description: Indicates whether to include deleted objects in the list. The deleted objects have the attribute `deleted` as `true`.
+          x-cb-sort-order: 2
+          example: null
+      - name: exclude_deleted_credit_notes
+        in: query
+        required: false
+        deprecated: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          deprecated: false
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-api-column: true
+          x-cb-sort-order: 3
+          example: null
+      - name: id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Uniquely identifies the order. It is the api identifier for the order
+          example: '890'
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 4
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: invoice_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The invoice number which acts as an identifier for invoice and is generated sequentially.
+          example: INVOICE_982
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 5
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: subscription_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The subscription for which the order is created
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 6
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+          example: null
+      - name: status
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The status of this order.
+          example: queued
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 7
+          properties:
+            is:
+              type: string
+              description: '* `new` - Order has been created. Applicable only if you are using Chargebee''s legacy order management system.
+
+                * `processing` - Order is being processed. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `complete` - Order has been processed successfully. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `cancelled` - Order has been cancelled. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `voided` - Order has been voided. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `queued` - Order is yet to be processed by any system, these are scheduled orders created by Chargebee
+
+                * `awaiting_shipment` - The order has been picked up by an integration system, and synced to a shipping management platform
+
+                * `on_hold` - The order is paused from being processed.
+
+                * `delivered` - The order has been delivered to the customer.
+
+                * `shipped` - The order has moved from order management system to a shipping system.
+
+                * `partially_delivered` - The order has been partially delivered to the customer.
+
+                * `returned` - The order has been returned after delivery.'
+              enum:
+              - new
+              - processing
+              - complete
+              - cancelled
+              - voided
+              - queued
+              - awaiting_shipment
+              - on_hold
+              - delivered
+              - shipped
+              - partially_delivered
+              - returned
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              example: null
+            is_not:
+              type: string
+              description: '* `new` - Order has been created. Applicable only if you are using Chargebee''s legacy order management system.
+
+                * `processing` - Order is being processed. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `complete` - Order has been processed successfully. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `cancelled` - Order has been cancelled. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `voided` - Order has been voided. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `queued` - Order is yet to be processed by any system, these are scheduled orders created by Chargebee
+
+                * `awaiting_shipment` - The order has been picked up by an integration system, and synced to a shipping management platform
+
+                * `on_hold` - The order is paused from being processed.
+
+                * `delivered` - The order has been delivered to the customer.
+
+                * `shipped` - The order has moved from order management system to a shipping system.
+
+                * `partially_delivered` - The order has been partially delivered to the customer.
+
+                * `returned` - The order has been returned after delivery.'
+              enum:
+              - new
+              - processing
+              - complete
+              - cancelled
+              - voided
+              - queued
+              - awaiting_shipment
+              - on_hold
+              - delivered
+              - shipped
+              - partially_delivered
+              - returned
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              example: null
+            in:
+              type: string
+              description: '* `new` - Order has been created. Applicable only if you are using Chargebee''s legacy order management system.
+
+                * `processing` - Order is being processed. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `complete` - Order has been processed successfully. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `cancelled` - Order has been cancelled. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `voided` - Order has been voided. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `queued` - Order is yet to be processed by any system, these are scheduled orders created by Chargebee
+
+                * `awaiting_shipment` - The order has been picked up by an integration system, and synced to a shipping management platform
+
+                * `on_hold` - The order is paused from being processed.
+
+                * `delivered` - The order has been delivered to the customer.
+
+                * `shipped` - The order has moved from order management system to a shipping system.
+
+                * `partially_delivered` - The order has been partially delivered to the customer.
+
+                * `returned` - The order has been returned after delivery.'
+              enum:
+              - new
+              - processing
+              - complete
+              - cancelled
+              - voided
+              - queued
+              - awaiting_shipment
+              - on_hold
+              - delivered
+              - shipped
+              - partially_delivered
+              - returned
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              pattern: ^\[(new|processing|complete|cancelled|voided|queued|awaiting_shipment|on_hold|delivered|shipped|partially_delivered|returned)(,(new|processing|complete|cancelled|voided|queued|awaiting_shipment|on_hold|delivered|shipped|partially_delivered|returned))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `new` - Order has been created. Applicable only if you are using Chargebee''s legacy order management system.
+
+                * `processing` - Order is being processed. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `complete` - Order has been processed successfully. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `cancelled` - Order has been cancelled. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `voided` - Order has been voided. Applicable only if you are using Chargebee''s legacy order management system
+
+                * `queued` - Order is yet to be processed by any system, these are scheduled orders created by Chargebee
+
+                * `awaiting_shipment` - The order has been picked up by an integration system, and synced to a shipping management platform
+
+                * `on_hold` - The order is paused from being processed.
+
+                * `delivered` - The order has been delivered to the customer.
+
+                * `shipped` - The order has moved from order management system to a shipping system.
+
+                * `partially_delivered` - The order has been partially delivered to the customer.
+
+                * `returned` - The order has been returned after delivery.'
+              enum:
+              - new
+              - processing
+              - complete
+              - cancelled
+              - voided
+              - queued
+              - awaiting_shipment
+              - on_hold
+              - delivered
+              - shipped
+              - partially_delivered
+              - returned
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              pattern: ^\[(new|processing|complete|cancelled|voided|queued|awaiting_shipment|on_hold|delivered|shipped|partially_delivered|returned)(,(new|processing|complete|cancelled|voided|queued|awaiting_shipment|on_hold|delivered|shipped|partially_delivered|returned))*\]$
+              example: null
+      - name: shipping_date
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: This is the date on which the order will be delivered to the customer.
+          example: '1435054328'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 8
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: shipped_at
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The time at which the order was shipped.
+          example: '1435054328'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 9
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: order_type
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Order type
+          example: system_generated
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 10
+          properties:
+            is:
+              type: string
+              description: '* `manual` - The order has been created by the the user using Chargebee''s legacy order management system.
+
+                * `system_generated` - The order has been created by Chargebee automatically based on the preferences set by the user.'
+              enum:
+              - manual
+              - system_generated
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: OrderType
+              example: null
+            is_not:
+              type: string
+              description: '* `manual` - The order has been created by the the user using Chargebee''s legacy order management system.
+
+                * `system_generated` - The order has been created by Chargebee automatically based on the preferences set by the user.'
+              enum:
+              - manual
+              - system_generated
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: OrderType
+              example: null
+            in:
+              type: string
+              description: '* `manual` - The order has been created by the the user using Chargebee''s legacy order management system.
+
+                * `system_generated` - The order has been created by Chargebee automatically based on the preferences set by the user.'
+              enum:
+              - manual
+              - system_generated
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: OrderType
+              pattern: ^\[(manual|system_generated)(,(manual|system_generated))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `manual` - The order has been created by the the user using Chargebee''s legacy order management system.
+
+                * `system_generated` - The order has been created by Chargebee automatically based on the preferences set by the user.'
+              enum:
+              - manual
+              - system_generated
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: OrderType
+              pattern: ^\[(manual|system_generated)(,(manual|system_generated))*\]$
+              example: null
+      - name: order_date
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The date on which the order will start getting processed.
+          example: '1435054328'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 11
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: paid_on
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The timestamp indicating the date & time the order's invoice got paid.
+          example: '1435054328'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 12
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: updated_at
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: To filter based on updated at .
+          example: '1243545465'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 13
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: created_at
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The time at which the order was created
+          example: '1435054328'
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 14
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: resent_status
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Resent order status.
+          example: fully_resent
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 15
+          properties:
+            is:
+              type: string
+              description: '* `fully_resent` - Order is Fully resent
+
+                * `partially_resent` - Order is Partially resent'
+              enum:
+              - fully_resent
+              - partially_resent
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ResentStatus
+              example: null
+            is_not:
+              type: string
+              description: '* `fully_resent` - Order is Fully resent
+
+                * `partially_resent` - Order is Partially resent'
+              enum:
+              - fully_resent
+              - partially_resent
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ResentStatus
+              example: null
+            in:
+              type: string
+              description: '* `fully_resent` - Order is Fully resent
+
+                * `partially_resent` - Order is Partially resent'
+              enum:
+              - fully_resent
+              - partially_resent
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ResentStatus
+              pattern: ^\[(fully_resent|partially_resent)(,(fully_resent|partially_resent))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `fully_resent` - Order is Fully resent
+
+                * `partially_resent` - Order is Partially resent'
+              enum:
+              - fully_resent
+              - partially_resent
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ResentStatus
+              pattern: ^\[(fully_resent|partially_resent)(,(fully_resent|partially_resent))*\]$
+              example: null
+      - name: is_resent
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Order is resent order or not.
+          example: 'false'
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: BooleanFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 16
+          properties:
+            is:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+      - name: original_order_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: If resent order what is the parent order id.
+          example: 1xRt6ifdr
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 17
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+      - name: sort_by
+        in: query
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: true
+          x-cb-sort-order: 18
+          properties:
+            asc:
+              type: string
+              enum:
+              - created_at
+              - updated_at
+              example: null
+            desc:
+              type: string
+              enum:
+              - created_at
+              - updated_at
+              example: null
+          example: null
       responses:
         '200':
-          description: List of orders
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GenericList'
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        order:
+                          $ref: '#/components/schemas/Order'
+                          description: Resource object representing order
+                      required:
+                      - order
+                      example: null
+                    example: null
+                  next_offset:
+                    type: string
+                    description: This attribute is returned only if more resources are present. To fetch the next set of resources use this value for the input parameter `offset`.
+                    maxLength: 1000
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 9
+      x-cb-module: orders
+      x-cb-operation-is-list: true
+      x-cb-operation-method-name: list
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: list
+      tags:
+      - Orders
+    post:
+      summary: Create an order
+      operationId: create_an_order
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 40
+                  example: null
+                invoice_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-is-foreign-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 50
+                  example: null
+                status:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - new
+                  - processing
+                  - complete
+                  - cancelled
+                  - voided
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: true
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Status
+                  x-cb-sort-order: 2
+                  example: null
+                reference_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 3
+                  maxLength: 50
+                  example: null
+                fulfillment_status:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 4
+                  maxLength: 50
+                  example: null
+                note:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 5
+                  maxLength: 600
+                  example: null
+                tracking_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 6
+                  maxLength: 50
+                  example: null
+                tracking_url:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 7
+                  maxLength: 255
+                  example: null
+                batch_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 8
+                  maxLength: 50
+                  example: null
+              required:
+              - invoice_id
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                    description: Resource object representing order
+                required:
+                - order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 0
+      x-cb-module: orders
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: create
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: create
+      tags:
+      - Orders
+  /orders/import_order:
+    post:
+      summary: Import an order
+      operationId: import_an_order
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 40
+                  example: null
+                document_number:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 50
+                  example: null
+                invoice_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-is-foreign-column: true
+                  x-cb-sort-order: 2
+                  maxLength: 50
+                  example: null
+                status:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - cancelled
+                  - queued
+                  - awaiting_shipment
+                  - on_hold
+                  - delivered
+                  - shipped
+                  - partially_delivered
+                  - returned
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Status
+                  x-cb-sort-order: 3
+                  example: null
+                subscription_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-is-foreign-column: true
+                  x-cb-sort-order: 4
+                  maxLength: 50
+                  example: null
+                customer_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-is-foreign-column: true
+                  x-cb-sort-order: 5
+                  maxLength: 50
+                  example: null
+                created_at:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 6
+                  example: null
+                order_date:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 7
+                  example: null
+                shipping_date:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 8
+                  example: null
+                reference_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 9
+                  maxLength: 50
+                  example: null
+                fulfillment_status:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 10
+                  maxLength: 50
+                  example: null
+                note:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 11
+                  maxLength: 600
+                  example: null
+                tracking_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 12
+                  maxLength: 50
+                  example: null
+                tracking_url:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 13
+                  maxLength: 255
+                  example: null
+                batch_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 14
+                  maxLength: 50
+                  example: null
+                shipment_carrier:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 15
+                  maxLength: 50
+                  example: null
+                shipping_cut_off_date:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 16
+                  example: null
+                delivered_at:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 17
+                  example: null
+                shipped_at:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 18
+                  example: null
+                cancelled_at:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 19
+                  example: null
+                cancellation_reason:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - shipping_cut_off_passed
+                  - product_unsatisfactory
+                  - third_party_cancellation
+                  - product_not_required
+                  - delivery_date_missed
+                  - alternative_found
+                  - invoice_written_off
+                  - invoice_voided
+                  - fraudulent_transaction
+                  - payment_declined
+                  - subscription_cancelled
+                  - product_not_available
+                  - others
+                  - order_resent
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: CancellationReason
+                  x-cb-sort-order: 20
+                  example: null
+                refundable_credits_issued:
+                  type: integer
+                  format: int64
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-is-money-column: true
+                  x-cb-sort-order: 21
+                  minimum: 0
+                  example: null
+                shipping_address:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-hidden-from-client-sdk: false
+                  x-cb-is-multi-value-attribute: false
+                  x-cb-is-sub-resource: true
+                  properties:
+                    first_name:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 22
+                      maxLength: 150
+                      example: null
+                    last_name:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 23
+                      maxLength: 150
+                      example: null
+                    email:
+                      type: string
+                      format: email
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 24
+                      maxLength: 70
+                      example: null
+                    company:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 25
+                      maxLength: 250
+                      example: null
+                    phone:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 26
+                      maxLength: 50
+                      example: null
+                    line1:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 27
+                      maxLength: 150
+                      example: null
+                    line2:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 28
+                      maxLength: 150
+                      example: null
+                    line3:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 29
+                      maxLength: 150
+                      example: null
+                    city:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 30
+                      maxLength: 50
+                      example: null
+                    state_code:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 31
+                      maxLength: 50
+                      example: null
+                    state:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 32
+                      maxLength: 50
+                      example: null
+                    zip:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 33
+                      maxLength: 20
+                      example: null
+                    country:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 34
+                      maxLength: 50
+                      example: null
+                    validation_status:
+                      type: string
+                      default: not_validated
+                      deprecated: false
+                      enum:
+                      - not_validated
+                      - valid
+                      - partially_valid
+                      - invalid
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-is-global-enum: true
+                      x-cb-is-external-enum: true
+                      x-cb-is-gen-separate: true
+                      x-cb-is-ignore-generation: false
+                      x-cb-sdk-enum-api-name: ValidationStatus
+                      x-cb-global-enum-reference: ./schemas/enums/ValidationStatus.yaml
+                      x-cb-sort-order: 35
+                      example: null
+                  example: null
+                billing_address:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-hidden-from-client-sdk: false
+                  x-cb-is-multi-value-attribute: false
+                  x-cb-is-sub-resource: true
+                  properties:
+                    first_name:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 36
+                      maxLength: 150
+                      example: null
+                    last_name:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 37
+                      maxLength: 150
+                      example: null
+                    email:
+                      type: string
+                      format: email
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 38
+                      maxLength: 70
+                      example: null
+                    company:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 39
+                      maxLength: 250
+                      example: null
+                    phone:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 40
+                      maxLength: 50
+                      example: null
+                    line1:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 41
+                      maxLength: 150
+                      example: null
+                    line2:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 42
+                      maxLength: 150
+                      example: null
+                    line3:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 43
+                      maxLength: 150
+                      example: null
+                    city:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 44
+                      maxLength: 50
+                      example: null
+                    state_code:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 45
+                      maxLength: 50
+                      example: null
+                    state:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 46
+                      maxLength: 50
+                      example: null
+                    zip:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 47
+                      maxLength: 20
+                      example: null
+                    country:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 48
+                      maxLength: 50
+                      example: null
+                    validation_status:
+                      type: string
+                      default: not_validated
+                      deprecated: false
+                      enum:
+                      - not_validated
+                      - valid
+                      - partially_valid
+                      - invalid
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: billing_addresses
+                      x-cb-is-api-column: true
+                      x-cb-is-global-enum: true
+                      x-cb-is-external-enum: true
+                      x-cb-is-gen-separate: true
+                      x-cb-is-ignore-generation: false
+                      x-cb-sdk-enum-api-name: ValidationStatus
+                      x-cb-global-enum-reference: ./schemas/enums/ValidationStatus.yaml
+                      x-cb-sort-order: 49
+                      example: null
+                  example: null
+              required:
+              - created_at
+              - invoice_id
+              - order_date
+              - shipping_date
+              - status
+              example: null
+            encoding:
+              billing_address:
+                style: deepObject
+                explode: true
+              shipping_address:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                    description: Resource object representing order
+                required:
+                - order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 2
+      x-cb-module: orders
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: importOrder
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: importOrder
+      tags:
+      - Orders
+  /orders/{order-id}/assign_order_number:
+    post:
+      summary: Assign order number
+      operationId: assign_order_number
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/order-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                    description: Resource object representing order
+                required:
+                - order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 3
+      x-cb-module: orders
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: assignOrderNumber
+      x-cb-sdk-method-name: assignOrderNumber
+      tags:
+      - Orders
+  /orders/{order-id}/resend:
+    post:
+      summary: Resend an order
+      operationId: resend_an_order
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/order-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                shipping_date:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  example: null
+                resend_reason:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 100
+                  example: null
+                order_line_items:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    id:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: order_line_items
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 2
+                        maxLength: 40
+                        example: null
+                      example: null
+                    fulfillment_quantity:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: order_line_items
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 3
+                        minimum: 0
+                        example: null
+                      example: null
+                  example: null
+              example: null
+            encoding:
+              order_line_items:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                    description: Resource object representing order
+                required:
+                - order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 11
+      x-cb-module: orders
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: resend
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: resend
+      tags:
+      - Orders
+  /orders/{order-id}/reopen:
+    post:
+      summary: Reopen a cancelled order
+      operationId: reopen_a_cancelled_order
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/order-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                void_cancellation_credit_notes:
+                  type: boolean
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  example: null
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                    description: Resource object representing order
+                required:
+                - order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 6
+      x-cb-module: orders
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: reopen
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: reopen
+      tags:
+      - Orders
+  /orders/{order-id}/cancel:
+    post:
+      summary: Cancel an order
+      operationId: cancel_an_order
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/order-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                cancellation_reason:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - shipping_cut_off_passed
+                  - product_unsatisfactory
+                  - third_party_cancellation
+                  - product_not_required
+                  - delivery_date_missed
+                  - alternative_found
+                  - invoice_written_off
+                  - invoice_voided
+                  - fraudulent_transaction
+                  - payment_declined
+                  - subscription_cancelled
+                  - product_not_available
+                  - others
+                  - order_resent
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: CancellationReason
+                  x-cb-sort-order: 0
+                  example: null
+                customer_notes:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  maxLength: 2000
+                  example: null
+                comment:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 3
+                  maxLength: 300
+                  example: null
+                cancelled_at:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 4
+                  example: null
+                credit_note:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-hidden-from-client-sdk: false
+                  x-cb-is-multi-value-attribute: false
+                  x-cb-is-sub-resource: true
+                  properties:
+                    total:
+                      type: integer
+                      format: int64
+                      default: 0
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: credit_notes
+                      x-cb-is-api-column: true
+                      x-cb-is-money-column: true
+                      x-cb-sort-order: 1
+                      minimum: 0
+                      example: null
+                  example: null
+              required:
+              - cancellation_reason
+              example: null
+            encoding:
+              credit_note:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                    description: Resource object representing order
+                required:
+                - order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 4
+      x-cb-module: orders
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: cancel
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: cancel
+      tags:
+      - Orders
+  /orders/{order-id}:
+    get:
+      summary: Retrieve an order
+      operationId: retrieve_an_order
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/order-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                    description: Resource object representing order
+                required:
+                - order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 7
+      x-cb-module: orders
+      x-cb-operation-method-name: retrieve
+      x-cb-sdk-method-name: retrieve
+      tags:
+      - Orders
+    post:
+      summary: Update an order
+      operationId: update_an_order
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/order-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reference_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 50
+                  example: null
+                batch_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 50
+                  example: null
+                note:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  maxLength: 600
+                  example: null
+                shipping_date:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 3
+                  example: null
+                order_date:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 4
+                  example: null
+                cancelled_at:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 5
+                  example: null
+                cancellation_reason:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - shipping_cut_off_passed
+                  - product_unsatisfactory
+                  - third_party_cancellation
+                  - product_not_required
+                  - delivery_date_missed
+                  - alternative_found
+                  - invoice_written_off
+                  - invoice_voided
+                  - fraudulent_transaction
+                  - payment_declined
+                  - subscription_cancelled
+                  - product_not_available
+                  - others
+                  - order_resent
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: CancellationReason
+                  x-cb-sort-order: 6
+                  example: null
+                shipped_at:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 7
+                  example: null
+                delivered_at:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 8
+                  example: null
+                tracking_url:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 12
+                  maxLength: 255
+                  example: null
+                tracking_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 13
+                  maxLength: 50
+                  example: null
+                shipment_carrier:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 14
+                  maxLength: 50
+                  example: null
+                fulfillment_status:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 15
+                  maxLength: 50
+                  example: null
+                status:
+                  type: string
+                  default: new
+                  deprecated: false
+                  enum:
+                  - new
+                  - processing
+                  - complete
+                  - cancelled
+                  - voided
+                  - queued
+                  - awaiting_shipment
+                  - on_hold
+                  - delivered
+                  - shipped
+                  - partially_delivered
+                  - returned
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: orders
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Status
+                  x-cb-sort-order: 16
+                  example: null
+                shipping_address:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-hidden-from-client-sdk: false
+                  x-cb-is-multi-value-attribute: false
+                  x-cb-is-sub-resource: true
+                  properties:
+                    first_name:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 17
+                      maxLength: 150
+                      example: null
+                    last_name:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 18
+                      maxLength: 150
+                      example: null
+                    email:
+                      type: string
+                      format: email
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 19
+                      maxLength: 70
+                      example: null
+                    company:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 20
+                      maxLength: 250
+                      example: null
+                    phone:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 21
+                      maxLength: 50
+                      example: null
+                    line1:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 22
+                      maxLength: 150
+                      example: null
+                    line2:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 23
+                      maxLength: 150
+                      example: null
+                    line3:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 24
+                      maxLength: 150
+                      example: null
+                    city:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 25
+                      maxLength: 50
+                      example: null
+                    state_code:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 26
+                      maxLength: 50
+                      example: null
+                    state:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 27
+                      maxLength: 50
+                      example: null
+                    zip:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 28
+                      maxLength: 20
+                      example: null
+                    country:
+                      type: string
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-sort-order: 29
+                      maxLength: 50
+                      example: null
+                    validation_status:
+                      type: string
+                      default: not_validated
+                      deprecated: false
+                      enum:
+                      - not_validated
+                      - valid
+                      - partially_valid
+                      - invalid
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: shipping_addresses
+                      x-cb-is-api-column: true
+                      x-cb-is-global-enum: true
+                      x-cb-is-external-enum: true
+                      x-cb-is-gen-separate: true
+                      x-cb-is-ignore-generation: false
+                      x-cb-sdk-enum-api-name: ValidationStatus
+                      x-cb-global-enum-reference: ./schemas/enums/ValidationStatus.yaml
+                      x-cb-sort-order: 30
+                      example: null
+                  example: null
+                order_line_items:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    id:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: order_line_items
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 9
+                        maxLength: 40
+                        example: null
+                      example: null
+                    status:
+                      type: array
+                      items:
+                        type: string
+                        default: queued
+                        deprecated: false
+                        enum:
+                        - queued
+                        - awaiting_shipment
+                        - on_hold
+                        - delivered
+                        - shipped
+                        - partially_delivered
+                        - returned
+                        - cancelled
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: order_line_items
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: Status
+                        x-cb-sort-order: 10
+                        example: null
+                      example: null
+                    sku:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: order_line_items
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 11
+                        maxLength: 250
+                        example: null
+                      example: null
+                  example: null
+              example: null
+            encoding:
+              order_line_items:
+                style: deepObject
+                explode: true
+              shipping_address:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                    description: Resource object representing order
+                required:
+                - order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 1
+      x-cb-module: orders
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: update
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: update
+      tags:
+      - Orders
+  /orders/{order-id}/delete:
+    post:
+      summary: Delete an imported order
+      operationId: delete_an_imported_order
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/order-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                    description: Resource object representing order
+                required:
+                - order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 8
+      x-cb-module: orders
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: delete
+      x-cb-sdk-method-name: delete
+      tags:
+      - Orders
+  /orders/{order-id}/create_refundable_credit_note:
+    post:
+      summary: Create a refundable credit note
+      operationId: create_a_refundable_credit_note
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/order-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                customer_notes:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  maxLength: 2000
+                  example: null
+                comment:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 3
+                  maxLength: 300
+                  example: null
+                credit_note:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-hidden-from-client-sdk: false
+                  x-cb-is-multi-value-attribute: false
+                  x-cb-is-sub-resource: true
+                  properties:
+                    reason_code:
+                      type: string
+                      deprecated: false
+                      enum:
+                      - write_off
+                      - subscription_change
+                      - subscription_cancellation
+                      - subscription_pause
+                      - chargeback
+                      - product_unsatisfactory
+                      - service_unsatisfactory
+                      - order_change
+                      - order_cancellation
+                      - waiver
+                      - other
+                      - fraudulent
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: required
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: credit_notes
+                      x-cb-is-api-column: true
+                      x-cb-is-global-enum: false
+                      x-cb-is-external-enum: false
+                      x-cb-is-gen-separate: false
+                      x-cb-is-ignore-generation: false
+                      x-cb-sdk-enum-api-name: ReasonCode
+                      x-cb-sort-order: 0
+                      example: null
+                    total:
+                      type: integer
+                      format: int64
+                      default: 0
+                      deprecated: false
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: required
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: credit_notes
+                      x-cb-is-api-column: true
+                      x-cb-is-money-column: true
+                      x-cb-sort-order: 1
+                      minimum: 0
+                      example: null
+                  required:
+                  - reason_code
+                  - total
+                  example: null
+              example: null
+            encoding:
+              credit_note:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+                    description: Resource object representing order
+                required:
+                - order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: order
+      x-cb-sort-order: 5
+      x-cb-module: orders
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: createRefundableCreditNote
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: createRefundableCreditNote
+      tags:
+      - Orders
 components:
   schemas:
-    GenericList:
+    '503':
       type: object
       properties:
-        list:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `db_connection_failure` - Returned when db connection fails.
+
+            * `site_read_only_mode` - Returned when your site is temporarily unavailable for write operations due to a scheduled maintenance.
+
+            * `site_not_ready` - Returned when your site is temporarily unavailable due to a scheduled maintenance.
+
+            * `internal_temporary_error` - Returned when temporary occured in Chargebee side. The request can be re-tried, with exponential backoff in case of repeat failures.'
+          enum:
+          - db_connection_failure
+          - site_read_only_mode
+          - site_not_ready
+          - internal_temporary_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '403':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `request_blocked` - Returned when request is blocked for your site. The blocking could be only for a specific set of operation(s) . The reason would be provided as part of the message. You would have to contact support for additional details.
+
+            * `api_authorization_failed` - Returned when the API key does not have sufficient privileges to perform the particular operation.'
+          enum:
+          - request_blocked
+          - api_authorization_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '405':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `http_method_not_supported` - Returned when the ''http method'', specified in the request, is not allowed for this URL. It should not occur if you are using one of the standard client library.'
+          enum:
+          - http_method_not_supported
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '400':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          - payment
+          example: null
+        api_error_code:
+          type: string
+          description: '* `payment_intent_invalid_amount` - Returned when processing amount is different from payment intent amountFor example if payment intent which is passed has authorized 10$ and if the charges initiated is for 12$.
+
+            * `configuration_incompatible` - Returned when the request is not compatible with the configuration for the  site or the configuration is incomplete.
+
+            * `payment_intent_invalid` - Returned when validation or verification fails for provided payment intent.For example if payment intent which is passed is in not consumable state.
+
+            * `invalid_request` - Returned when the request has incompatible values or does not match the API specification. As it is a generic error, handling this error is recommended only in combination  with  param attribute.
+
+            * `payment_method_verification_failed` - Returned when validation or verification fails for the provided payment method. For example  if the payment method is card, this will include all card parameter validation errors and also verification failures  from the gateway.
+
+            * `payment_processing_failed` - Returned when the payment collection fails.
+
+            * `resource_limit_exhausted` - Returned when any limit constraint is violated by the request. For example this error is  thrown when the coupon provided has already expired or its maximum redemption count has been reached.
+
+            * `duplicate_entry` - Returned when the request provides a duplicate value for an attribute that is specified as unique for that site.  For example in ''create subscription api'' if you are passing  the subscription id then this error will be thrown if a subscription exists in site with the same id.
+
+            * `param_wrong_value` - Returned when the value does not meet the required specification for the parameter. For example, wrong email format. It is strongly recommended  to do the validation at your end before calling Chargebee''s API (other than specific cases like  VAT number validation).
+
+            * `payment_method_not_present` - Returned when the request requires payment collection but the ''payment method'' details (such as card) is not present for the customer. This error will not occur if auto-collection is disabled for the customer.
+
+            * `resource_limit_exceeded`
+
+            * `payment_gateway_currency_incompatible` - Returned when the payment gateway configured is incompatible with the transactional currency. This error will not occur if auto-collection is disabled for the customer.'
+          enum:
+          - payment_intent_invalid_amount
+          - configuration_incompatible
+          - payment_intent_invalid
+          - invalid_request
+          - payment_method_verification_failed
+          - payment_processing_failed
+          - resource_limit_exhausted
+          - duplicate_entry
+          - param_wrong_value
+          - payment_method_not_present
+          - resource_limit_exceeded
+          - payment_gateway_currency_incompatible
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '500':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `internal_error` - Returned when the request parameters were right but the operation couldn''t be completed due to a bug in Chargebee side.'
+          enum:
+          - internal_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    Order:
+      type: object
+      x-cb-resource-id: order
+      x-cb-resource-path-name: orders
+      x-cb-is-dependent-resource: false
+      x-cb-sort-order: 30
+      properties:
+        id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 0
+          maxLength: 40
+          example: null
+        document_number:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 1
+          maxLength: 50
+          example: null
+        invoice_id:
+          type: string
+          deprecated: false
+          x-cb-is-foreign-column: true
+          x-cb-sort-order: 2
+          maxLength: 50
+          example: null
+        subscription_id:
+          type: string
+          deprecated: false
+          x-cb-is-foreign-column: true
+          x-cb-sort-order: 3
+          maxLength: 50
+          example: null
+        customer_id:
+          type: string
+          deprecated: false
+          x-cb-is-foreign-column: true
+          x-cb-sort-order: 4
+          maxLength: 50
+          example: null
+        status:
+          type: string
+          default: new
+          deprecated: false
+          enum:
+          - new
+          - processing
+          - complete
+          - cancelled
+          - voided
+          - queued
+          - awaiting_shipment
+          - on_hold
+          - delivered
+          - shipped
+          - partially_delivered
+          - returned
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Status
+          x-cb-sort-order: 5
+          example: null
+        cancellation_reason:
+          type: string
+          deprecated: false
+          enum:
+          - shipping_cut_off_passed
+          - product_unsatisfactory
+          - third_party_cancellation
+          - product_not_required
+          - delivery_date_missed
+          - alternative_found
+          - invoice_written_off
+          - invoice_voided
+          - fraudulent_transaction
+          - payment_declined
+          - subscription_cancelled
+          - product_not_available
+          - others
+          - order_resent
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: CancellationReason
+          x-cb-sort-order: 6
+          example: null
+        payment_status:
+          type: string
+          deprecated: false
+          enum:
+          - not_paid
+          - paid
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: PaymentStatus
+          x-cb-sort-order: 7
+          example: null
+        order_type:
+          type: string
+          deprecated: false
+          enum:
+          - manual
+          - system_generated
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: OrderType
+          x-cb-sort-order: 8
+          example: null
+        price_type:
+          type: string
+          default: tax_exclusive
+          deprecated: false
+          enum:
+          - tax_exclusive
+          - tax_inclusive
+          x-cb-is-global-enum: true
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: true
+          x-cb-is-gen-separate: true
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: PriceType
+          x-cb-global-enum-reference: ./schemas/enums/PriceType.yaml
+          x-cb-sort-order: 9
+          example: null
+        reference_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 10
+          maxLength: 50
+          example: null
+        fulfillment_status:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 11
+          maxLength: 50
+          example: null
+        order_date:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 12
+          example: null
+        shipping_date:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 13
+          example: null
+        note:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 14
+          maxLength: 600
+          example: null
+        tracking_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 15
+          maxLength: 50
+          example: null
+        tracking_url:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 16
+          maxLength: 255
+          example: null
+        batch_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 17
+          maxLength: 50
+          example: null
+        created_by:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 18
+          maxLength: 50
+          example: null
+        shipment_carrier:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 19
+          maxLength: 50
+          example: null
+        invoice_round_off_amount:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 20
+          minimum: 0
+          example: null
+        tax:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 21
+          minimum: 0
+          example: null
+        amount_paid:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 22
+          minimum: 0
+          example: null
+        amount_adjusted:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 23
+          minimum: 0
+          example: null
+        refundable_credits_issued:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 24
+          minimum: 0
+          example: null
+        refundable_credits:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 25
+          minimum: 0
+          example: null
+        rounding_adjustement:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 26
+          example: null
+        paid_on:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 27
+          example: null
+        shipping_cut_off_date:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 29
+          example: null
+        created_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 30
+          example: null
+        status_update_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 31
+          example: null
+        delivered_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 32
+          example: null
+        shipped_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 33
+          example: null
+        resource_version:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-sort-order: 34
+          example: null
+        updated_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 35
+          example: null
+        cancelled_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 36
+          example: null
+        resent_status:
+          type: string
+          deprecated: false
+          enum:
+          - fully_resent
+          - partially_resent
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: ResentStatus
+          x-cb-sort-order: 37
+          example: null
+        is_resent:
+          type: boolean
+          default: false
+          deprecated: false
+          x-cb-sort-order: 38
+          example: null
+        original_order_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 39
+          maxLength: 40
+          example: null
+        discount:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 43
+          minimum: 0
+          example: null
+        sub_total:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 44
+          minimum: 0
+          example: null
+        total:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 45
+          minimum: 0
+          example: null
+        deleted:
+          type: boolean
+          deprecated: false
+          x-cb-sort-order: 49
+          example: null
+        currency_code:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 50
+          maxLength: 3
+          example: null
+        is_gifted:
+          type: boolean
+          default: false
+          deprecated: false
+          x-cb-sort-order: 51
+          example: null
+        gift_note:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 52
+          maxLength: 500
+          example: null
+        gift_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 53
+          maxLength: 50
+          example: null
+        resend_reason:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 55
+          maxLength: 100
+          example: null
+        business_entity_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 57
+          maxLength: 50
+          example: null
+        order_line_items:
           type: array
+          deprecated: false
+          x-cb-sort-order: 40
           items:
             type: object
-        next_offset:
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: OrderLineItem
+            x-cb-sub-resource-parent-name: Order
+            properties:
+              id:
+                type: string
+                deprecated: false
+                maxLength: 40
+                example: null
+              invoice_id:
+                type: string
+                deprecated: false
+                x-cb-is-foreign-column: true
+                maxLength: 50
+                example: null
+              invoice_line_item_id:
+                type: string
+                deprecated: false
+                x-cb-is-foreign-column: true
+                maxLength: 40
+                example: null
+              unit_price:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              description:
+                type: string
+                deprecated: false
+                maxLength: 250
+                example: null
+              amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              fulfillment_quantity:
+                type: integer
+                format: int32
+                deprecated: false
+                minimum: 0
+                example: null
+              fulfillment_amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              tax_amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              amount_paid:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              amount_adjusted:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              refundable_credits_issued:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              refundable_credits:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              is_shippable:
+                type: boolean
+                deprecated: false
+                example: null
+              sku:
+                type: string
+                deprecated: false
+                maxLength: 250
+                example: null
+              status:
+                type: string
+                default: queued
+                deprecated: false
+                enum:
+                - queued
+                - awaiting_shipment
+                - on_hold
+                - delivered
+                - shipped
+                - partially_delivered
+                - returned
+                - cancelled
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: Status
+                example: null
+              entity_type:
+                type: string
+                deprecated: false
+                enum:
+                - adhoc
+                - plan_item_price
+                - addon_item_price
+                - charge_item_price
+                - plan_setup
+                - plan
+                - addon
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: EntityType
+                example: null
+              item_level_discount_amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              discount_amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              entity_id:
+                type: string
+                deprecated: false
+                maxLength: 50
+                example: null
+            required:
+            - entity_type
+            - id
+            - invoice_id
+            - invoice_line_item_id
+            - is_shippable
+            example: null
+          example: null
+        shipping_address:
+          type: object
+          deprecated: false
+          x-cb-is-sub-resource: true
+          x-cb-sub-resource-name: ShippingAddress
+          x-cb-sub-resource-parent-name: Order
+          x-cb-sort-order: 41
+          properties:
+            first_name:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            last_name:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            email:
+              type: string
+              format: email
+              deprecated: false
+              maxLength: 70
+              example: null
+            company:
+              type: string
+              deprecated: false
+              maxLength: 250
+              example: null
+            phone:
+              type: string
+              deprecated: false
+              maxLength: 50
+              example: null
+            line1:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            line2:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            line3:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            city:
+              type: string
+              deprecated: false
+              maxLength: 50
+              example: null
+            state_code:
+              type: string
+              deprecated: false
+              maxLength: 50
+              example: null
+            state:
+              type: string
+              deprecated: false
+              maxLength: 50
+              example: null
+            country:
+              type: string
+              deprecated: false
+              maxLength: 50
+              example: null
+            zip:
+              type: string
+              deprecated: false
+              maxLength: 20
+              example: null
+            validation_status:
+              type: string
+              default: not_validated
+              deprecated: false
+              enum:
+              - not_validated
+              - valid
+              - partially_valid
+              - invalid
+              x-cb-is-global-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-external-enum: true
+              x-cb-is-gen-separate: true
+              x-cb-is-ignore-generation: false
+              x-cb-sdk-enum-api-name: ValidationStatus
+              x-cb-global-enum-reference: ./schemas/enums/ValidationStatus.yaml
+              example: null
+          example: null
+        billing_address:
+          type: object
+          deprecated: false
+          x-cb-is-sub-resource: true
+          x-cb-sub-resource-name: BillingAddress
+          x-cb-sub-resource-parent-name: Order
+          x-cb-sort-order: 42
+          properties:
+            first_name:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            last_name:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            email:
+              type: string
+              format: email
+              deprecated: false
+              maxLength: 70
+              example: null
+            company:
+              type: string
+              deprecated: false
+              maxLength: 250
+              example: null
+            phone:
+              type: string
+              deprecated: false
+              maxLength: 50
+              example: null
+            line1:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            line2:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            line3:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            city:
+              type: string
+              deprecated: false
+              maxLength: 50
+              example: null
+            state_code:
+              type: string
+              deprecated: false
+              maxLength: 50
+              example: null
+            state:
+              type: string
+              deprecated: false
+              maxLength: 50
+              example: null
+            country:
+              type: string
+              deprecated: false
+              maxLength: 50
+              example: null
+            zip:
+              type: string
+              deprecated: false
+              maxLength: 20
+              example: null
+            validation_status:
+              type: string
+              default: not_validated
+              deprecated: false
+              enum:
+              - not_validated
+              - valid
+              - partially_valid
+              - invalid
+              x-cb-is-global-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-external-enum: true
+              x-cb-is-gen-separate: true
+              x-cb-is-ignore-generation: false
+              x-cb-sdk-enum-api-name: ValidationStatus
+              x-cb-global-enum-reference: ./schemas/enums/ValidationStatus.yaml
+              example: null
+          example: null
+        line_item_taxes:
+          type: array
+          deprecated: false
+          x-cb-sort-order: 46
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: LineItemTax
+            x-cb-sub-resource-parent-name: Order
+            properties:
+              line_item_id:
+                type: string
+                deprecated: false
+                maxLength: 40
+                example: null
+              tax_name:
+                type: string
+                deprecated: false
+                maxLength: 100
+                example: null
+              tax_rate:
+                type: number
+                format: double
+                default: 0
+                deprecated: false
+                maximum: 100
+                minimum: 0
+                example: null
+              date_to:
+                type: integer
+                format: unix-time
+                deprecated: false
+                example: null
+              date_from:
+                type: integer
+                format: unix-time
+                deprecated: false
+                example: null
+              prorated_taxable_amount:
+                type: number
+                format: decimal
+                deprecated: false
+                maximum: 1000000000
+                minimum: -1000000000
+                example: null
+              is_partial_tax_applied:
+                type: boolean
+                deprecated: false
+                example: null
+              is_non_compliance_tax:
+                type: boolean
+                deprecated: false
+                example: null
+              taxable_amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              tax_amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              tax_juris_type:
+                type: string
+                deprecated: false
+                enum:
+                - country
+                - federal
+                - state
+                - county
+                - city
+                - special
+                - unincorporated
+                - other
+                x-cb-is-global-enum: true
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: true
+                x-cb-is-gen-separate: true
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: TaxJurisType
+                example: null
+              tax_juris_name:
+                type: string
+                deprecated: false
+                maxLength: 250
+                example: null
+              tax_juris_code:
+                type: string
+                deprecated: false
+                maxLength: 250
+                example: null
+              tax_amount_in_local_currency:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              local_currency_code:
+                type: string
+                deprecated: false
+                maxLength: 3
+                example: null
+            required:
+            - tax_amount
+            - tax_name
+            - tax_rate
+            - taxable_amount
+            example: null
+          example: null
+        line_item_discounts:
+          type: array
+          deprecated: false
+          x-cb-sort-order: 47
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: LineItemDiscount
+            x-cb-sub-resource-parent-name: Order
+            properties:
+              line_item_id:
+                type: string
+                deprecated: false
+                maxLength: 50
+                example: null
+              discount_type:
+                type: string
+                deprecated: false
+                enum:
+                - item_level_coupon
+                - document_level_coupon
+                - promotional_credits
+                - prorated_credits
+                - custom_discount
+                - item_level_discount
+                - document_level_discount
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: DiscountType
+                example: null
+              coupon_id:
+                type: string
+                deprecated: true
+                maxLength: 50
+                example: null
+              entity_id:
+                type: string
+                deprecated: false
+                x-cb-attribute-pcv: 2
+                maxLength: 50
+                example: null
+              discount_amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+            required:
+            - discount_amount
+            - discount_type
+            - line_item_id
+            example: null
+          example: null
+        linked_credit_notes:
+          type: array
+          deprecated: false
+          x-cb-sort-order: 48
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: OrderLineItemLinkedCredit
+            x-cb-sub-resource-parent-name: Order
+            properties:
+              amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              type:
+                type: string
+                deprecated: false
+                enum:
+                - adjustment
+                - refundable
+                - store
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: Type
+                example: null
+              id:
+                type: string
+                deprecated: false
+                maxLength: 50
+                example: null
+              status:
+                type: string
+                deprecated: false
+                enum:
+                - adjusted
+                - refunded
+                - refund_due
+                - voided
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: Status
+                example: null
+              amount_adjusted:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              amount_refunded:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+            required:
+            - id
+            - status
+            - type
+            example: null
+          example: null
+        resent_orders:
+          type: array
+          deprecated: false
+          x-cb-sort-order: 56
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: ResentOrder
+            x-cb-sub-resource-parent-name: Order
+            properties:
+              order_id:
+                type: string
+                deprecated: false
+                x-cb-is-foreign-column: true
+                maxLength: 40
+                example: null
+              reason:
+                type: string
+                deprecated: false
+                maxLength: 100
+                example: null
+              amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+            required:
+            - order_id
+            example: null
+          example: null
+      required:
+      - created_at
+      - deleted
+      - id
+      - is_resent
+      - price_type
+      example: null
+    '409':
+      type: object
+      properties:
+        message:
           type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `invalid_state_for_request` - Returned when the requested operation is not allowed for current state of the resource. This error will occur if the state of the resource has not been checked for the validity of the request. For example this error is returned when we try to schedule subscription changes  at ''end of term'' for canceled subscriptions.'
+          enum:
+          - invalid_state_for_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '422':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `unable_to_process_request` - Returned when the HTTP request body contains a well-formed, but semantically erroneous payload. For example this error is returned when a client attempts to reuse an idempotency key with a different request payload.'
+          enum:
+          - unable_to_process_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '404':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: "* `resource_not_found` - Returned when any of resource(s) referred in the request is not found. \n* `site_not_found` - Returned when the site is not found."
+          enum:
+          - resource_not_found
+          - site_not_found
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '401':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: '* `api_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be the api key is invalid or authentication header is not present in the request or the header''s format is invalid.
+
+            * `basic_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be that one or both of the username and password are invalid'
+          enum:
+          - api_authentication_failed
+          - basic_authentication_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '429':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `third_party_api_request_limit_exceeded` - Returned when your request is blocked temporarily at a third-party service, due to the request count exceeding their acceptable limits.
+
+            * `api_request_limit_exceeded` - Returned when requests have been blocked temporarily due to request count exceeding acceptable limits.
+
+            * `lock_timeout` - Returned when there are multiple concurrent requests to the same resource.'
+          enum:
+          - third_party_api_request_limit_exceeded
+          - api_request_limit_exceeded
+          - lock_timeout
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+  parameters:
+    chargebee-request-origin-device:
+      name: chargebee-request-origin-device
+      in: header
+      description: The device from which the customer has made the request
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The device from which the customer has made the request
+        example: Android
+    chargebee-event-actions:
+      name: chargebee-event-actions
+      in: header
+      description: skip all actions to be done on the events
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip all actions to be done on the events
+        enum:
+        - all-disabled
+    offset:
+      name: offset
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        description: Determines your position in the list for pagination. To ensure that the next page is retrieved correctly, always set 'offset' to the value of 'next_offset' obtained in the previous iteration of the API call.
+        x-cb-is-pagination-parameter: true
+        maxLength: 1000
+    chargebee-event-webhook:
+      name: chargebee-event-webhook
+      in: header
+      description: ' skip only webhooks'
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: ' skip only webhooks'
+        enum:
+        - all-disabled
+    order-id:
+      name: order-id
+      in: path
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    chargebee-business-entity-id:
+      name: chargebee-business-entity-id
+      in: header
+      description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        maxLength: 50
+    limit:
+      name: limit
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+        default: 10
+        description: The number of resources to be returned.
+        x-cb-is-pagination-parameter: true
+        maximum: 100
+        minimum: 1
+    chargebee-request-origin-user:
+      name: chargebee-request-origin-user
+      in: header
+      description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        example: user@example.com
+    chargebee-request-origin-user-encoded:
+      name: chargebee-request-origin-user-encoded
+      in: header
+      description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        example: dXNlci7QutCy0ZbRgtC+0YfQutCwQGV4YW1wbGUuY29t
+    chargebee-request-origin-ip:
+      name: chargebee-request-origin-ip
+      in: header
+      description: The IP address of the customer where the request originated
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The IP address of the customer where the request originated
+        example: 192.168.1.2
+        pattern: ^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-fA-F]|[a-fA-F][a-fA-F0-9\-]*[a-fA-F0-9])\.)*([A-Fa-f]|[A-Fa-f][A-Fa-f0-9\-]*[A-Fa-f0-9])$|^(?:(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){6})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:::(?:(?:(?:[0-9a-fA-F]{1,4})):){5})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){4})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,1}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){3})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,2}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){2})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,3}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:[0-9a-fA-F]{1,4})):)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,4}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,5}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,6}(?:(?:[0-9a-fA-F]{1,4})))?::)))))$
+    chargebee-event-email:
+      name: chargebee-event-email
+      in: header
+      description: skip only emails
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip only emails
+        enum:
+        - all-disabled
   securitySchemes:
-    basicAuth:
+    BasicAuth:
       type: http
       scheme: basic
-      description: HTTP Basic Auth. Username is your Chargebee site API key; password is empty.

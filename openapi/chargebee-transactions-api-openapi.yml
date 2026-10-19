@@ -1,0 +1,4594 @@
+openapi: 3.2.0
+info:
+  title: Chargebee Transactions API
+  contact:
+    name: Chargebee Support
+    url: https://www.chargebee.com
+    email: support@chargebee.com
+  version: 2026-09-24.553c79154f0075cfbab35271eeff8b63a3ed6a86
+  x-cb-product-catalog-version: 2
+  x-cb-api-version: 2
+servers:
+- url: '{protocol}://{site}.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+- url: '{protocol}://{site}-test.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+tags:
+- name: Transactions
+paths:
+  /transactions:
+    get:
+      summary: List transactions
+      operationId: list_transactions
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - name: include_deleted
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+          description: Indicates whether to include deleted objects in the list. The deleted objects have the attribute `deleted` as `true`.
+          x-cb-sort-order: 2
+          example: null
+      - name: id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Uniquely identifies the transaction.
+          example: txn_88ybdbsnvf2
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 3
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: customer_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Identifier of the customer for which this transaction is made
+          example: 5hjdk8nOpd
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-presence-operator-supported: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 4
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            is_present:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: subscription_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Identifier of the subscription for which this transaction is made.
+          example: 5hjdk8nOpd
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-presence-operator-supported: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 5
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            is_present:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: payment_source_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: To filter based on Transaction payment source id.
+          example: pm_3Nl8XXUQUXDVFa2
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-presence-operator-supported: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 6
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            is_present:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: payment_method
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The payment method of this transaction
+          example: card
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 7
+          properties:
+            is:
+              type: string
+              description: '* `card` - Card
+
+                * `cash` - Cash
+
+                * `check` - Check
+
+                * `chargeback` - Only applicable for a transaction of [type](transactions#transaction_type) = `refund`. This value is set by Chargebee when an automated [chargeback](https://www.chargebee.com/docs/chargeback.html#chargeback-process) occurs. You can also set this explicitly when [recording a refund](transactions#record_an_offline_refund).
+
+                * `bank_transfer` - Bank Transfer
+
+                * `amazon_payments` - Amazon Payments
+
+                * `paypal_express_checkout` - Paypal Express Checkout
+
+                * `direct_debit` - Direct Debit
+
+                * `alipay` - Alipay
+
+                * `unionpay` - Unionpay
+
+                * `apple_pay` - Apple Pay
+
+                * `wechat_pay` - WeChat Pay
+
+                * `ach_credit` - ACH Credit
+
+                * `sepa_credit` - SEPA Credit
+
+                * `ideal` - IDEAL
+
+                * `google_pay` - Google Pay
+
+                * `sofort` - Sofort
+
+                * `bancontact` - Bancontact
+
+                * `giropay` - giropay
+
+                * `dotpay` - Dotpay
+
+                * `other` - Payment Methods other than the above types
+
+                * `app_store` - **(Deprecated)** App Store
+
+                * `upi` - upi
+
+                * `netbanking_emandates` - netbanking_emandates
+
+                * `play_store` - **(Deprecated)** Play Store
+
+                * `custom` - Custom
+
+                * `boleto` - boleto
+
+                * `venmo` - Venmo
+
+                * `pay_to` - PayTo
+
+                * `faster_payments` - Faster Payments
+
+                * `sepa_instant_transfer` - Sepa Instant Transfer
+
+                * `automated_bank_transfer` - Automated Bank Transfer
+
+                * `klarna_pay_now` - Klarna Pay Now
+
+                * `online_banking_poland` - Online Banking Poland
+
+                * `payconiq_by_bancontact` - Payconiq by Bancontact
+
+                * `electronic_payment_standard` - Payments made via Electronic Payment Standard.
+
+                * `kbc_payment_button` - Payments made via KBC Payment Button.
+
+                * `pay_by_bank` - Payments made via Pay By Bank.
+
+                * `trustly` - Payments made via Trustly.
+
+                * `stablecoin` - Stablecoin
+
+                * `kakao_pay` - Kakao Pay
+
+                * `naver_pay` - Naver Pay
+
+                * `revolut_pay` - Revolut Pay
+
+                * `cash_app_pay` - Cash App Pay
+
+                * `pix` - Payments made via Pix
+
+                * `twint` - Twint
+
+                * `go_pay` - Go Pay
+
+                * `grab_pay` - Grab Pay
+
+                * `pay_co` - Pay Co
+
+                * `after_pay` - After Pay
+
+                * `swish` - Swish
+
+                * `payme` - PayMe
+
+                * `klarna` - Payments made via Klarna
+
+                * `alipay_hk` - Alipay HK
+
+                * `paypay` - PayPay
+
+                * `gcash` - GCash
+
+                * `south_korean_cards` - Payments made via South Korean Cards
+
+                * `paynow` - Payments made via PayNow
+
+                * `bizum` - Payments made via Bizum
+
+                * `promptpay` - Payments made via PromptPay
+
+                * `dana` - Dana
+
+                * `touch_n_go` - Touch ''n Go
+
+                * `tamara` - Tamara
+
+                * `qpay` - Qpay
+
+                * `ovo` - OVO
+
+                * `momo` - MoMo
+
+                * `mercado_pago` - Mercado Pago
+
+                * `nequi` - Nequi
+
+                * `nupay` - NuPay
+
+                * `picpay` - PicPay
+
+                * `thai_qr` - Thai QR
+
+                * `blik` - BLIK
+
+                * `fpx` - FPX
+
+                * `wero` - Wero
+
+                * `p24` - Przelewy24 (P24)
+
+                * `affirm_pay` - Affirm Pay
+
+                * `rakuten_pay` - Rakuten Pay
+
+                '
+              enum:
+              - card
+              - cash
+              - check
+              - chargeback
+              - bank_transfer
+              - amazon_payments
+              - paypal_express_checkout
+              - direct_debit
+              - alipay
+              - unionpay
+              - apple_pay
+              - wechat_pay
+              - ach_credit
+              - sepa_credit
+              - ideal
+              - google_pay
+              - sofort
+              - bancontact
+              - giropay
+              - dotpay
+              - other
+              - app_store
+              - upi
+              - netbanking_emandates
+              - play_store
+              - custom
+              - boleto
+              - venmo
+              - pay_to
+              - faster_payments
+              - sepa_instant_transfer
+              - automated_bank_transfer
+              - klarna_pay_now
+              - online_banking_poland
+              - payconiq_by_bancontact
+              - electronic_payment_standard
+              - kbc_payment_button
+              - pay_by_bank
+              - trustly
+              - stablecoin
+              - kakao_pay
+              - naver_pay
+              - revolut_pay
+              - cash_app_pay
+              - pix
+              - twint
+              - go_pay
+              - grab_pay
+              - pay_co
+              - after_pay
+              - swish
+              - payme
+              - klarna
+              - alipay_hk
+              - paypay
+              - gcash
+              - south_korean_cards
+              - paynow
+              - bizum
+              - promptpay
+              - dana
+              - touch_n_go
+              - tamara
+              - qpay
+              - ovo
+              - momo
+              - mercado_pago
+              - nequi
+              - nupay
+              - picpay
+              - thai_qr
+              - blik
+              - fpx
+              - wero
+              - p24
+              - affirm_pay
+              - rakuten_pay
+              x-cb-deprecated-enum-values: app_store,play_store
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: PaymentMethod
+              example: null
+            is_not:
+              type: string
+              description: '* `card` - Card
+
+                * `cash` - Cash
+
+                * `check` - Check
+
+                * `chargeback` - Only applicable for a transaction of [type](transactions#transaction_type) = `refund`. This value is set by Chargebee when an automated [chargeback](https://www.chargebee.com/docs/chargeback.html#chargeback-process) occurs. You can also set this explicitly when [recording a refund](transactions#record_an_offline_refund).
+
+                * `bank_transfer` - Bank Transfer
+
+                * `amazon_payments` - Amazon Payments
+
+                * `paypal_express_checkout` - Paypal Express Checkout
+
+                * `direct_debit` - Direct Debit
+
+                * `alipay` - Alipay
+
+                * `unionpay` - Unionpay
+
+                * `apple_pay` - Apple Pay
+
+                * `wechat_pay` - WeChat Pay
+
+                * `ach_credit` - ACH Credit
+
+                * `sepa_credit` - SEPA Credit
+
+                * `ideal` - IDEAL
+
+                * `google_pay` - Google Pay
+
+                * `sofort` - Sofort
+
+                * `bancontact` - Bancontact
+
+                * `giropay` - giropay
+
+                * `dotpay` - Dotpay
+
+                * `other` - Payment Methods other than the above types
+
+                * `app_store` - **(Deprecated)** App Store
+
+                * `upi` - upi
+
+                * `netbanking_emandates` - netbanking_emandates
+
+                * `play_store` - **(Deprecated)** Play Store
+
+                * `custom` - Custom
+
+                * `boleto` - boleto
+
+                * `venmo` - Venmo
+
+                * `pay_to` - PayTo
+
+                * `faster_payments` - Faster Payments
+
+                * `sepa_instant_transfer` - Sepa Instant Transfer
+
+                * `automated_bank_transfer` - Automated Bank Transfer
+
+                * `klarna_pay_now` - Klarna Pay Now
+
+                * `online_banking_poland` - Online Banking Poland
+
+                * `payconiq_by_bancontact` - Payconiq by Bancontact
+
+                * `electronic_payment_standard` - Payments made via Electronic Payment Standard.
+
+                * `kbc_payment_button` - Payments made via KBC Payment Button.
+
+                * `pay_by_bank` - Payments made via Pay By Bank.
+
+                * `trustly` - Payments made via Trustly.
+
+                * `stablecoin` - Stablecoin
+
+                * `kakao_pay` - Kakao Pay
+
+                * `naver_pay` - Naver Pay
+
+                * `revolut_pay` - Revolut Pay
+
+                * `cash_app_pay` - Cash App Pay
+
+                * `pix` - Payments made via Pix
+
+                * `twint` - Twint
+
+                * `go_pay` - Go Pay
+
+                * `grab_pay` - Grab Pay
+
+                * `pay_co` - Pay Co
+
+                * `after_pay` - After Pay
+
+                * `swish` - Swish
+
+                * `payme` - PayMe
+
+                * `klarna` - Payments made via Klarna
+
+                * `alipay_hk` - Alipay HK
+
+                * `paypay` - PayPay
+
+                * `gcash` - GCash
+
+                * `south_korean_cards` - Payments made via South Korean Cards
+
+                * `paynow` - Payments made via PayNow
+
+                * `bizum` - Payments made via Bizum
+
+                * `promptpay` - Payments made via PromptPay
+
+                * `dana` - Dana
+
+                * `touch_n_go` - Touch ''n Go
+
+                * `tamara` - Tamara
+
+                * `qpay` - Qpay
+
+                * `ovo` - OVO
+
+                * `momo` - MoMo
+
+                * `mercado_pago` - Mercado Pago
+
+                * `nequi` - Nequi
+
+                * `nupay` - NuPay
+
+                * `picpay` - PicPay
+
+                * `thai_qr` - Thai QR
+
+                * `blik` - BLIK
+
+                * `fpx` - FPX
+
+                * `wero` - Wero
+
+                * `p24` - Przelewy24 (P24)
+
+                * `affirm_pay` - Affirm Pay
+
+                * `rakuten_pay` - Rakuten Pay
+
+                '
+              enum:
+              - card
+              - cash
+              - check
+              - chargeback
+              - bank_transfer
+              - amazon_payments
+              - paypal_express_checkout
+              - direct_debit
+              - alipay
+              - unionpay
+              - apple_pay
+              - wechat_pay
+              - ach_credit
+              - sepa_credit
+              - ideal
+              - google_pay
+              - sofort
+              - bancontact
+              - giropay
+              - dotpay
+              - other
+              - app_store
+              - upi
+              - netbanking_emandates
+              - play_store
+              - custom
+              - boleto
+              - venmo
+              - pay_to
+              - faster_payments
+              - sepa_instant_transfer
+              - automated_bank_transfer
+              - klarna_pay_now
+              - online_banking_poland
+              - payconiq_by_bancontact
+              - electronic_payment_standard
+              - kbc_payment_button
+              - pay_by_bank
+              - trustly
+              - stablecoin
+              - kakao_pay
+              - naver_pay
+              - revolut_pay
+              - cash_app_pay
+              - pix
+              - twint
+              - go_pay
+              - grab_pay
+              - pay_co
+              - after_pay
+              - swish
+              - payme
+              - klarna
+              - alipay_hk
+              - paypay
+              - gcash
+              - south_korean_cards
+              - paynow
+              - bizum
+              - promptpay
+              - dana
+              - touch_n_go
+              - tamara
+              - qpay
+              - ovo
+              - momo
+              - mercado_pago
+              - nequi
+              - nupay
+              - picpay
+              - thai_qr
+              - blik
+              - fpx
+              - wero
+              - p24
+              - affirm_pay
+              - rakuten_pay
+              x-cb-deprecated-enum-values: app_store,play_store
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: PaymentMethod
+              example: null
+            in:
+              type: string
+              description: '* `card` - Card
+
+                * `cash` - Cash
+
+                * `check` - Check
+
+                * `chargeback` - Only applicable for a transaction of [type](transactions#transaction_type) = `refund`. This value is set by Chargebee when an automated [chargeback](https://www.chargebee.com/docs/chargeback.html#chargeback-process) occurs. You can also set this explicitly when [recording a refund](transactions#record_an_offline_refund).
+
+                * `bank_transfer` - Bank Transfer
+
+                * `amazon_payments` - Amazon Payments
+
+                * `paypal_express_checkout` - Paypal Express Checkout
+
+                * `direct_debit` - Direct Debit
+
+                * `alipay` - Alipay
+
+                * `unionpay` - Unionpay
+
+                * `apple_pay` - Apple Pay
+
+                * `wechat_pay` - WeChat Pay
+
+                * `ach_credit` - ACH Credit
+
+                * `sepa_credit` - SEPA Credit
+
+                * `ideal` - IDEAL
+
+                * `google_pay` - Google Pay
+
+                * `sofort` - Sofort
+
+                * `bancontact` - Bancontact
+
+                * `giropay` - giropay
+
+                * `dotpay` - Dotpay
+
+                * `other` - Payment Methods other than the above types
+
+                * `app_store` - **(Deprecated)** App Store
+
+                * `upi` - upi
+
+                * `netbanking_emandates` - netbanking_emandates
+
+                * `play_store` - **(Deprecated)** Play Store
+
+                * `custom` - Custom
+
+                * `boleto` - boleto
+
+                * `venmo` - Venmo
+
+                * `pay_to` - PayTo
+
+                * `faster_payments` - Faster Payments
+
+                * `sepa_instant_transfer` - Sepa Instant Transfer
+
+                * `automated_bank_transfer` - Automated Bank Transfer
+
+                * `klarna_pay_now` - Klarna Pay Now
+
+                * `online_banking_poland` - Online Banking Poland
+
+                * `payconiq_by_bancontact` - Payconiq by Bancontact
+
+                * `electronic_payment_standard` - Payments made via Electronic Payment Standard.
+
+                * `kbc_payment_button` - Payments made via KBC Payment Button.
+
+                * `pay_by_bank` - Payments made via Pay By Bank.
+
+                * `trustly` - Payments made via Trustly.
+
+                * `stablecoin` - Stablecoin
+
+                * `kakao_pay` - Kakao Pay
+
+                * `naver_pay` - Naver Pay
+
+                * `revolut_pay` - Revolut Pay
+
+                * `cash_app_pay` - Cash App Pay
+
+                * `pix` - Payments made via Pix
+
+                * `twint` - Twint
+
+                * `go_pay` - Go Pay
+
+                * `grab_pay` - Grab Pay
+
+                * `pay_co` - Pay Co
+
+                * `after_pay` - After Pay
+
+                * `swish` - Swish
+
+                * `payme` - PayMe
+
+                * `klarna` - Payments made via Klarna
+
+                * `alipay_hk` - Alipay HK
+
+                * `paypay` - PayPay
+
+                * `gcash` - GCash
+
+                * `south_korean_cards` - Payments made via South Korean Cards
+
+                * `paynow` - Payments made via PayNow
+
+                * `bizum` - Payments made via Bizum
+
+                * `promptpay` - Payments made via PromptPay
+
+                * `dana` - Dana
+
+                * `touch_n_go` - Touch ''n Go
+
+                * `tamara` - Tamara
+
+                * `qpay` - Qpay
+
+                * `ovo` - OVO
+
+                * `momo` - MoMo
+
+                * `mercado_pago` - Mercado Pago
+
+                * `nequi` - Nequi
+
+                * `nupay` - NuPay
+
+                * `picpay` - PicPay
+
+                * `thai_qr` - Thai QR
+
+                * `blik` - BLIK
+
+                * `fpx` - FPX
+
+                * `wero` - Wero
+
+                * `p24` - Przelewy24 (P24)
+
+                * `affirm_pay` - Affirm Pay
+
+                * `rakuten_pay` - Rakuten Pay
+
+                '
+              enum:
+              - card
+              - cash
+              - check
+              - chargeback
+              - bank_transfer
+              - amazon_payments
+              - paypal_express_checkout
+              - direct_debit
+              - alipay
+              - unionpay
+              - apple_pay
+              - wechat_pay
+              - ach_credit
+              - sepa_credit
+              - ideal
+              - google_pay
+              - sofort
+              - bancontact
+              - giropay
+              - dotpay
+              - other
+              - app_store
+              - upi
+              - netbanking_emandates
+              - play_store
+              - custom
+              - boleto
+              - venmo
+              - pay_to
+              - faster_payments
+              - sepa_instant_transfer
+              - automated_bank_transfer
+              - klarna_pay_now
+              - online_banking_poland
+              - payconiq_by_bancontact
+              - electronic_payment_standard
+              - kbc_payment_button
+              - pay_by_bank
+              - trustly
+              - stablecoin
+              - kakao_pay
+              - naver_pay
+              - revolut_pay
+              - cash_app_pay
+              - pix
+              - twint
+              - go_pay
+              - grab_pay
+              - pay_co
+              - after_pay
+              - swish
+              - payme
+              - klarna
+              - alipay_hk
+              - paypay
+              - gcash
+              - south_korean_cards
+              - paynow
+              - bizum
+              - promptpay
+              - dana
+              - touch_n_go
+              - tamara
+              - qpay
+              - ovo
+              - momo
+              - mercado_pago
+              - nequi
+              - nupay
+              - picpay
+              - thai_qr
+              - blik
+              - fpx
+              - wero
+              - p24
+              - affirm_pay
+              - rakuten_pay
+              x-cb-deprecated-enum-values: app_store,play_store
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: PaymentMethod
+              pattern: ^\[(card|cash|check|chargeback|bank_transfer|amazon_payments|paypal_express_checkout|direct_debit|alipay|unionpay|apple_pay|wechat_pay|ach_credit|sepa_credit|ideal|google_pay|sofort|bancontact|giropay|dotpay|other|app_store|upi|netbanking_emandates|play_store|custom|boleto|venmo|pay_to|faster_payments|sepa_instant_transfer|automated_bank_transfer|klarna_pay_now|online_banking_poland|payconiq_by_bancontact|electronic_payment_standard|kbc_payment_button|pay_by_bank|trustly|stablecoin|kakao_pay|naver_pay|revolut_pay|cash_app_pay|pix|twint|go_pay|grab_pay|pay_co|after_pay|swish|payme|klarna|alipay_hk|paypay|gcash|south_korean_cards|paynow|bizum|promptpay|dana|touch_n_go|tamara|qpay|ovo|momo|mercado_pago|nequi|nupay|picpay|thai_qr|blik|fpx|wero|p24|affirm_pay|rakuten_pay)(,(card|cash|check|chargeback|bank_transfer|amazon_payments|paypal_express_checkout|direct_debit|alipay|unionpay|apple_pay|wechat_pay|ach_credit|sepa_credit|ideal|google_pay|sofort|bancontact|giropay|dotpay|other|app_store|upi|netbanking_emandates|play_store|custom|boleto|venmo|pay_to|faster_payments|sepa_instant_transfer|automated_bank_transfer|klarna_pay_now|online_banking_poland|payconiq_by_bancontact|electronic_payment_standard|kbc_payment_button|pay_by_bank|trustly|stablecoin|kakao_pay|naver_pay|revolut_pay|cash_app_pay|pix|twint|go_pay|grab_pay|pay_co|after_pay|swish|payme|klarna|alipay_hk|paypay|gcash|south_korean_cards|paynow|bizum|promptpay|dana|touch_n_go|tamara|qpay|ovo|momo|mercado_pago|nequi|nupay|picpay|thai_qr|blik|fpx|wero|p24|affirm_pay|rakuten_pay))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `card` - Card
+
+                * `cash` - Cash
+
+                * `check` - Check
+
+                * `chargeback` - Only applicable for a transaction of [type](transactions#transaction_type) = `refund`. This value is set by Chargebee when an automated [chargeback](https://www.chargebee.com/docs/chargeback.html#chargeback-process) occurs. You can also set this explicitly when [recording a refund](transactions#record_an_offline_refund).
+
+                * `bank_transfer` - Bank Transfer
+
+                * `amazon_payments` - Amazon Payments
+
+                * `paypal_express_checkout` - Paypal Express Checkout
+
+                * `direct_debit` - Direct Debit
+
+                * `alipay` - Alipay
+
+                * `unionpay` - Unionpay
+
+                * `apple_pay` - Apple Pay
+
+                * `wechat_pay` - WeChat Pay
+
+                * `ach_credit` - ACH Credit
+
+                * `sepa_credit` - SEPA Credit
+
+                * `ideal` - IDEAL
+
+                * `google_pay` - Google Pay
+
+                * `sofort` - Sofort
+
+                * `bancontact` - Bancontact
+
+                * `giropay` - giropay
+
+                * `dotpay` - Dotpay
+
+                * `other` - Payment Methods other than the above types
+
+                * `app_store` - **(Deprecated)** App Store
+
+                * `upi` - upi
+
+                * `netbanking_emandates` - netbanking_emandates
+
+                * `play_store` - **(Deprecated)** Play Store
+
+                * `custom` - Custom
+
+                * `boleto` - boleto
+
+                * `venmo` - Venmo
+
+                * `pay_to` - PayTo
+
+                * `faster_payments` - Faster Payments
+
+                * `sepa_instant_transfer` - Sepa Instant Transfer
+
+                * `automated_bank_transfer` - Automated Bank Transfer
+
+                * `klarna_pay_now` - Klarna Pay Now
+
+                * `online_banking_poland` - Online Banking Poland
+
+                * `payconiq_by_bancontact` - Payconiq by Bancontact
+
+                * `electronic_payment_standard` - Payments made via Electronic Payment Standard.
+
+                * `kbc_payment_button` - Payments made via KBC Payment Button.
+
+                * `pay_by_bank` - Payments made via Pay By Bank.
+
+                * `trustly` - Payments made via Trustly.
+
+                * `stablecoin` - Stablecoin
+
+                * `kakao_pay` - Kakao Pay
+
+                * `naver_pay` - Naver Pay
+
+                * `revolut_pay` - Revolut Pay
+
+                * `cash_app_pay` - Cash App Pay
+
+                * `pix` - Payments made via Pix
+
+                * `twint` - Twint
+
+                * `go_pay` - Go Pay
+
+                * `grab_pay` - Grab Pay
+
+                * `pay_co` - Pay Co
+
+                * `after_pay` - After Pay
+
+                * `swish` - Swish
+
+                * `payme` - PayMe
+
+                * `klarna` - Payments made via Klarna
+
+                * `alipay_hk` - Alipay HK
+
+                * `paypay` - PayPay
+
+                * `gcash` - GCash
+
+                * `south_korean_cards` - Payments made via South Korean Cards
+
+                * `paynow` - Payments made via PayNow
+
+                * `bizum` - Payments made via Bizum
+
+                * `promptpay` - Payments made via PromptPay
+
+                * `dana` - Dana
+
+                * `touch_n_go` - Touch ''n Go
+
+                * `tamara` - Tamara
+
+                * `qpay` - Qpay
+
+                * `ovo` - OVO
+
+                * `momo` - MoMo
+
+                * `mercado_pago` - Mercado Pago
+
+                * `nequi` - Nequi
+
+                * `nupay` - NuPay
+
+                * `picpay` - PicPay
+
+                * `thai_qr` - Thai QR
+
+                * `blik` - BLIK
+
+                * `fpx` - FPX
+
+                * `wero` - Wero
+
+                * `p24` - Przelewy24 (P24)
+
+                * `affirm_pay` - Affirm Pay
+
+                * `rakuten_pay` - Rakuten Pay
+
+                '
+              enum:
+              - card
+              - cash
+              - check
+              - chargeback
+              - bank_transfer
+              - amazon_payments
+              - paypal_express_checkout
+              - direct_debit
+              - alipay
+              - unionpay
+              - apple_pay
+              - wechat_pay
+              - ach_credit
+              - sepa_credit
+              - ideal
+              - google_pay
+              - sofort
+              - bancontact
+              - giropay
+              - dotpay
+              - other
+              - app_store
+              - upi
+              - netbanking_emandates
+              - play_store
+              - custom
+              - boleto
+              - venmo
+              - pay_to
+              - faster_payments
+              - sepa_instant_transfer
+              - automated_bank_transfer
+              - klarna_pay_now
+              - online_banking_poland
+              - payconiq_by_bancontact
+              - electronic_payment_standard
+              - kbc_payment_button
+              - pay_by_bank
+              - trustly
+              - stablecoin
+              - kakao_pay
+              - naver_pay
+              - revolut_pay
+              - cash_app_pay
+              - pix
+              - twint
+              - go_pay
+              - grab_pay
+              - pay_co
+              - after_pay
+              - swish
+              - payme
+              - klarna
+              - alipay_hk
+              - paypay
+              - gcash
+              - south_korean_cards
+              - paynow
+              - bizum
+              - promptpay
+              - dana
+              - touch_n_go
+              - tamara
+              - qpay
+              - ovo
+              - momo
+              - mercado_pago
+              - nequi
+              - nupay
+              - picpay
+              - thai_qr
+              - blik
+              - fpx
+              - wero
+              - p24
+              - affirm_pay
+              - rakuten_pay
+              x-cb-deprecated-enum-values: app_store,play_store
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: PaymentMethod
+              pattern: ^\[(card|cash|check|chargeback|bank_transfer|amazon_payments|paypal_express_checkout|direct_debit|alipay|unionpay|apple_pay|wechat_pay|ach_credit|sepa_credit|ideal|google_pay|sofort|bancontact|giropay|dotpay|other|app_store|upi|netbanking_emandates|play_store|custom|boleto|venmo|pay_to|faster_payments|sepa_instant_transfer|automated_bank_transfer|klarna_pay_now|online_banking_poland|payconiq_by_bancontact|electronic_payment_standard|kbc_payment_button|pay_by_bank|trustly|stablecoin|kakao_pay|naver_pay|revolut_pay|cash_app_pay|pix|twint|go_pay|grab_pay|pay_co|after_pay|swish|payme|klarna|alipay_hk|paypay|gcash|south_korean_cards|paynow|bizum|promptpay|dana|touch_n_go|tamara|qpay|ovo|momo|mercado_pago|nequi|nupay|picpay|thai_qr|blik|fpx|wero|p24|affirm_pay|rakuten_pay)(,(card|cash|check|chargeback|bank_transfer|amazon_payments|paypal_express_checkout|direct_debit|alipay|unionpay|apple_pay|wechat_pay|ach_credit|sepa_credit|ideal|google_pay|sofort|bancontact|giropay|dotpay|other|app_store|upi|netbanking_emandates|play_store|custom|boleto|venmo|pay_to|faster_payments|sepa_instant_transfer|automated_bank_transfer|klarna_pay_now|online_banking_poland|payconiq_by_bancontact|electronic_payment_standard|kbc_payment_button|pay_by_bank|trustly|stablecoin|kakao_pay|naver_pay|revolut_pay|cash_app_pay|pix|twint|go_pay|grab_pay|pay_co|after_pay|swish|payme|klarna|alipay_hk|paypay|gcash|south_korean_cards|paynow|bizum|promptpay|dana|touch_n_go|tamara|qpay|ovo|momo|mercado_pago|nequi|nupay|picpay|thai_qr|blik|fpx|wero|p24|affirm_pay|rakuten_pay))*\]$
+              example: null
+      - name: gateway
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Gateway through which this transaction was done. Applicable only for 'Card' Payment Method
+          example: stripe
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 8
+          properties:
+            is:
+              type: string
+              description: "* `chargebee` - Chargebee test gateway.\n* `chargebee_payments` - Chargebee Pay gateway\n* `adyen` - Adyen is a payment gateway.\n* `stripe` - Stripe is a payment gateway.\n* `wepay` - WePay is a payment gateway.\n* `braintree` - Braintree is a payment gateway.\n* `authorize_net` - Authorize.net is a payment gateway\n* `paypal_pro` - PayPal Pro Account is a payment gateway.\n* `pin` - Pin is a payment gateway\n* `eway` - eWAY Account is a payment gateway.\n* `eway_rapid` - eWAY Rapid is a payment gateway.\n* `worldpay` - WorldPay is a payment gateway\n* `balanced_payments` - Balanced is a payment gateway\n* `beanstream` - Bambora(formerly known as Beanstream) is a payment gateway.\n* `bluepay` - BluePay is a payment gateway.\n* `elavon` - Elavon Virtual Merchant is a payment solution.\n* `first_data_global` - First Data Global Gateway Virtual Terminal Account\n* `hdfc` - HDFC Account is a payment gateway.\n* `migs` - MasterCard Internet Gateway Service payment gateway.\n* `nmi` - NMI is a payment gateway.\n* `ogone` - Ingenico ePayments (formerly known as Ogone) is a payment gateway.\n* `paymill` - PAYMILL is a payment gateway.\n* `paypal_payflow_pro` - PayPal Payflow Pro is a payment gateway.\n* `sage_pay` - Sage Pay is a payment gateway.\n* `tco` - 2Checkout is a payment gateway.\n* `wirecard` - WireCard Account is a payment service provider.\n* `amazon_payments` - Amazon Payments is a payment service provider.\n* `paypal_express_checkout` - PayPal Express Checkout is a payment gateway.\n* `gocardless` - GoCardless is a payment service provider.\n* `orbital` - Chase Paymentech(Orbital) is a payment gateway.\n* `moneris_us` - Moneris USA is a payment gateway.\n* `moneris` - Moneris is a payment gateway.\n* `bluesnap` - BlueSnap is a payment gateway.\n* `cybersource` - CyberSource is a payment gateway.\n* `vantiv` - Vantiv is a payment gateway.\n* `checkout_com` - Checkout.com is a payment gateway.\n* `paypal` - PayPal Commerce is a payment gateway.\n* `ingenico_direct` - Worldline Online Payments is a payment gateway.\n* `exact` - Exact Payments is a payment gateway.\n* `mollie` - Mollie is a payment gateway.\n* `quickbooks` - Intuit QuickBooks Payments gateway\n* `razorpay` - Razorpay is a fast growing payment service provider in India working with all leading banks and support for major local payment methods including Netbanking, UPI etc.\n* `global_payments` - Global Payments is a payment service provider.\n* `bank_of_america` - Bank of America Gateway\n* `ecentric` - Ecentric provides a seamless payment processing service in South Africa specializing on omnichannel capabilities.\n* `metrics_global` - Metrics global is a leading payment service provider providing unified payment services in the US.\n* `windcave` - Windcave provides an end to end payment processing solution in ANZ and other leading global markets.\n* `pay_com` - Pay.com provides payment services focused on simplicity and hassle-free operations for businesses of all sizes.\n* `ebanx` - EBANX is a payment gateway, enabling businesses to accept diverse local payment methods from various countries for increased market reach and conversion.\n* `dlocal` - Dlocal provides payment solutions for global commerce by accepting local payment methods.\n* `nuvei` - Nuvei is a secure and reliable payment processing solution that allows you to accept payments from customers and suitable for various types of businesses.\n* `solidgate` - Solidgate is a secure and reliable payment processing solution that allows you to accept payments from customers and suitable for various types of businesses.\n* `paystack` - Paystack is a payment gateway for businesses in Africa. It enables secure payment acceptance both online and offline.\n* `jp_morgan` - J.P. Morgan Mobility Payment Solutions is a payment gateway that enables you to securely accept and manage digital payments across different `payment_source_type`.\n* `deutsche_bank` - Deutsche Bank is the leading German bank with strong European roots and a global network.\n* `ezidebit` -\n  Ezidebit is a payment gateway integration based in Australia that supports automated direct debit, BPAY, and card payments for businesses.  \n  Ezidebit is in beta.\n* `twikey` - Twikey is a payment gateway that provides automated payment collection and mandate management solutions.\n* `tempus` - Tempus Technologies is a payment gateway and payments technology provider offering secure payment processing with end-to-end encryption (P2PE) and tokenization.\n* `moyasar` - Moyasar is a fully integrated online payment services that makes accepting payments simple and secure\n* `payway` - Payway is a payment gateway that enables secure card and payment acceptance.\n* `payu` - PayU is a payment gateway that enables secure card payment acceptance via PaymentsOS.\n* `not_applicable` - Indicates that payment gateway is not applicable for this resource.\n"
+              enum:
+              - chargebee
+              - chargebee_payments
+              - adyen
+              - stripe
+              - wepay
+              - braintree
+              - authorize_net
+              - paypal_pro
+              - pin
+              - eway
+              - eway_rapid
+              - worldpay
+              - balanced_payments
+              - beanstream
+              - bluepay
+              - elavon
+              - first_data_global
+              - hdfc
+              - migs
+              - nmi
+              - ogone
+              - paymill
+              - paypal_payflow_pro
+              - sage_pay
+              - tco
+              - wirecard
+              - amazon_payments
+              - paypal_express_checkout
+              - gocardless
+              - orbital
+              - moneris_us
+              - moneris
+              - bluesnap
+              - cybersource
+              - vantiv
+              - checkout_com
+              - paypal
+              - ingenico_direct
+              - exact
+              - mollie
+              - quickbooks
+              - razorpay
+              - global_payments
+              - bank_of_america
+              - ecentric
+              - metrics_global
+              - windcave
+              - pay_com
+              - ebanx
+              - dlocal
+              - nuvei
+              - solidgate
+              - paystack
+              - jp_morgan
+              - deutsche_bank
+              - ezidebit
+              - twikey
+              - tempus
+              - moyasar
+              - payway
+              - payu
+              - not_applicable
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: Gateway
+              example: null
+            is_not:
+              type: string
+              description: "* `chargebee` - Chargebee test gateway.\n* `chargebee_payments` - Chargebee Pay gateway\n* `adyen` - Adyen is a payment gateway.\n* `stripe` - Stripe is a payment gateway.\n* `wepay` - WePay is a payment gateway.\n* `braintree` - Braintree is a payment gateway.\n* `authorize_net` - Authorize.net is a payment gateway\n* `paypal_pro` - PayPal Pro Account is a payment gateway.\n* `pin` - Pin is a payment gateway\n* `eway` - eWAY Account is a payment gateway.\n* `eway_rapid` - eWAY Rapid is a payment gateway.\n* `worldpay` - WorldPay is a payment gateway\n* `balanced_payments` - Balanced is a payment gateway\n* `beanstream` - Bambora(formerly known as Beanstream) is a payment gateway.\n* `bluepay` - BluePay is a payment gateway.\n* `elavon` - Elavon Virtual Merchant is a payment solution.\n* `first_data_global` - First Data Global Gateway Virtual Terminal Account\n* `hdfc` - HDFC Account is a payment gateway.\n* `migs` - MasterCard Internet Gateway Service payment gateway.\n* `nmi` - NMI is a payment gateway.\n* `ogone` - Ingenico ePayments (formerly known as Ogone) is a payment gateway.\n* `paymill` - PAYMILL is a payment gateway.\n* `paypal_payflow_pro` - PayPal Payflow Pro is a payment gateway.\n* `sage_pay` - Sage Pay is a payment gateway.\n* `tco` - 2Checkout is a payment gateway.\n* `wirecard` - WireCard Account is a payment service provider.\n* `amazon_payments` - Amazon Payments is a payment service provider.\n* `paypal_express_checkout` - PayPal Express Checkout is a payment gateway.\n* `gocardless` - GoCardless is a payment service provider.\n* `orbital` - Chase Paymentech(Orbital) is a payment gateway.\n* `moneris_us` - Moneris USA is a payment gateway.\n* `moneris` - Moneris is a payment gateway.\n* `bluesnap` - BlueSnap is a payment gateway.\n* `cybersource` - CyberSource is a payment gateway.\n* `vantiv` - Vantiv is a payment gateway.\n* `checkout_com` - Checkout.com is a payment gateway.\n* `paypal` - PayPal Commerce is a payment gateway.\n* `ingenico_direct` - Worldline Online Payments is a payment gateway.\n* `exact` - Exact Payments is a payment gateway.\n* `mollie` - Mollie is a payment gateway.\n* `quickbooks` - Intuit QuickBooks Payments gateway\n* `razorpay` - Razorpay is a fast growing payment service provider in India working with all leading banks and support for major local payment methods including Netbanking, UPI etc.\n* `global_payments` - Global Payments is a payment service provider.\n* `bank_of_america` - Bank of America Gateway\n* `ecentric` - Ecentric provides a seamless payment processing service in South Africa specializing on omnichannel capabilities.\n* `metrics_global` - Metrics global is a leading payment service provider providing unified payment services in the US.\n* `windcave` - Windcave provides an end to end payment processing solution in ANZ and other leading global markets.\n* `pay_com` - Pay.com provides payment services focused on simplicity and hassle-free operations for businesses of all sizes.\n* `ebanx` - EBANX is a payment gateway, enabling businesses to accept diverse local payment methods from various countries for increased market reach and conversion.\n* `dlocal` - Dlocal provides payment solutions for global commerce by accepting local payment methods.\n* `nuvei` - Nuvei is a secure and reliable payment processing solution that allows you to accept payments from customers and suitable for various types of businesses.\n* `solidgate` - Solidgate is a secure and reliable payment processing solution that allows you to accept payments from customers and suitable for various types of businesses.\n* `paystack` - Paystack is a payment gateway for businesses in Africa. It enables secure payment acceptance both online and offline.\n* `jp_morgan` - J.P. Morgan Mobility Payment Solutions is a payment gateway that enables you to securely accept and manage digital payments across different `payment_source_type`.\n* `deutsche_bank` - Deutsche Bank is the leading German bank with strong European roots and a global network.\n* `ezidebit` -\n  Ezidebit is a payment gateway integration based in Australia that supports automated direct debit, BPAY, and card payments for businesses.  \n  Ezidebit is in beta.\n* `twikey` - Twikey is a payment gateway that provides automated payment collection and mandate management solutions.\n* `tempus` - Tempus Technologies is a payment gateway and payments technology provider offering secure payment processing with end-to-end encryption (P2PE) and tokenization.\n* `moyasar` - Moyasar is a fully integrated online payment services that makes accepting payments simple and secure\n* `payway` - Payway is a payment gateway that enables secure card and payment acceptance.\n* `payu` - PayU is a payment gateway that enables secure card payment acceptance via PaymentsOS.\n* `not_applicable` - Indicates that payment gateway is not applicable for this resource.\n"
+              enum:
+              - chargebee
+              - chargebee_payments
+              - adyen
+              - stripe
+              - wepay
+              - braintree
+              - authorize_net
+              - paypal_pro
+              - pin
+              - eway
+              - eway_rapid
+              - worldpay
+              - balanced_payments
+              - beanstream
+              - bluepay
+              - elavon
+              - first_data_global
+              - hdfc
+              - migs
+              - nmi
+              - ogone
+              - paymill
+              - paypal_payflow_pro
+              - sage_pay
+              - tco
+              - wirecard
+              - amazon_payments
+              - paypal_express_checkout
+              - gocardless
+              - orbital
+              - moneris_us
+              - moneris
+              - bluesnap
+              - cybersource
+              - vantiv
+              - checkout_com
+              - paypal
+              - ingenico_direct
+              - exact
+              - mollie
+              - quickbooks
+              - razorpay
+              - global_payments
+              - bank_of_america
+              - ecentric
+              - metrics_global
+              - windcave
+              - pay_com
+              - ebanx
+              - dlocal
+              - nuvei
+              - solidgate
+              - paystack
+              - jp_morgan
+              - deutsche_bank
+              - ezidebit
+              - twikey
+              - tempus
+              - moyasar
+              - payway
+              - payu
+              - not_applicable
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: Gateway
+              example: null
+            in:
+              type: string
+              description: "* `chargebee` - Chargebee test gateway.\n* `chargebee_payments` - Chargebee Pay gateway\n* `adyen` - Adyen is a payment gateway.\n* `stripe` - Stripe is a payment gateway.\n* `wepay` - WePay is a payment gateway.\n* `braintree` - Braintree is a payment gateway.\n* `authorize_net` - Authorize.net is a payment gateway\n* `paypal_pro` - PayPal Pro Account is a payment gateway.\n* `pin` - Pin is a payment gateway\n* `eway` - eWAY Account is a payment gateway.\n* `eway_rapid` - eWAY Rapid is a payment gateway.\n* `worldpay` - WorldPay is a payment gateway\n* `balanced_payments` - Balanced is a payment gateway\n* `beanstream` - Bambora(formerly known as Beanstream) is a payment gateway.\n* `bluepay` - BluePay is a payment gateway.\n* `elavon` - Elavon Virtual Merchant is a payment solution.\n* `first_data_global` - First Data Global Gateway Virtual Terminal Account\n* `hdfc` - HDFC Account is a payment gateway.\n* `migs` - MasterCard Internet Gateway Service payment gateway.\n* `nmi` - NMI is a payment gateway.\n* `ogone` - Ingenico ePayments (formerly known as Ogone) is a payment gateway.\n* `paymill` - PAYMILL is a payment gateway.\n* `paypal_payflow_pro` - PayPal Payflow Pro is a payment gateway.\n* `sage_pay` - Sage Pay is a payment gateway.\n* `tco` - 2Checkout is a payment gateway.\n* `wirecard` - WireCard Account is a payment service provider.\n* `amazon_payments` - Amazon Payments is a payment service provider.\n* `paypal_express_checkout` - PayPal Express Checkout is a payment gateway.\n* `gocardless` - GoCardless is a payment service provider.\n* `orbital` - Chase Paymentech(Orbital) is a payment gateway.\n* `moneris_us` - Moneris USA is a payment gateway.\n* `moneris` - Moneris is a payment gateway.\n* `bluesnap` - BlueSnap is a payment gateway.\n* `cybersource` - CyberSource is a payment gateway.\n* `vantiv` - Vantiv is a payment gateway.\n* `checkout_com` - Checkout.com is a payment gateway.\n* `paypal` - PayPal Commerce is a payment gateway.\n* `ingenico_direct` - Worldline Online Payments is a payment gateway.\n* `exact` - Exact Payments is a payment gateway.\n* `mollie` - Mollie is a payment gateway.\n* `quickbooks` - Intuit QuickBooks Payments gateway\n* `razorpay` - Razorpay is a fast growing payment service provider in India working with all leading banks and support for major local payment methods including Netbanking, UPI etc.\n* `global_payments` - Global Payments is a payment service provider.\n* `bank_of_america` - Bank of America Gateway\n* `ecentric` - Ecentric provides a seamless payment processing service in South Africa specializing on omnichannel capabilities.\n* `metrics_global` - Metrics global is a leading payment service provider providing unified payment services in the US.\n* `windcave` - Windcave provides an end to end payment processing solution in ANZ and other leading global markets.\n* `pay_com` - Pay.com provides payment services focused on simplicity and hassle-free operations for businesses of all sizes.\n* `ebanx` - EBANX is a payment gateway, enabling businesses to accept diverse local payment methods from various countries for increased market reach and conversion.\n* `dlocal` - Dlocal provides payment solutions for global commerce by accepting local payment methods.\n* `nuvei` - Nuvei is a secure and reliable payment processing solution that allows you to accept payments from customers and suitable for various types of businesses.\n* `solidgate` - Solidgate is a secure and reliable payment processing solution that allows you to accept payments from customers and suitable for various types of businesses.\n* `paystack` - Paystack is a payment gateway for businesses in Africa. It enables secure payment acceptance both online and offline.\n* `jp_morgan` - J.P. Morgan Mobility Payment Solutions is a payment gateway that enables you to securely accept and manage digital payments across different `payment_source_type`.\n* `deutsche_bank` - Deutsche Bank is the leading German bank with strong European roots and a global network.\n* `ezidebit` -\n  Ezidebit is a payment gateway integration based in Australia that supports automated direct debit, BPAY, and card payments for businesses.  \n  Ezidebit is in beta.\n* `twikey` - Twikey is a payment gateway that provides automated payment collection and mandate management solutions.\n* `tempus` - Tempus Technologies is a payment gateway and payments technology provider offering secure payment processing with end-to-end encryption (P2PE) and tokenization.\n* `moyasar` - Moyasar is a fully integrated online payment services that makes accepting payments simple and secure\n* `payway` - Payway is a payment gateway that enables secure card and payment acceptance.\n* `payu` - PayU is a payment gateway that enables secure card payment acceptance via PaymentsOS.\n* `not_applicable` - Indicates that payment gateway is not applicable for this resource.\n"
+              enum:
+              - chargebee
+              - chargebee_payments
+              - adyen
+              - stripe
+              - wepay
+              - braintree
+              - authorize_net
+              - paypal_pro
+              - pin
+              - eway
+              - eway_rapid
+              - worldpay
+              - balanced_payments
+              - beanstream
+              - bluepay
+              - elavon
+              - first_data_global
+              - hdfc
+              - migs
+              - nmi
+              - ogone
+              - paymill
+              - paypal_payflow_pro
+              - sage_pay
+              - tco
+              - wirecard
+              - amazon_payments
+              - paypal_express_checkout
+              - gocardless
+              - orbital
+              - moneris_us
+              - moneris
+              - bluesnap
+              - cybersource
+              - vantiv
+              - checkout_com
+              - paypal
+              - ingenico_direct
+              - exact
+              - mollie
+              - quickbooks
+              - razorpay
+              - global_payments
+              - bank_of_america
+              - ecentric
+              - metrics_global
+              - windcave
+              - pay_com
+              - ebanx
+              - dlocal
+              - nuvei
+              - solidgate
+              - paystack
+              - jp_morgan
+              - deutsche_bank
+              - ezidebit
+              - twikey
+              - tempus
+              - moyasar
+              - payway
+              - payu
+              - not_applicable
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: Gateway
+              pattern: ^\[(chargebee|chargebee_payments|adyen|stripe|wepay|braintree|authorize_net|paypal_pro|pin|eway|eway_rapid|worldpay|balanced_payments|beanstream|bluepay|elavon|first_data_global|hdfc|migs|nmi|ogone|paymill|paypal_payflow_pro|sage_pay|tco|wirecard|amazon_payments|paypal_express_checkout|gocardless|orbital|moneris_us|moneris|bluesnap|cybersource|vantiv|checkout_com|paypal|ingenico_direct|exact|mollie|quickbooks|razorpay|global_payments|bank_of_america|ecentric|metrics_global|windcave|pay_com|ebanx|dlocal|nuvei|solidgate|paystack|jp_morgan|deutsche_bank|ezidebit|twikey|tempus|moyasar|payway|payu|not_applicable)(,(chargebee|chargebee_payments|adyen|stripe|wepay|braintree|authorize_net|paypal_pro|pin|eway|eway_rapid|worldpay|balanced_payments|beanstream|bluepay|elavon|first_data_global|hdfc|migs|nmi|ogone|paymill|paypal_payflow_pro|sage_pay|tco|wirecard|amazon_payments|paypal_express_checkout|gocardless|orbital|moneris_us|moneris|bluesnap|cybersource|vantiv|checkout_com|paypal|ingenico_direct|exact|mollie|quickbooks|razorpay|global_payments|bank_of_america|ecentric|metrics_global|windcave|pay_com|ebanx|dlocal|nuvei|solidgate|paystack|jp_morgan|deutsche_bank|ezidebit|twikey|tempus|moyasar|payway|payu|not_applicable))*\]$
+              example: null
+            not_in:
+              type: string
+              description: "* `chargebee` - Chargebee test gateway.\n* `chargebee_payments` - Chargebee Pay gateway\n* `adyen` - Adyen is a payment gateway.\n* `stripe` - Stripe is a payment gateway.\n* `wepay` - WePay is a payment gateway.\n* `braintree` - Braintree is a payment gateway.\n* `authorize_net` - Authorize.net is a payment gateway\n* `paypal_pro` - PayPal Pro Account is a payment gateway.\n* `pin` - Pin is a payment gateway\n* `eway` - eWAY Account is a payment gateway.\n* `eway_rapid` - eWAY Rapid is a payment gateway.\n* `worldpay` - WorldPay is a payment gateway\n* `balanced_payments` - Balanced is a payment gateway\n* `beanstream` - Bambora(formerly known as Beanstream) is a payment gateway.\n* `bluepay` - BluePay is a payment gateway.\n* `elavon` - Elavon Virtual Merchant is a payment solution.\n* `first_data_global` - First Data Global Gateway Virtual Terminal Account\n* `hdfc` - HDFC Account is a payment gateway.\n* `migs` - MasterCard Internet Gateway Service payment gateway.\n* `nmi` - NMI is a payment gateway.\n* `ogone` - Ingenico ePayments (formerly known as Ogone) is a payment gateway.\n* `paymill` - PAYMILL is a payment gateway.\n* `paypal_payflow_pro` - PayPal Payflow Pro is a payment gateway.\n* `sage_pay` - Sage Pay is a payment gateway.\n* `tco` - 2Checkout is a payment gateway.\n* `wirecard` - WireCard Account is a payment service provider.\n* `amazon_payments` - Amazon Payments is a payment service provider.\n* `paypal_express_checkout` - PayPal Express Checkout is a payment gateway.\n* `gocardless` - GoCardless is a payment service provider.\n* `orbital` - Chase Paymentech(Orbital) is a payment gateway.\n* `moneris_us` - Moneris USA is a payment gateway.\n* `moneris` - Moneris is a payment gateway.\n* `bluesnap` - BlueSnap is a payment gateway.\n* `cybersource` - CyberSource is a payment gateway.\n* `vantiv` - Vantiv is a payment gateway.\n* `checkout_com` - Checkout.com is a payment gateway.\n* `paypal` - PayPal Commerce is a payment gateway.\n* `ingenico_direct` - Worldline Online Payments is a payment gateway.\n* `exact` - Exact Payments is a payment gateway.\n* `mollie` - Mollie is a payment gateway.\n* `quickbooks` - Intuit QuickBooks Payments gateway\n* `razorpay` - Razorpay is a fast growing payment service provider in India working with all leading banks and support for major local payment methods including Netbanking, UPI etc.\n* `global_payments` - Global Payments is a payment service provider.\n* `bank_of_america` - Bank of America Gateway\n* `ecentric` - Ecentric provides a seamless payment processing service in South Africa specializing on omnichannel capabilities.\n* `metrics_global` - Metrics global is a leading payment service provider providing unified payment services in the US.\n* `windcave` - Windcave provides an end to end payment processing solution in ANZ and other leading global markets.\n* `pay_com` - Pay.com provides payment services focused on simplicity and hassle-free operations for businesses of all sizes.\n* `ebanx` - EBANX is a payment gateway, enabling businesses to accept diverse local payment methods from various countries for increased market reach and conversion.\n* `dlocal` - Dlocal provides payment solutions for global commerce by accepting local payment methods.\n* `nuvei` - Nuvei is a secure and reliable payment processing solution that allows you to accept payments from customers and suitable for various types of businesses.\n* `solidgate` - Solidgate is a secure and reliable payment processing solution that allows you to accept payments from customers and suitable for various types of businesses.\n* `paystack` - Paystack is a payment gateway for businesses in Africa. It enables secure payment acceptance both online and offline.\n* `jp_morgan` - J.P. Morgan Mobility Payment Solutions is a payment gateway that enables you to securely accept and manage digital payments across different `payment_source_type`.\n* `deutsche_bank` - Deutsche Bank is the leading German bank with strong European roots and a global network.\n* `ezidebit` -\n  Ezidebit is a payment gateway integration based in Australia that supports automated direct debit, BPAY, and card payments for businesses.  \n  Ezidebit is in beta.\n* `twikey` - Twikey is a payment gateway that provides automated payment collection and mandate management solutions.\n* `tempus` - Tempus Technologies is a payment gateway and payments technology provider offering secure payment processing with end-to-end encryption (P2PE) and tokenization.\n* `moyasar` - Moyasar is a fully integrated online payment services that makes accepting payments simple and secure\n* `payway` - Payway is a payment gateway that enables secure card and payment acceptance.\n* `payu` - PayU is a payment gateway that enables secure card payment acceptance via PaymentsOS.\n* `not_applicable` - Indicates that payment gateway is not applicable for this resource.\n"
+              enum:
+              - chargebee
+              - chargebee_payments
+              - adyen
+              - stripe
+              - wepay
+              - braintree
+              - authorize_net
+              - paypal_pro
+              - pin
+              - eway
+              - eway_rapid
+              - worldpay
+              - balanced_payments
+              - beanstream
+              - bluepay
+              - elavon
+              - first_data_global
+              - hdfc
+              - migs
+              - nmi
+              - ogone
+              - paymill
+              - paypal_payflow_pro
+              - sage_pay
+              - tco
+              - wirecard
+              - amazon_payments
+              - paypal_express_checkout
+              - gocardless
+              - orbital
+              - moneris_us
+              - moneris
+              - bluesnap
+              - cybersource
+              - vantiv
+              - checkout_com
+              - paypal
+              - ingenico_direct
+              - exact
+              - mollie
+              - quickbooks
+              - razorpay
+              - global_payments
+              - bank_of_america
+              - ecentric
+              - metrics_global
+              - windcave
+              - pay_com
+              - ebanx
+              - dlocal
+              - nuvei
+              - solidgate
+              - paystack
+              - jp_morgan
+              - deutsche_bank
+              - ezidebit
+              - twikey
+              - tempus
+              - moyasar
+              - payway
+              - payu
+              - not_applicable
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: Gateway
+              pattern: ^\[(chargebee|chargebee_payments|adyen|stripe|wepay|braintree|authorize_net|paypal_pro|pin|eway|eway_rapid|worldpay|balanced_payments|beanstream|bluepay|elavon|first_data_global|hdfc|migs|nmi|ogone|paymill|paypal_payflow_pro|sage_pay|tco|wirecard|amazon_payments|paypal_express_checkout|gocardless|orbital|moneris_us|moneris|bluesnap|cybersource|vantiv|checkout_com|paypal|ingenico_direct|exact|mollie|quickbooks|razorpay|global_payments|bank_of_america|ecentric|metrics_global|windcave|pay_com|ebanx|dlocal|nuvei|solidgate|paystack|jp_morgan|deutsche_bank|ezidebit|twikey|tempus|moyasar|payway|payu|not_applicable)(,(chargebee|chargebee_payments|adyen|stripe|wepay|braintree|authorize_net|paypal_pro|pin|eway|eway_rapid|worldpay|balanced_payments|beanstream|bluepay|elavon|first_data_global|hdfc|migs|nmi|ogone|paymill|paypal_payflow_pro|sage_pay|tco|wirecard|amazon_payments|paypal_express_checkout|gocardless|orbital|moneris_us|moneris|bluesnap|cybersource|vantiv|checkout_com|paypal|ingenico_direct|exact|mollie|quickbooks|razorpay|global_payments|bank_of_america|ecentric|metrics_global|windcave|pay_com|ebanx|dlocal|nuvei|solidgate|paystack|jp_morgan|deutsche_bank|ezidebit|twikey|tempus|moyasar|payway|payu|not_applicable))*\]$
+              example: null
+      - name: gateway_account_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The gateway account used for this transaction
+          example: gw_3Nl9BNeQ7438Ks1
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 9
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: id_at_gateway
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The id with which this transaction is referred in gateway.
+          example: txn_5678HJS89900
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 10
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+      - name: reference_number
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'The reference number for this transaction. For example, the check number when [payment_method](transactions#transaction_payment_method) = `check`.
+
+            '
+          example: cus_u239732
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-presence-operator-supported: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 11
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            is_present:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+      - name: type
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Type of the transaction.
+          example: payment
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 12
+          properties:
+            is:
+              type: string
+              description: '* `authorization` - The transaction represents an authorization for capturing the [amount](transactions#transaction_amount) from the customer''s [payment_source](payment_sources).
+
+                * `payment` - The transaction represents capture of [amount](transactions#transaction_amount) from the customer''s [payment_source](payment_sources).
+
+                * `refund` - The transaction represents a refund of [amount](transactions#transaction_amount) to the customer''s [payment_source](payment_sources).
+
+                * `payment_reversal` - Indicates a reversal transaction.
+
+                '
+              enum:
+              - authorization
+              - payment
+              - refund
+              - payment_reversal
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              example: null
+            is_not:
+              type: string
+              description: '* `authorization` - The transaction represents an authorization for capturing the [amount](transactions#transaction_amount) from the customer''s [payment_source](payment_sources).
+
+                * `payment` - The transaction represents capture of [amount](transactions#transaction_amount) from the customer''s [payment_source](payment_sources).
+
+                * `refund` - The transaction represents a refund of [amount](transactions#transaction_amount) to the customer''s [payment_source](payment_sources).
+
+                * `payment_reversal` - Indicates a reversal transaction.
+
+                '
+              enum:
+              - authorization
+              - payment
+              - refund
+              - payment_reversal
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              example: null
+            in:
+              type: string
+              description: '* `authorization` - The transaction represents an authorization for capturing the [amount](transactions#transaction_amount) from the customer''s [payment_source](payment_sources).
+
+                * `payment` - The transaction represents capture of [amount](transactions#transaction_amount) from the customer''s [payment_source](payment_sources).
+
+                * `refund` - The transaction represents a refund of [amount](transactions#transaction_amount) to the customer''s [payment_source](payment_sources).
+
+                * `payment_reversal` - Indicates a reversal transaction.
+
+                '
+              enum:
+              - authorization
+              - payment
+              - refund
+              - payment_reversal
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              pattern: ^\[(authorization|payment|refund|payment_reversal)(,(authorization|payment|refund|payment_reversal))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `authorization` - The transaction represents an authorization for capturing the [amount](transactions#transaction_amount) from the customer''s [payment_source](payment_sources).
+
+                * `payment` - The transaction represents capture of [amount](transactions#transaction_amount) from the customer''s [payment_source](payment_sources).
+
+                * `refund` - The transaction represents a refund of [amount](transactions#transaction_amount) to the customer''s [payment_source](payment_sources).
+
+                * `payment_reversal` - Indicates a reversal transaction.
+
+                '
+              enum:
+              - authorization
+              - payment
+              - refund
+              - payment_reversal
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              pattern: ^\[(authorization|payment|refund|payment_reversal)(,(authorization|payment|refund|payment_reversal))*\]$
+              example: null
+      - name: date
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Indicates when this transaction occurred.
+          example: '1435054328'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 13
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: amount
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Amount for this transaction.
+          example: '1200'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: NumberFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 14
+          properties:
+            is:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            is_not:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            lt:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            lte:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            gt:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            gte:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            between:
+              type: string
+              pattern: ^\[-?\d+,-?\d+\]$
+              example: null
+      - name: amount_capturable
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: To filter based on transaction’s unused authorized/blocked amount.
+          example: '1200'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: NumberFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 15
+          properties:
+            is:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            is_not:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            lt:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            lte:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            gt:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            gte:
+              type: string
+              format: number
+              pattern: ^-?\d+$
+              example: null
+            between:
+              type: string
+              pattern: ^\[-?\d+,-?\d+\]$
+              example: null
+      - name: status
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The status of this transaction.
+          example: success
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 16
+          properties:
+            is:
+              type: string
+              description: '* `in_progress` - Transaction is being processed by the gateway. This typically happens for [direct debit transactions](https://www.chargebee.com/docs/direct-debit-payments.html) or, in case of cards, refund transactions. Such transactions can take 2-7 days to complete, depending on the gateway and payment method.
+
+                * `success` - The transaction is successful.
+
+                * `voided` - The transaction got voided or authorization expired at gateway.
+
+                * `failure` - Transaction failed. Refer the ''error_code'' and ''error_text'' fields to know the reason for failure
+
+                * `timeout` - Transaction failed because of Gateway not accepting the connection.
+
+                * `needs_attention` - Connection with Gateway got terminated abruptly. So, status of this transaction needs to be resolved manually
+
+                * `late_failure` - This status indicates that late failure has been recorded for the transaction that has encountered success state in the previous stage.
+
+                '
+              enum:
+              - in_progress
+              - success
+              - voided
+              - failure
+              - timeout
+              - needs_attention
+              - late_failure
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              example: null
+            is_not:
+              type: string
+              description: '* `in_progress` - Transaction is being processed by the gateway. This typically happens for [direct debit transactions](https://www.chargebee.com/docs/direct-debit-payments.html) or, in case of cards, refund transactions. Such transactions can take 2-7 days to complete, depending on the gateway and payment method.
+
+                * `success` - The transaction is successful.
+
+                * `voided` - The transaction got voided or authorization expired at gateway.
+
+                * `failure` - Transaction failed. Refer the ''error_code'' and ''error_text'' fields to know the reason for failure
+
+                * `timeout` - Transaction failed because of Gateway not accepting the connection.
+
+                * `needs_attention` - Connection with Gateway got terminated abruptly. So, status of this transaction needs to be resolved manually
+
+                * `late_failure` - This status indicates that late failure has been recorded for the transaction that has encountered success state in the previous stage.
+
+                '
+              enum:
+              - in_progress
+              - success
+              - voided
+              - failure
+              - timeout
+              - needs_attention
+              - late_failure
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              example: null
+            in:
+              type: string
+              description: '* `in_progress` - Transaction is being processed by the gateway. This typically happens for [direct debit transactions](https://www.chargebee.com/docs/direct-debit-payments.html) or, in case of cards, refund transactions. Such transactions can take 2-7 days to complete, depending on the gateway and payment method.
+
+                * `success` - The transaction is successful.
+
+                * `voided` - The transaction got voided or authorization expired at gateway.
+
+                * `failure` - Transaction failed. Refer the ''error_code'' and ''error_text'' fields to know the reason for failure
+
+                * `timeout` - Transaction failed because of Gateway not accepting the connection.
+
+                * `needs_attention` - Connection with Gateway got terminated abruptly. So, status of this transaction needs to be resolved manually
+
+                * `late_failure` - This status indicates that late failure has been recorded for the transaction that has encountered success state in the previous stage.
+
+                '
+              enum:
+              - in_progress
+              - success
+              - voided
+              - failure
+              - timeout
+              - needs_attention
+              - late_failure
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              pattern: ^\[(in_progress|success|voided|failure|timeout|needs_attention|late_failure)(,(in_progress|success|voided|failure|timeout|needs_attention|late_failure))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `in_progress` - Transaction is being processed by the gateway. This typically happens for [direct debit transactions](https://www.chargebee.com/docs/direct-debit-payments.html) or, in case of cards, refund transactions. Such transactions can take 2-7 days to complete, depending on the gateway and payment method.
+
+                * `success` - The transaction is successful.
+
+                * `voided` - The transaction got voided or authorization expired at gateway.
+
+                * `failure` - Transaction failed. Refer the ''error_code'' and ''error_text'' fields to know the reason for failure
+
+                * `timeout` - Transaction failed because of Gateway not accepting the connection.
+
+                * `needs_attention` - Connection with Gateway got terminated abruptly. So, status of this transaction needs to be resolved manually
+
+                * `late_failure` - This status indicates that late failure has been recorded for the transaction that has encountered success state in the previous stage.
+
+                '
+              enum:
+              - in_progress
+              - success
+              - voided
+              - failure
+              - timeout
+              - needs_attention
+              - late_failure
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              pattern: ^\[(in_progress|success|voided|failure|timeout|needs_attention|late_failure)(,(in_progress|success|voided|failure|timeout|needs_attention|late_failure))*\]$
+              example: null
+      - name: updated_at
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'To filter based on `updated_at`. This attribute will be present only if the resource has been updated after 2016-09-28. It is advisable when using this filter, to pass the `sort_by` input parameter as `updated_at` for a faster response.
+
+            '
+          example: '1243545465'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: transactions
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 17
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: sort_by
+        in: query
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: true
+          x-cb-sort-order: 18
+          properties:
+            asc:
+              type: string
+              enum:
+              - date
+              - updated_at
+              example: null
+            desc:
+              type: string
+              enum:
+              - date
+              - updated_at
+              example: null
+          example: null
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        transaction:
+                          $ref: '#/components/schemas/Transaction'
+                          description: Resource object representing transaction
+                      required:
+                      - transaction
+                      example: null
+                    example: null
+                  next_offset:
+                    type: string
+                    description: This attribute is returned only if more resources are present. To fetch the next set of resources use this value for the input parameter `offset`.
+                    maxLength: 1000
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: transaction
+      x-cb-sort-order: 6
+      x-cb-module: gateway
+      x-cb-operation-is-list: true
+      x-cb-operation-method-name: list
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: list
+      tags:
+      - Transactions
+  /transactions/{transaction-id}/reconcile:
+    post:
+      summary: Reconcile transaction
+      operationId: reconcile_transaction
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/transaction-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id_at_gateway:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 100
+                  example: null
+                customer_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-is-foreign-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 50
+                  example: null
+                status:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - success
+                  - failure
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Status
+                  x-cb-sort-order: 2
+                  example: null
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    $ref: '#/components/schemas/Transaction'
+                    description: Resource object representing transaction
+                required:
+                - transaction
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: transaction
+      x-cb-sort-order: 4
+      x-cb-module: gateway
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: reconcile
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: reconcile
+      tags:
+      - Transactions
+  /transactions/{transaction-id}:
+    get:
+      summary: Retrieve a transaction
+      operationId: retrieve_a_transaction
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/transaction-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    $ref: '#/components/schemas/Transaction'
+                    description: Resource object representing transaction
+                required:
+                - transaction
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: transaction
+      x-cb-sort-order: 11
+      x-cb-module: gateway
+      x-cb-operation-method-name: retrieve
+      x-cb-sdk-method-name: retrieve
+      tags:
+      - Transactions
+  /transactions/{transaction-id}/refund:
+    post:
+      summary: Refund a payment
+      operationId: refund_a_payment
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/transaction-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  format: int64
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-is-money-column: true
+                  x-cb-sort-order: 0
+                  minimum: 1
+                  example: null
+                comment:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 300
+                  example: null
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    $ref: '#/components/schemas/Transaction'
+                    description: Resource object representing transaction
+                required:
+                - transaction
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: transaction
+      x-cb-sort-order: 5
+      x-cb-module: gateway
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: refund
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: refund
+      tags:
+      - Transactions
+  /transactions/{transaction-id}/record_refund:
+    post:
+      summary: Record an offline refund
+      operationId: record_an_offline_refund
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/transaction-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  format: int64
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-is-money-column: true
+                  x-cb-sort-order: 0
+                  minimum: 1
+                  example: null
+                payment_method:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - cash
+                  - check
+                  - chargeback
+                  - bank_transfer
+                  - other
+                  - app_store
+                  - play_store
+                  - custom
+                  - tamara
+                  - qpay
+                  - blik
+                  - fpx
+                  - wero
+                  - p24
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-is-api-column: true
+                  x-cb-deprecated-enum-values: app_store,play_store
+                  x-cb-is-global-enum: true
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: true
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: PaymentMethod
+                  x-cb-global-enum-reference: ./schemas/enums/PaymentMethod.yaml
+                  x-cb-sort-order: 1
+                  example: null
+                date:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  example: null
+                reference_number:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 3
+                  maxLength: 100
+                  example: null
+                custom_payment_method_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: transactions
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 4
+                  maxLength: 50
+                  example: null
+                comment:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 5
+                  maxLength: 300
+                  example: null
+              required:
+              - date
+              - payment_method
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    $ref: '#/components/schemas/Transaction'
+                    description: Resource object representing transaction
+                required:
+                - transaction
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: transaction
+      x-cb-sort-order: 3
+      x-cb-module: gateway
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: recordRefund
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: recordRefund
+      tags:
+      - Transactions
+  /transactions/{transaction-id}/void:
+    post:
+      summary: Void an authorization transaction
+      operationId: void_an_authorization_transaction
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/transaction-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    $ref: '#/components/schemas/Transaction'
+                    description: Resource object representing transaction
+                required:
+                - transaction
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: transaction
+      x-cb-sort-order: 1
+      x-cb-module: gateway
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: voidTransaction
+      x-cb-sdk-method-name: voidTransaction
+      tags:
+      - Transactions
+  /transactions/{transaction-id}/sync:
+    post:
+      summary: Sync transaction status
+      operationId: sync_transaction_status
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/transaction-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    $ref: '#/components/schemas/Transaction'
+                    description: Resource object representing transaction
+                required:
+                - transaction
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: transaction
+      x-cb-sort-order: 2
+      x-cb-module: gateway
+      x-cb-operation-is-bulk: true
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: syncTransaction
+      x-cb-sdk-method-name: syncTransaction
+      tags:
+      - Transactions
+  /transactions/create_authorization:
+    post:
+      summary: Create an authorization payment
+      operationId: create_an_authorization_payment
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: transactions
+                  x-cb-is-api-column: true
+                  x-cb-is-foreign-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 50
+                  example: null
+                payment_source_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 40
+                  example: null
+                currency_code:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required if Multicurrency is enabled
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  maxLength: 3
+                  example: null
+                amount:
+                  type: integer
+                  format: int64
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-is-api-column: true
+                  x-cb-is-money-column: true
+                  x-cb-sort-order: 3
+                  minimum: 1
+                  example: null
+              required:
+              - amount
+              - customer_id
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    $ref: '#/components/schemas/Transaction'
+                    description: Resource object representing transaction
+                required:
+                - transaction
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: transaction
+      x-cb-sort-order: 0
+      x-cb-module: gateway
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: createAuthorization
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: createAuthorization
+      tags:
+      - Transactions
+  /transactions/{transaction-id}/delete_offline_transaction:
+    post:
+      summary: Delete an offline transaction
+      operationId: delete_an_offline_transaction
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/transaction-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                comment:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 300
+                  example: null
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    $ref: '#/components/schemas/Transaction'
+                    description: Resource object representing transaction
+                required:
+                - transaction
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: transaction
+      x-cb-sort-order: 12
+      x-cb-module: gateway
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: deleteOfflineTransaction
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: deleteOfflineTransaction
+      tags:
+      - Transactions
+components:
+  schemas:
+    '503':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `db_connection_failure` - Returned when db connection fails.
+
+            * `site_read_only_mode` - Returned when your site is temporarily unavailable for write operations due to a scheduled maintenance.
+
+            * `site_not_ready` - Returned when your site is temporarily unavailable due to a scheduled maintenance.
+
+            * `internal_temporary_error` - Returned when temporary occured in Chargebee side. The request can be re-tried, with exponential backoff in case of repeat failures.'
+          enum:
+          - db_connection_failure
+          - site_read_only_mode
+          - site_not_ready
+          - internal_temporary_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '403':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `request_blocked` - Returned when request is blocked for your site. The blocking could be only for a specific set of operation(s) . The reason would be provided as part of the message. You would have to contact support for additional details.
+
+            * `api_authorization_failed` - Returned when the API key does not have sufficient privileges to perform the particular operation.'
+          enum:
+          - request_blocked
+          - api_authorization_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '405':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `http_method_not_supported` - Returned when the ''http method'', specified in the request, is not allowed for this URL. It should not occur if you are using one of the standard client library.'
+          enum:
+          - http_method_not_supported
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '400':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          - payment
+          example: null
+        api_error_code:
+          type: string
+          description: '* `payment_intent_invalid_amount` - Returned when processing amount is different from payment intent amountFor example if payment intent which is passed has authorized 10$ and if the charges initiated is for 12$.
+
+            * `configuration_incompatible` - Returned when the request is not compatible with the configuration for the  site or the configuration is incomplete.
+
+            * `payment_intent_invalid` - Returned when validation or verification fails for provided payment intent.For example if payment intent which is passed is in not consumable state.
+
+            * `invalid_request` - Returned when the request has incompatible values or does not match the API specification. As it is a generic error, handling this error is recommended only in combination  with  param attribute.
+
+            * `payment_method_verification_failed` - Returned when validation or verification fails for the provided payment method. For example  if the payment method is card, this will include all card parameter validation errors and also verification failures  from the gateway.
+
+            * `payment_processing_failed` - Returned when the payment collection fails.
+
+            * `resource_limit_exhausted` - Returned when any limit constraint is violated by the request. For example this error is  thrown when the coupon provided has already expired or its maximum redemption count has been reached.
+
+            * `duplicate_entry` - Returned when the request provides a duplicate value for an attribute that is specified as unique for that site.  For example in ''create subscription api'' if you are passing  the subscription id then this error will be thrown if a subscription exists in site with the same id.
+
+            * `param_wrong_value` - Returned when the value does not meet the required specification for the parameter. For example, wrong email format. It is strongly recommended  to do the validation at your end before calling Chargebee''s API (other than specific cases like  VAT number validation).
+
+            * `payment_method_not_present` - Returned when the request requires payment collection but the ''payment method'' details (such as card) is not present for the customer. This error will not occur if auto-collection is disabled for the customer.
+
+            * `resource_limit_exceeded`
+
+            * `payment_gateway_currency_incompatible` - Returned when the payment gateway configured is incompatible with the transactional currency. This error will not occur if auto-collection is disabled for the customer.'
+          enum:
+          - payment_intent_invalid_amount
+          - configuration_incompatible
+          - payment_intent_invalid
+          - invalid_request
+          - payment_method_verification_failed
+          - payment_processing_failed
+          - resource_limit_exhausted
+          - duplicate_entry
+          - param_wrong_value
+          - payment_method_not_present
+          - resource_limit_exceeded
+          - payment_gateway_currency_incompatible
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '500':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `internal_error` - Returned when the request parameters were right but the operation couldn''t be completed due to a bug in Chargebee side.'
+          enum:
+          - internal_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '409':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `invalid_state_for_request` - Returned when the requested operation is not allowed for current state of the resource. This error will occur if the state of the resource has not been checked for the validity of the request. For example this error is returned when we try to schedule subscription changes  at ''end of term'' for canceled subscriptions.'
+          enum:
+          - invalid_state_for_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '422':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `unable_to_process_request` - Returned when the HTTP request body contains a well-formed, but semantically erroneous payload. For example this error is returned when a client attempts to reuse an idempotency key with a different request payload.'
+          enum:
+          - unable_to_process_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '404':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: "* `resource_not_found` - Returned when any of resource(s) referred in the request is not found. \n* `site_not_found` - Returned when the site is not found."
+          enum:
+          - resource_not_found
+          - site_not_found
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '401':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: '* `api_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be the api key is invalid or authentication header is not present in the request or the header''s format is invalid.
+
+            * `basic_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be that one or both of the username and password are invalid'
+          enum:
+          - api_authentication_failed
+          - basic_authentication_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    Transaction:
+      type: object
+      x-cb-resource-id: transaction
+      x-cb-resource-path-name: transactions
+      x-cb-is-dependent-resource: false
+      x-cb-sort-order: 32
+      properties:
+        id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 0
+          maxLength: 40
+          example: null
+        customer_id:
+          type: string
+          deprecated: false
+          x-cb-is-foreign-column: true
+          x-cb-sort-order: 1
+          maxLength: 50
+          example: null
+        subscription_id:
+          type: string
+          deprecated: false
+          x-cb-is-foreign-column: true
+          x-cb-sort-order: 2
+          maxLength: 50
+          example: null
+        gateway_account_id:
+          type: string
+          deprecated: false
+          x-cb-is-foreign-column: true
+          x-cb-sort-order: 3
+          maxLength: 50
+          example: null
+        payment_source_id:
+          type: string
+          deprecated: false
+          x-cb-is-foreign-column: true
+          x-cb-sort-order: 4
+          maxLength: 40
+          example: null
+        payment_method:
+          type: string
+          default: card
+          deprecated: false
+          enum:
+          - card
+          - cash
+          - check
+          - chargeback
+          - bank_transfer
+          - amazon_payments
+          - paypal_express_checkout
+          - direct_debit
+          - alipay
+          - unionpay
+          - apple_pay
+          - wechat_pay
+          - ach_credit
+          - sepa_credit
+          - ideal
+          - google_pay
+          - sofort
+          - bancontact
+          - giropay
+          - dotpay
+          - other
+          - app_store
+          - upi
+          - netbanking_emandates
+          - play_store
+          - custom
+          - boleto
+          - venmo
+          - pay_to
+          - faster_payments
+          - sepa_instant_transfer
+          - automated_bank_transfer
+          - klarna_pay_now
+          - online_banking_poland
+          - payconiq_by_bancontact
+          - electronic_payment_standard
+          - kbc_payment_button
+          - pay_by_bank
+          - trustly
+          - stablecoin
+          - kakao_pay
+          - naver_pay
+          - revolut_pay
+          - cash_app_pay
+          - pix
+          - twint
+          - go_pay
+          - grab_pay
+          - pay_co
+          - after_pay
+          - swish
+          - payme
+          - klarna
+          - alipay_hk
+          - paypay
+          - gcash
+          - south_korean_cards
+          - paynow
+          - bizum
+          - promptpay
+          - dana
+          - touch_n_go
+          - tamara
+          - qpay
+          - ovo
+          - momo
+          - mercado_pago
+          - nequi
+          - nupay
+          - picpay
+          - thai_qr
+          - blik
+          - fpx
+          - wero
+          - p24
+          - affirm_pay
+          - rakuten_pay
+          x-cb-deprecated-enum-values: app_store,play_store
+          x-cb-is-global-enum: true
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: true
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: PaymentMethod
+          x-cb-global-enum-reference: ./schemas/enums/PaymentMethod.yaml
+          x-cb-sort-order: 5
+          example: null
+        reference_number:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 6
+          maxLength: 100
+          example: null
+        gateway:
+          type: string
+          deprecated: false
+          enum:
+          - chargebee
+          - chargebee_payments
+          - adyen
+          - stripe
+          - wepay
+          - braintree
+          - authorize_net
+          - paypal_pro
+          - pin
+          - eway
+          - eway_rapid
+          - worldpay
+          - balanced_payments
+          - beanstream
+          - bluepay
+          - elavon
+          - first_data_global
+          - hdfc
+          - migs
+          - nmi
+          - ogone
+          - paymill
+          - paypal_payflow_pro
+          - sage_pay
+          - tco
+          - wirecard
+          - amazon_payments
+          - paypal_express_checkout
+          - gocardless
+          - orbital
+          - moneris_us
+          - moneris
+          - bluesnap
+          - cybersource
+          - vantiv
+          - checkout_com
+          - paypal
+          - ingenico_direct
+          - exact
+          - mollie
+          - quickbooks
+          - razorpay
+          - global_payments
+          - bank_of_america
+          - ecentric
+          - metrics_global
+          - windcave
+          - pay_com
+          - ebanx
+          - dlocal
+          - nuvei
+          - solidgate
+          - paystack
+          - jp_morgan
+          - deutsche_bank
+          - ezidebit
+          - twikey
+          - tempus
+          - moyasar
+          - payway
+          - payu
+          - not_applicable
+          x-cb-is-global-enum: true
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: true
+          x-cb-is-gen-separate: true
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Gateway
+          x-cb-global-enum-reference: ./schemas/enums/Gateway.yaml
+          x-cb-sort-order: 7
+          example: null
+        type:
+          type: string
+          deprecated: false
+          enum:
+          - authorization
+          - payment
+          - refund
+          - payment_reversal
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Type
+          x-cb-sort-order: 8
+          example: null
+        date:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 9
+          example: null
+        settled_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 10
+          example: null
+        exchange_rate:
+          type: number
+          format: decimal
+          deprecated: false
+          x-cb-sort-order: 11
+          maximum: 1000000000
+          minimum: 1.0e-09
+          example: null
+        currency_code:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 12
+          maxLength: 3
+          example: null
+        amount:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 13
+          minimum: 0
+          example: null
+        id_at_gateway:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 14
+          maxLength: 100
+          example: null
+        status:
+          type: string
+          deprecated: false
+          enum:
+          - in_progress
+          - success
+          - voided
+          - failure
+          - timeout
+          - needs_attention
+          - late_failure
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Status
+          x-cb-sort-order: 15
+          example: null
+        fraud_flag:
+          type: string
+          deprecated: false
+          enum:
+          - safe
+          - suspicious
+          - fraudulent
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: FraudFlag
+          x-cb-sort-order: 16
+          example: null
+        initiator_type:
+          type: string
+          deprecated: false
+          enum:
+          - customer
+          - merchant
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: InitiatorType
+          x-cb-sort-order: 17
+          example: null
+        three_d_secure:
+          type: boolean
+          deprecated: false
+          x-cb-sort-order: 18
+          example: null
+        authorization_reason:
+          type: string
+          deprecated: false
+          enum:
+          - blocking_funds
+          - verification
+          - scheduled_capture
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: AuthorizationReason
+          x-cb-sort-order: 19
+          example: null
+        error_code:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 20
+          maxLength: 100
+          example: null
+        error_text:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 21
+          maxLength: 65000
+          example: null
+        voided_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 22
+          example: null
+        resource_version:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-sort-order: 23
+          example: null
+        updated_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 24
+          example: null
+        fraud_reason:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 25
+          maxLength: 250
+          example: null
+        custom_payment_method_id:
+          type: string
+          deprecated: false
+          x-cb-is-foreign-column: true
+          x-cb-sort-order: 26
+          maxLength: 50
+          example: null
+        amount_unused:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 27
+          minimum: 0
+          example: null
+        masked_card_number:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 28
+          maxLength: 20
+          example: null
+        reference_transaction_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 29
+          maxLength: 40
+          example: null
+        refunded_txn_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 30
+          maxLength: 40
+          example: null
+        reference_authorization_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 31
+          maxLength: 40
+          example: null
+        amount_capturable:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 32
+          minimum: 0
+          example: null
+        reversal_transaction_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 33
+          maxLength: 40
+          example: null
+        deleted:
+          type: boolean
+          deprecated: false
+          x-cb-sort-order: 38
+          example: null
+        iin:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 40
+          maxLength: 6
+          minLength: 4
+          example: null
+        last4:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 41
+          maxLength: 4
+          minLength: 4
+          example: null
+        merchant_reference_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 42
+          maxLength: 500
+          example: null
+        business_entity_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 43
+          maxLength: 50
+          example: null
+        payment_method_details:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 44
+          example: null
+        custom_payment_method_name:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 46
+          maxLength: 100
+          example: null
+        linked_invoices:
+          type: array
+          deprecated: false
+          x-cb-sort-order: 34
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: InvoiceTransaction
+            x-cb-sub-resource-parent-name: Transaction
+            properties:
+              invoice_id:
+                type: string
+                deprecated: false
+                x-cb-is-foreign-column: true
+                maxLength: 50
+                example: null
+              applied_amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              applied_at:
+                type: integer
+                format: unix-time
+                deprecated: false
+                example: null
+              invoice_date:
+                type: integer
+                format: unix-time
+                deprecated: false
+                example: null
+              invoice_total:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              invoice_status:
+                type: string
+                deprecated: false
+                enum:
+                - paid
+                - posted
+                - payment_due
+                - not_paid
+                - voided
+                - pending
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: true
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: Invoice.Status
+                example: null
+            required:
+            - applied_amount
+            - applied_at
+            - invoice_id
+            - invoice_status
+            example: null
+          example: null
+        linked_credit_notes:
+          type: array
+          deprecated: false
+          x-cb-sort-order: 35
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: CreditNoteTransaction
+            x-cb-sub-resource-parent-name: Transaction
+            properties:
+              cn_id:
+                type: string
+                deprecated: false
+                x-cb-is-foreign-column: true
+                maxLength: 50
+                example: null
+              applied_amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              applied_at:
+                type: integer
+                format: unix-time
+                deprecated: false
+                example: null
+              cn_reason_code:
+                type: string
+                deprecated: false
+                enum:
+                - write_off
+                - subscription_change
+                - subscription_cancellation
+                - subscription_pause
+                - chargeback
+                - product_unsatisfactory
+                - service_unsatisfactory
+                - order_change
+                - order_cancellation
+                - waiver
+                - other
+                - fraudulent
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: true
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: CreditNote.ReasonCode
+                example: null
+              cn_create_reason_code:
+                type: string
+                deprecated: false
+                maxLength: 100
+                example: null
+              cn_date:
+                type: integer
+                format: unix-time
+                deprecated: false
+                example: null
+              cn_total:
+                type: integer
+                format: int64
+                default: 0
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              cn_status:
+                type: string
+                deprecated: false
+                enum:
+                - adjusted
+                - refunded
+                - refund_due
+                - voided
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: true
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: CreditNote.Status
+                example: null
+              cn_reference_invoice_id:
+                type: string
+                deprecated: false
+                maxLength: 50
+                example: null
+            required:
+            - applied_amount
+            - applied_at
+            - cn_id
+            - cn_status
+            example: null
+          example: null
+        linked_refunds:
+          type: array
+          deprecated: false
+          x-cb-sort-order: 36
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: TxnRefundsAndReversal
+            x-cb-sub-resource-parent-name: Transaction
+            properties:
+              txn_id:
+                type: string
+                deprecated: false
+                maxLength: 40
+                example: null
+              txn_status:
+                type: string
+                deprecated: false
+                enum:
+                - in_progress
+                - success
+                - voided
+                - failure
+                - timeout
+                - needs_attention
+                - late_failure
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: true
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: Transaction.Status
+                example: null
+              txn_date:
+                type: integer
+                format: unix-time
+                deprecated: false
+                example: null
+              txn_amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+            required:
+            - txn_amount
+            - txn_date
+            - txn_id
+            - txn_status
+            example: null
+          example: null
+        linked_payments:
+          type: array
+          deprecated: false
+          x-cb-sort-order: 37
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: LinkedPayment
+            x-cb-sub-resource-parent-name: Transaction
+            properties:
+              id:
+                type: string
+                deprecated: false
+                maxLength: 40
+                example: null
+              status:
+                type: string
+                deprecated: false
+                enum:
+                - in_progress
+                - success
+                - voided
+                - failure
+                - timeout
+                - needs_attention
+                - late_failure
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: Status
+                example: null
+              amount:
+                type: integer
+                format: int64
+                deprecated: false
+                x-cb-is-money-column: true
+                minimum: 0
+                example: null
+              date:
+                type: integer
+                format: unix-time
+                deprecated: false
+                example: null
+            required:
+            - id
+            example: null
+          example: null
+        error_detail:
+          type: object
+          deprecated: false
+          x-cb-is-sub-resource: true
+          x-cb-sub-resource-name: GatewayErrorDetail
+          x-cb-sub-resource-parent-name: Transaction
+          x-cb-sort-order: 45
+          properties:
+            request_id:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            error_category:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            error_code:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            error_message:
+              type: string
+              deprecated: false
+              maxLength: 65000
+              example: null
+            decline_code:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            decline_message:
+              type: string
+              deprecated: false
+              maxLength: 65000
+              example: null
+            network_error_code:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            network_error_message:
+              type: string
+              deprecated: false
+              maxLength: 65000
+              example: null
+            error_field:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            recommendation_code:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            recommendation_message:
+              type: string
+              deprecated: false
+              maxLength: 65000
+              example: null
+            processor_error_code:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            processor_error_message:
+              type: string
+              deprecated: false
+              maxLength: 65000
+              example: null
+            error_cause_id:
+              type: string
+              deprecated: false
+              maxLength: 150
+              example: null
+            processor_advice_code:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+          example: null
+        network_transaction_details:
+          type: object
+          deprecated: false
+          x-cb-is-sub-resource: true
+          x-cb-sub-resource-name: NetworkTransactionDetail
+          x-cb-sub-resource-parent-name: Transaction
+          x-cb-sort-order: 47
+          properties:
+            network_transaction_id:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            original_network_transaction_id:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+          example: null
+      required:
+      - currency_code
+      - deleted
+      - gateway
+      - id
+      - payment_method
+      - type
+      example: null
+    '429':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `third_party_api_request_limit_exceeded` - Returned when your request is blocked temporarily at a third-party service, due to the request count exceeding their acceptable limits.
+
+            * `api_request_limit_exceeded` - Returned when requests have been blocked temporarily due to request count exceeding acceptable limits.
+
+            * `lock_timeout` - Returned when there are multiple concurrent requests to the same resource.'
+          enum:
+          - third_party_api_request_limit_exceeded
+          - api_request_limit_exceeded
+          - lock_timeout
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+  parameters:
+    chargebee-request-origin-device:
+      name: chargebee-request-origin-device
+      in: header
+      description: The device from which the customer has made the request
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The device from which the customer has made the request
+        example: Android
+    chargebee-event-actions:
+      name: chargebee-event-actions
+      in: header
+      description: skip all actions to be done on the events
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip all actions to be done on the events
+        enum:
+        - all-disabled
+    offset:
+      name: offset
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        description: Determines your position in the list for pagination. To ensure that the next page is retrieved correctly, always set 'offset' to the value of 'next_offset' obtained in the previous iteration of the API call.
+        x-cb-is-pagination-parameter: true
+        maxLength: 1000
+    chargebee-event-webhook:
+      name: chargebee-event-webhook
+      in: header
+      description: ' skip only webhooks'
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: ' skip only webhooks'
+        enum:
+        - all-disabled
+    chargebee-business-entity-id:
+      name: chargebee-business-entity-id
+      in: header
+      description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        maxLength: 50
+    transaction-id:
+      name: transaction-id
+      in: path
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+        default: 10
+        description: The number of resources to be returned.
+        x-cb-is-pagination-parameter: true
+        maximum: 100
+        minimum: 1
+    chargebee-request-origin-user:
+      name: chargebee-request-origin-user
+      in: header
+      description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        example: user@example.com
+    chargebee-request-origin-user-encoded:
+      name: chargebee-request-origin-user-encoded
+      in: header
+      description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        example: dXNlci7QutCy0ZbRgtC+0YfQutCwQGV4YW1wbGUuY29t
+    chargebee-request-origin-ip:
+      name: chargebee-request-origin-ip
+      in: header
+      description: The IP address of the customer where the request originated
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The IP address of the customer where the request originated
+        example: 192.168.1.2
+        pattern: ^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-fA-F]|[a-fA-F][a-fA-F0-9\-]*[a-fA-F0-9])\.)*([A-Fa-f]|[A-Fa-f][A-Fa-f0-9\-]*[A-Fa-f0-9])$|^(?:(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){6})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:::(?:(?:(?:[0-9a-fA-F]{1,4})):){5})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){4})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,1}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){3})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,2}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){2})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,3}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:[0-9a-fA-F]{1,4})):)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,4}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,5}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,6}(?:(?:[0-9a-fA-F]{1,4})))?::)))))$
+    chargebee-event-email:
+      name: chargebee-event-email
+      in: header
+      description: skip only emails
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip only emails
+        enum:
+        - all-disabled
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

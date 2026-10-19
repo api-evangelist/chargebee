@@ -1,0 +1,694 @@
+openapi: 3.2.0
+info:
+  title: Chargebee Batch API
+  contact:
+    name: Chargebee Support
+    url: https://www.chargebee.com
+    email: support@chargebee.com
+  version: 2026-09-24.553c79154f0075cfbab35271eeff8b63a3ed6a86
+  x-cb-product-catalog-version: 2
+  x-cb-api-version: 2
+servers:
+- url: '{protocol}://{site}.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+- url: '{protocol}://{site}-test.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+tags:
+- name: Batch
+paths:
+  /batch/usage_events:
+    post:
+      summary: Ingest usages in batch
+      operationId: ingest_usages_in_batch
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                events:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    deduplication_id:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: events
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 0
+                        maxLength: 36
+                        example: null
+                      example: null
+                    subscription_id:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: events
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 1
+                        maxLength: 50
+                        example: null
+                      example: null
+                    usage_timestamp:
+                      type: array
+                      items:
+                        type: integer
+                        format: int64
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: events
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 2
+                        example: null
+                      example: null
+                    properties:
+                      type: array
+                      items:
+                        type: object
+                        additionalProperties: true
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: events
+                        x-cb-is-api-column: true
+                        x-cb-attribute-pcv: 2
+                        x-cb-sort-order: 3
+                        example: null
+                      example: null
+                  required:
+                  - deduplication_id
+                  - properties
+                  - subscription_id
+                  - usage_timestamp
+                  example: null
+              example: null
+            encoding:
+              events:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  batch_id:
+                    type: string
+                    deprecated: false
+                    x-cb-attribute-pcv: 2
+                    maxLength: 36
+                    example: null
+                  failed_events:
+                    type: array
+                    deprecated: false
+                    items:
+                      example: null
+                    example: null
+                required:
+                - batch_id
+                - failed_events
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      servers:
+      - url: '{protocol}://{site}.ingest.{environment}:{port}/api/v2'
+        variables:
+          protocol:
+            default: https
+            enum:
+            - http
+            - https
+          site:
+            default: demo
+          environment:
+            default: chargebee.com
+            enum:
+            - chargebee.com
+          port:
+            default: '443'
+            enum:
+            - '443'
+            - '8080'
+      - url: '{protocol}://{site}-test.ingest.{environment}:{port}/api/v2'
+        variables:
+          protocol:
+            default: https
+            enum:
+            - http
+            - https
+          site:
+            default: demo
+          environment:
+            default: chargebee.com
+            enum:
+            - chargebee.com
+          port:
+            default: '443'
+            enum:
+            - '443'
+            - '8080'
+      x-cb-resource-id: usage_event
+      x-cb-sort-order: 5
+      x-cb-module: usage-based-billing
+      x-cb-operation-method-name: batchIngest
+      x-cb-is-operation-needs-input-object: true
+      x-cb-operation-is-batch: true
+      x-cb-operation-sub-domain-name: ingest
+      x-cb-is-operation-needs-json-input: true
+      x-cb-sdk-method-name: batchIngest
+      tags:
+      - Batch
+components:
+  schemas:
+    '409':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `invalid_state_for_request` - Returned when the requested operation is not allowed for current state of the resource. This error will occur if the state of the resource has not been checked for the validity of the request. For example this error is returned when we try to schedule subscription changes  at ''end of term'' for canceled subscriptions.'
+          enum:
+          - invalid_state_for_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '400':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          - payment
+          example: null
+        api_error_code:
+          type: string
+          description: '* `payment_intent_invalid_amount` - Returned when processing amount is different from payment intent amountFor example if payment intent which is passed has authorized 10$ and if the charges initiated is for 12$.
+
+            * `configuration_incompatible` - Returned when the request is not compatible with the configuration for the  site or the configuration is incomplete.
+
+            * `payment_intent_invalid` - Returned when validation or verification fails for provided payment intent.For example if payment intent which is passed is in not consumable state.
+
+            * `invalid_request` - Returned when the request has incompatible values or does not match the API specification. As it is a generic error, handling this error is recommended only in combination  with  param attribute.
+
+            * `payment_method_verification_failed` - Returned when validation or verification fails for the provided payment method. For example  if the payment method is card, this will include all card parameter validation errors and also verification failures  from the gateway.
+
+            * `payment_processing_failed` - Returned when the payment collection fails.
+
+            * `resource_limit_exhausted` - Returned when any limit constraint is violated by the request. For example this error is  thrown when the coupon provided has already expired or its maximum redemption count has been reached.
+
+            * `duplicate_entry` - Returned when the request provides a duplicate value for an attribute that is specified as unique for that site.  For example in ''create subscription api'' if you are passing  the subscription id then this error will be thrown if a subscription exists in site with the same id.
+
+            * `param_wrong_value` - Returned when the value does not meet the required specification for the parameter. For example, wrong email format. It is strongly recommended  to do the validation at your end before calling Chargebee''s API (other than specific cases like  VAT number validation).
+
+            * `payment_method_not_present` - Returned when the request requires payment collection but the ''payment method'' details (such as card) is not present for the customer. This error will not occur if auto-collection is disabled for the customer.
+
+            * `resource_limit_exceeded`
+
+            * `payment_gateway_currency_incompatible` - Returned when the payment gateway configured is incompatible with the transactional currency. This error will not occur if auto-collection is disabled for the customer.'
+          enum:
+          - payment_intent_invalid_amount
+          - configuration_incompatible
+          - payment_intent_invalid
+          - invalid_request
+          - payment_method_verification_failed
+          - payment_processing_failed
+          - resource_limit_exhausted
+          - duplicate_entry
+          - param_wrong_value
+          - payment_method_not_present
+          - resource_limit_exceeded
+          - payment_gateway_currency_incompatible
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '422':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `unable_to_process_request` - Returned when the HTTP request body contains a well-formed, but semantically erroneous payload. For example this error is returned when a client attempts to reuse an idempotency key with a different request payload.'
+          enum:
+          - unable_to_process_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '404':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: "* `resource_not_found` - Returned when any of resource(s) referred in the request is not found. \n* `site_not_found` - Returned when the site is not found."
+          enum:
+          - resource_not_found
+          - site_not_found
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '503':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `db_connection_failure` - Returned when db connection fails.
+
+            * `site_read_only_mode` - Returned when your site is temporarily unavailable for write operations due to a scheduled maintenance.
+
+            * `site_not_ready` - Returned when your site is temporarily unavailable due to a scheduled maintenance.
+
+            * `internal_temporary_error` - Returned when temporary occured in Chargebee side. The request can be re-tried, with exponential backoff in case of repeat failures.'
+          enum:
+          - db_connection_failure
+          - site_read_only_mode
+          - site_not_ready
+          - internal_temporary_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '401':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: '* `api_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be the api key is invalid or authentication header is not present in the request or the header''s format is invalid.
+
+            * `basic_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be that one or both of the username and password are invalid'
+          enum:
+          - api_authentication_failed
+          - basic_authentication_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '403':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `request_blocked` - Returned when request is blocked for your site. The blocking could be only for a specific set of operation(s) . The reason would be provided as part of the message. You would have to contact support for additional details.
+
+            * `api_authorization_failed` - Returned when the API key does not have sufficient privileges to perform the particular operation.'
+          enum:
+          - request_blocked
+          - api_authorization_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '500':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `internal_error` - Returned when the request parameters were right but the operation couldn''t be completed due to a bug in Chargebee side.'
+          enum:
+          - internal_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '405':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `http_method_not_supported` - Returned when the ''http method'', specified in the request, is not allowed for this URL. It should not occur if you are using one of the standard client library.'
+          enum:
+          - http_method_not_supported
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '429':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `third_party_api_request_limit_exceeded` - Returned when your request is blocked temporarily at a third-party service, due to the request count exceeding their acceptable limits.
+
+            * `api_request_limit_exceeded` - Returned when requests have been blocked temporarily due to request count exceeding acceptable limits.
+
+            * `lock_timeout` - Returned when there are multiple concurrent requests to the same resource.'
+          enum:
+          - third_party_api_request_limit_exceeded
+          - api_request_limit_exceeded
+          - lock_timeout
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+  parameters:
+    chargebee-request-origin-user-encoded:
+      name: chargebee-request-origin-user-encoded
+      in: header
+      description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        example: dXNlci7QutCy0ZbRgtC+0YfQutCwQGV4YW1wbGUuY29t
+    chargebee-event-webhook:
+      name: chargebee-event-webhook
+      in: header
+      description: ' skip only webhooks'
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: ' skip only webhooks'
+        enum:
+        - all-disabled
+    chargebee-request-origin-user:
+      name: chargebee-request-origin-user
+      in: header
+      description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        example: user@example.com
+    chargebee-business-entity-id:
+      name: chargebee-business-entity-id
+      in: header
+      description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        maxLength: 50
+    chargebee-request-origin-device:
+      name: chargebee-request-origin-device
+      in: header
+      description: The device from which the customer has made the request
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The device from which the customer has made the request
+        example: Android
+    chargebee-event-email:
+      name: chargebee-event-email
+      in: header
+      description: skip only emails
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip only emails
+        enum:
+        - all-disabled
+    chargebee-request-origin-ip:
+      name: chargebee-request-origin-ip
+      in: header
+      description: The IP address of the customer where the request originated
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The IP address of the customer where the request originated
+        example: 192.168.1.2
+        pattern: ^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-fA-F]|[a-fA-F][a-fA-F0-9\-]*[a-fA-F0-9])\.)*([A-Fa-f]|[A-Fa-f][A-Fa-f0-9\-]*[A-Fa-f0-9])$|^(?:(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){6})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:::(?:(?:(?:[0-9a-fA-F]{1,4})):){5})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){4})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,1}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){3})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,2}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){2})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,3}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:[0-9a-fA-F]{1,4})):)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,4}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,5}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,6}(?:(?:[0-9a-fA-F]{1,4})))?::)))))$
+    chargebee-event-actions:
+      name: chargebee-event-actions
+      in: header
+      description: skip all actions to be done on the events
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip all actions to be done on the events
+        enum:
+        - all-disabled
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

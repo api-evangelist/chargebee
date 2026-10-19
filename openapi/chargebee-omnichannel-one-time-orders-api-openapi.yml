@@ -1,0 +1,1026 @@
+openapi: 3.2.0
+info:
+  title: Chargebee Omnichannel One Time Orders API
+  contact:
+    name: Chargebee Support
+    url: https://www.chargebee.com
+    email: support@chargebee.com
+  version: 2026-09-24.553c79154f0075cfbab35271eeff8b63a3ed6a86
+  x-cb-product-catalog-version: 2
+  x-cb-api-version: 2
+servers:
+- url: '{protocol}://{site}.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+- url: '{protocol}://{site}-test.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+tags:
+- name: Omnichannel One Time Orders
+paths:
+  /omnichannel_one_time_orders:
+    get:
+      summary: list omnichannel one time orders
+      operationId: list_omnichannel_one_time_orders
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - name: source
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          example: apple_app_store
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: omnichannel_one_time_orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 2
+          properties:
+            is:
+              type: string
+              description: '* `apple_app_store` - Source of the app is apple app store
+
+                * `google_play_store` - Source of the app is google play store'
+              enum:
+              - apple_app_store
+              - google_play_store
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Source
+              example: null
+            is_not:
+              type: string
+              description: '* `apple_app_store` - Source of the app is apple app store
+
+                * `google_play_store` - Source of the app is google play store'
+              enum:
+              - apple_app_store
+              - google_play_store
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Source
+              example: null
+            in:
+              type: string
+              description: '* `apple_app_store` - Source of the app is apple app store
+
+                * `google_play_store` - Source of the app is google play store'
+              enum:
+              - apple_app_store
+              - google_play_store
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Source
+              pattern: ^\[(apple_app_store|google_play_store)(,(apple_app_store|google_play_store))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `apple_app_store` - Source of the app is apple app store
+
+                * `google_play_store` - Source of the app is google play store'
+              enum:
+              - apple_app_store
+              - google_play_store
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Source
+              pattern: ^\[(apple_app_store|google_play_store)(,(apple_app_store|google_play_store))*\]$
+              example: null
+      - name: customer_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Chargebee Customer External Identifier
+          example: 8gsnbYfsMLds
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: omnichannel_one_time_orders
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 3
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        omnichannel_one_time_order:
+                          $ref: '#/components/schemas/OmnichannelOneTimeOrder'
+                          description: Resource object representing omnichannel_one_time_order
+                      required:
+                      - omnichannel_one_time_order
+                      example: null
+                    example: null
+                  next_offset:
+                    type: string
+                    description: This attribute is returned only if more resources are present. To fetch the next set of resources use this value for the input parameter `offset`.
+                    maxLength: 1000
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: omnichannel_one_time_order
+      x-cb-sort-order: 1
+      x-cb-module: mobile-subscription
+      x-cb-operation-is-list: true
+      x-cb-operation-method-name: list
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: list
+      tags:
+      - Omnichannel One Time Orders
+  /omnichannel_one_time_orders/{omnichannel-one-time-order-id}:
+    get:
+      summary: retrieve an omnichannel one time order
+      operationId: retrieve_an_omnichannel_one_time_order
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/omnichannel-one-time-order-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  omnichannel_one_time_order:
+                    $ref: '#/components/schemas/OmnichannelOneTimeOrder'
+                    description: Resource object representing omnichannel_one_time_order
+                required:
+                - omnichannel_one_time_order
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: omnichannel_one_time_order
+      x-cb-sort-order: 0
+      x-cb-module: mobile-subscription
+      x-cb-operation-method-name: retrieve
+      x-cb-sdk-method-name: retrieve
+      tags:
+      - Omnichannel One Time Orders
+components:
+  schemas:
+    '503':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `db_connection_failure` - Returned when db connection fails.
+
+            * `site_read_only_mode` - Returned when your site is temporarily unavailable for write operations due to a scheduled maintenance.
+
+            * `site_not_ready` - Returned when your site is temporarily unavailable due to a scheduled maintenance.
+
+            * `internal_temporary_error` - Returned when temporary occured in Chargebee side. The request can be re-tried, with exponential backoff in case of repeat failures.'
+          enum:
+          - db_connection_failure
+          - site_read_only_mode
+          - site_not_ready
+          - internal_temporary_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '403':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `request_blocked` - Returned when request is blocked for your site. The blocking could be only for a specific set of operation(s) . The reason would be provided as part of the message. You would have to contact support for additional details.
+
+            * `api_authorization_failed` - Returned when the API key does not have sufficient privileges to perform the particular operation.'
+          enum:
+          - request_blocked
+          - api_authorization_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '405':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `http_method_not_supported` - Returned when the ''http method'', specified in the request, is not allowed for this URL. It should not occur if you are using one of the standard client library.'
+          enum:
+          - http_method_not_supported
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '400':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          - payment
+          example: null
+        api_error_code:
+          type: string
+          description: '* `payment_intent_invalid_amount` - Returned when processing amount is different from payment intent amountFor example if payment intent which is passed has authorized 10$ and if the charges initiated is for 12$.
+
+            * `configuration_incompatible` - Returned when the request is not compatible with the configuration for the  site or the configuration is incomplete.
+
+            * `payment_intent_invalid` - Returned when validation or verification fails for provided payment intent.For example if payment intent which is passed is in not consumable state.
+
+            * `invalid_request` - Returned when the request has incompatible values or does not match the API specification. As it is a generic error, handling this error is recommended only in combination  with  param attribute.
+
+            * `payment_method_verification_failed` - Returned when validation or verification fails for the provided payment method. For example  if the payment method is card, this will include all card parameter validation errors and also verification failures  from the gateway.
+
+            * `payment_processing_failed` - Returned when the payment collection fails.
+
+            * `resource_limit_exhausted` - Returned when any limit constraint is violated by the request. For example this error is  thrown when the coupon provided has already expired or its maximum redemption count has been reached.
+
+            * `duplicate_entry` - Returned when the request provides a duplicate value for an attribute that is specified as unique for that site.  For example in ''create subscription api'' if you are passing  the subscription id then this error will be thrown if a subscription exists in site with the same id.
+
+            * `param_wrong_value` - Returned when the value does not meet the required specification for the parameter. For example, wrong email format. It is strongly recommended  to do the validation at your end before calling Chargebee''s API (other than specific cases like  VAT number validation).
+
+            * `payment_method_not_present` - Returned when the request requires payment collection but the ''payment method'' details (such as card) is not present for the customer. This error will not occur if auto-collection is disabled for the customer.
+
+            * `resource_limit_exceeded`
+
+            * `payment_gateway_currency_incompatible` - Returned when the payment gateway configured is incompatible with the transactional currency. This error will not occur if auto-collection is disabled for the customer.'
+          enum:
+          - payment_intent_invalid_amount
+          - configuration_incompatible
+          - payment_intent_invalid
+          - invalid_request
+          - payment_method_verification_failed
+          - payment_processing_failed
+          - resource_limit_exhausted
+          - duplicate_entry
+          - param_wrong_value
+          - payment_method_not_present
+          - resource_limit_exceeded
+          - payment_gateway_currency_incompatible
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    OmnichannelOneTimeOrder:
+      type: object
+      x-cb-resource-id: omnichannel_one_time_order
+      x-cb-resource-path-name: omnichannel_one_time_orders
+      x-cb-is-dependent-resource: false
+      x-cb-sort-order: 146
+      x-cb-product-catalog-version: 2
+      properties:
+        id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 0
+          maxLength: 40
+          example: null
+        app_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 1
+          maxLength: 100
+          example: null
+        customer_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 2
+          maxLength: 100
+          example: null
+        id_at_source:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 3
+          maxLength: 500
+          example: null
+        origin:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 4
+          maxLength: 3
+          example: null
+        source:
+          type: string
+          deprecated: false
+          enum:
+          - apple_app_store
+          - google_play_store
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Source
+          x-cb-sort-order: 5
+          example: null
+        created_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 6
+          example: null
+        resource_version:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-sort-order: 7
+          example: null
+        omnichannel_one_time_order_items:
+          type: array
+          deprecated: false
+          x-cb-attribute-pcv: 2
+          x-cb-is-dependent-attribute: true
+          x-cb-sort-order: 8
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: OmnichannelOneTimeOrderItem
+            x-cb-is-global-resource-reference: true
+            properties:
+              id:
+                type: string
+                deprecated: false
+                maxLength: 40
+                example: null
+              item_id_at_source:
+                type: string
+                deprecated: false
+                maxLength: 100
+                example: null
+              item_type_at_source:
+                type: string
+                deprecated: false
+                maxLength: 100
+                example: null
+              quantity:
+                type: integer
+                format: int32
+                deprecated: false
+                example: null
+              cancelled_at:
+                type: integer
+                format: unix-time
+                deprecated: false
+                example: null
+              cancellation_reason:
+                type: string
+                deprecated: false
+                enum:
+                - customer_cancelled
+                - customer_did_not_consent_to_price_increase
+                - refunded_due_to_app_issue
+                - refunded_for_other_reason
+                - merchant_revoked
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: CancellationReason
+                example: null
+              created_at:
+                type: integer
+                format: unix-time
+                deprecated: false
+                example: null
+              resource_version:
+                type: integer
+                format: int64
+                deprecated: false
+                example: null
+            required:
+            - created_at
+            - id
+            - item_id_at_source
+            example: null
+          example: null
+        purchase_transaction:
+          type: object
+          deprecated: false
+          x-cb-is-sub-resource: true
+          x-cb-sub-resource-name: OmnichannelTransaction
+          x-cb-is-global-resource-reference: true
+          x-cb-is-dependent-attribute: true
+          x-cb-sort-order: 9
+          properties:
+            id:
+              type: string
+              deprecated: false
+              maxLength: 40
+              example: null
+            id_at_source:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            app_id:
+              type: string
+              deprecated: false
+              maxLength: 100
+              example: null
+            price_currency:
+              type: string
+              deprecated: false
+              maxLength: 3
+              example: null
+            price_units:
+              type: integer
+              format: int64
+              deprecated: false
+              example: null
+            price_nanos:
+              type: integer
+              format: int64
+              deprecated: false
+              example: null
+            type:
+              type: string
+              deprecated: false
+              enum:
+              - purchase
+              - renewal
+              x-cb-is-global-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-external-enum: false
+              x-cb-is-gen-separate: false
+              x-cb-is-ignore-generation: false
+              x-cb-sdk-enum-api-name: Type
+              example: null
+            transacted_at:
+              type: integer
+              format: unix-time
+              deprecated: false
+              example: null
+            created_at:
+              type: integer
+              format: unix-time
+              deprecated: false
+              example: null
+            resource_version:
+              type: integer
+              format: int64
+              deprecated: false
+              example: null
+            linked_omnichannel_subscriptions:
+              type: array
+              deprecated: false
+              items:
+                type: object
+                deprecated: false
+                x-cb-is-sub-resource: true
+                x-cb-sub-resource-name: LinkedOmnichannelSubscription
+                x-cb-sub-resource-parent-name: OmnichannelOneTimeOrder
+                properties:
+                  omnichannel_subscription_id:
+                    type: string
+                    deprecated: false
+                    maxLength: 100
+                    example: null
+                example: null
+              example: null
+            linked_omnichannel_one_time_orders:
+              type: array
+              deprecated: false
+              items:
+                type: object
+                deprecated: false
+                x-cb-is-sub-resource: true
+                x-cb-sub-resource-name: LinkedOmnichannelOneTimeOrder
+                x-cb-sub-resource-parent-name: OmnichannelOneTimeOrder
+                properties:
+                  omnichannel_one_time_order_id:
+                    type: string
+                    deprecated: false
+                    maxLength: 100
+                    example: null
+                example: null
+              example: null
+          required:
+          - app_id
+          - created_at
+          - id
+          - id_at_source
+          - type
+          example: null
+      required:
+      - app_id
+      - created_at
+      - id
+      - id_at_source
+      - omnichannel_one_time_order_items
+      - source
+      example: null
+    '500':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `internal_error` - Returned when the request parameters were right but the operation couldn''t be completed due to a bug in Chargebee side.'
+          enum:
+          - internal_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '409':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `invalid_state_for_request` - Returned when the requested operation is not allowed for current state of the resource. This error will occur if the state of the resource has not been checked for the validity of the request. For example this error is returned when we try to schedule subscription changes  at ''end of term'' for canceled subscriptions.'
+          enum:
+          - invalid_state_for_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '422':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `unable_to_process_request` - Returned when the HTTP request body contains a well-formed, but semantically erroneous payload. For example this error is returned when a client attempts to reuse an idempotency key with a different request payload.'
+          enum:
+          - unable_to_process_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '404':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: "* `resource_not_found` - Returned when any of resource(s) referred in the request is not found. \n* `site_not_found` - Returned when the site is not found."
+          enum:
+          - resource_not_found
+          - site_not_found
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '401':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: '* `api_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be the api key is invalid or authentication header is not present in the request or the header''s format is invalid.
+
+            * `basic_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be that one or both of the username and password are invalid'
+          enum:
+          - api_authentication_failed
+          - basic_authentication_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '429':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `third_party_api_request_limit_exceeded` - Returned when your request is blocked temporarily at a third-party service, due to the request count exceeding their acceptable limits.
+
+            * `api_request_limit_exceeded` - Returned when requests have been blocked temporarily due to request count exceeding acceptable limits.
+
+            * `lock_timeout` - Returned when there are multiple concurrent requests to the same resource.'
+          enum:
+          - third_party_api_request_limit_exceeded
+          - api_request_limit_exceeded
+          - lock_timeout
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+  parameters:
+    chargebee-request-origin-device:
+      name: chargebee-request-origin-device
+      in: header
+      description: The device from which the customer has made the request
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The device from which the customer has made the request
+        example: Android
+    offset:
+      name: offset
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        description: Determines your position in the list for pagination. To ensure that the next page is retrieved correctly, always set 'offset' to the value of 'next_offset' obtained in the previous iteration of the API call.
+        x-cb-is-pagination-parameter: true
+        maxLength: 1000
+    chargebee-business-entity-id:
+      name: chargebee-business-entity-id
+      in: header
+      description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        maxLength: 50
+    limit:
+      name: limit
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+        default: 10
+        description: The number of resources to be returned.
+        x-cb-is-pagination-parameter: true
+        maximum: 100
+        minimum: 1
+    chargebee-request-origin-user:
+      name: chargebee-request-origin-user
+      in: header
+      description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        example: user@example.com
+    omnichannel-one-time-order-id:
+      name: omnichannel-one-time-order-id
+      in: path
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    chargebee-request-origin-user-encoded:
+      name: chargebee-request-origin-user-encoded
+      in: header
+      description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        example: dXNlci7QutCy0ZbRgtC+0YfQutCwQGV4YW1wbGUuY29t
+    chargebee-request-origin-ip:
+      name: chargebee-request-origin-ip
+      in: header
+      description: The IP address of the customer where the request originated
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The IP address of the customer where the request originated
+        example: 192.168.1.2
+        pattern: ^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-fA-F]|[a-fA-F][a-fA-F0-9\-]*[a-fA-F0-9])\.)*([A-Fa-f]|[A-Fa-f][A-Fa-f0-9\-]*[A-Fa-f0-9])$|^(?:(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){6})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:::(?:(?:(?:[0-9a-fA-F]{1,4})):){5})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){4})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,1}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){3})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,2}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){2})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,3}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:[0-9a-fA-F]{1,4})):)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,4}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,5}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,6}(?:(?:[0-9a-fA-F]{1,4})))?::)))))$
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

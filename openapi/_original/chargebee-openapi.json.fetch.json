@@ -1,0 +1,12 @@
+{
+ "url": "https://raw.githubusercontent.com/chargebee/openapi/HEAD/spec/chargebee_sdk_spec.json",
+ "final": "https://raw.githubusercontent.com/chargebee/openapi/HEAD/spec/chargebee_sdk_spec.json",
+ "status": 200,
+ "content_type": "text/plain; charset=utf-8",
+ "bytes": 11717071,
+ "sha256": "9d77cf209bd172a74a28de05320eb06d982989af59666e7566d480d616b53fd8",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

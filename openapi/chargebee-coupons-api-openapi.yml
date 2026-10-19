@@ -1,0 +1,4146 @@
+openapi: 3.2.0
+info:
+  title: Chargebee Coupons API
+  contact:
+    name: Chargebee Support
+    url: https://www.chargebee.com
+    email: support@chargebee.com
+  version: 2026-09-24.553c79154f0075cfbab35271eeff8b63a3ed6a86
+  x-cb-product-catalog-version: 2
+  x-cb-api-version: 2
+servers:
+- url: '{protocol}://{site}.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+- url: '{protocol}://{site}-test.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+tags:
+- name: Coupons
+paths:
+  /coupons:
+    get:
+      summary: List coupons
+      operationId: list_coupons
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - name: id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: "Used to uniquely identify the coupon in your website/application and to integrate with Chargebee.  \n**Note:**\n\n\nWhen the coupon ID contains a special character; for example: `#`, the API returns an error.\nMake sure that you [encode](https://www.urlencoder.org/) the coupon ID in the path parameter before making an API call.\n"
+          example: OFF2008
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: coupons
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 2
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: name
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: "The display name used in web interface for identifying the coupon.  \n**Note:**\n\n\nWhen the name of the coupon set contains a special character; for example: `#`, the API returns an error.\nMake sure that you [encode](https://www.urlencoder.org/) the name of the coupon set in the path parameter before making an API call.\n"
+          example: Offer 10
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: coupons
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 3
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: discount_type
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The type of deduction
+          example: fixed_amount
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: coupons
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 4
+          properties:
+            is:
+              type: string
+              description: '* `fixed_amount` - The specified amount will be deducted.
+
+                * `percentage` - The specified percentage will be deducted.
+
+                * `offer_quantity` - The specified units will be offered without any deduction.'
+              enum:
+              - fixed_amount
+              - percentage
+              - offer_quantity
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: DiscountType
+              example: null
+            is_not:
+              type: string
+              description: '* `fixed_amount` - The specified amount will be deducted.
+
+                * `percentage` - The specified percentage will be deducted.
+
+                * `offer_quantity` - The specified units will be offered without any deduction.'
+              enum:
+              - fixed_amount
+              - percentage
+              - offer_quantity
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: DiscountType
+              example: null
+            in:
+              type: string
+              description: '* `fixed_amount` - The specified amount will be deducted.
+
+                * `percentage` - The specified percentage will be deducted.
+
+                * `offer_quantity` - The specified units will be offered without any deduction.'
+              enum:
+              - fixed_amount
+              - percentage
+              - offer_quantity
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: DiscountType
+              pattern: ^\[(fixed_amount|percentage|offer_quantity)(,(fixed_amount|percentage|offer_quantity))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `fixed_amount` - The specified amount will be deducted.
+
+                * `percentage` - The specified percentage will be deducted.
+
+                * `offer_quantity` - The specified units will be offered without any deduction.'
+              enum:
+              - fixed_amount
+              - percentage
+              - offer_quantity
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: DiscountType
+              pattern: ^\[(fixed_amount|percentage|offer_quantity)(,(fixed_amount|percentage|offer_quantity))*\]$
+              example: null
+      - name: duration_type
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Specifies the time duration for which this coupon is attached to the subscription.
+          example: forever
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: coupons
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 5
+          properties:
+            is:
+              type: string
+              description: '* `one_time` - The coupon stays attached to the subscription till it is applied on an invoice **once**. It is removed after that from the subscription.
+
+                * `forever` - The coupon is attached to the subscription and applied on the invoices until explicitly removed.
+
+                * `limited_period` - The discount is attached to the subscription and applied on the invoices for a limited duration. This duration starts from the point it is applied to an invoice for the first time and expires after a period specified by `period` and `period_unit`.
+
+                '
+              enum:
+              - one_time
+              - forever
+              - limited_period
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: DurationType
+              example: null
+            is_not:
+              type: string
+              description: '* `one_time` - The coupon stays attached to the subscription till it is applied on an invoice **once**. It is removed after that from the subscription.
+
+                * `forever` - The coupon is attached to the subscription and applied on the invoices until explicitly removed.
+
+                * `limited_period` - The discount is attached to the subscription and applied on the invoices for a limited duration. This duration starts from the point it is applied to an invoice for the first time and expires after a period specified by `period` and `period_unit`.
+
+                '
+              enum:
+              - one_time
+              - forever
+              - limited_period
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: DurationType
+              example: null
+            in:
+              type: string
+              description: '* `one_time` - The coupon stays attached to the subscription till it is applied on an invoice **once**. It is removed after that from the subscription.
+
+                * `forever` - The coupon is attached to the subscription and applied on the invoices until explicitly removed.
+
+                * `limited_period` - The discount is attached to the subscription and applied on the invoices for a limited duration. This duration starts from the point it is applied to an invoice for the first time and expires after a period specified by `period` and `period_unit`.
+
+                '
+              enum:
+              - one_time
+              - forever
+              - limited_period
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: DurationType
+              pattern: ^\[(one_time|forever|limited_period)(,(one_time|forever|limited_period))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `one_time` - The coupon stays attached to the subscription till it is applied on an invoice **once**. It is removed after that from the subscription.
+
+                * `forever` - The coupon is attached to the subscription and applied on the invoices until explicitly removed.
+
+                * `limited_period` - The discount is attached to the subscription and applied on the invoices for a limited duration. This duration starts from the point it is applied to an invoice for the first time and expires after a period specified by `period` and `period_unit`.
+
+                '
+              enum:
+              - one_time
+              - forever
+              - limited_period
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: DurationType
+              pattern: ^\[(one_time|forever|limited_period)(,(one_time|forever|limited_period))*\]$
+              example: null
+      - name: status
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Status of the coupon.
+          example: active
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: coupons
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 6
+          properties:
+            is:
+              type: string
+              description: '* `active` - Can be applied to a subscription.
+
+                * `expired` - Cannot be applied to a subscription. A coupon may expire due to exceeding [max_redemptions](/docs/api/coupons?#coupon_max_redemptions) or [valid_till](/docs/api/coupons?#coupon_valid_till) date is past. Existing associations remain unaffected.
+
+                * `archived` - Cannot be applied to a subscription. Existing associations remain unaffected.
+
+                * `deleted` - Indicates the coupon has been deleted.
+
+                * `future` - The coupon is scheduled to start at a future date and cannot be applied to a subscription. From the valid_from date, the status changes to active.
+
+                '
+              enum:
+              - active
+              - expired
+              - archived
+              - deleted
+              - future
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              example: null
+            is_not:
+              type: string
+              description: '* `active` - Can be applied to a subscription.
+
+                * `expired` - Cannot be applied to a subscription. A coupon may expire due to exceeding [max_redemptions](/docs/api/coupons?#coupon_max_redemptions) or [valid_till](/docs/api/coupons?#coupon_valid_till) date is past. Existing associations remain unaffected.
+
+                * `archived` - Cannot be applied to a subscription. Existing associations remain unaffected.
+
+                * `deleted` - Indicates the coupon has been deleted.
+
+                * `future` - The coupon is scheduled to start at a future date and cannot be applied to a subscription. From the valid_from date, the status changes to active.
+
+                '
+              enum:
+              - active
+              - expired
+              - archived
+              - deleted
+              - future
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              example: null
+            in:
+              type: string
+              description: '* `active` - Can be applied to a subscription.
+
+                * `expired` - Cannot be applied to a subscription. A coupon may expire due to exceeding [max_redemptions](/docs/api/coupons?#coupon_max_redemptions) or [valid_till](/docs/api/coupons?#coupon_valid_till) date is past. Existing associations remain unaffected.
+
+                * `archived` - Cannot be applied to a subscription. Existing associations remain unaffected.
+
+                * `deleted` - Indicates the coupon has been deleted.
+
+                * `future` - The coupon is scheduled to start at a future date and cannot be applied to a subscription. From the valid_from date, the status changes to active.
+
+                '
+              enum:
+              - active
+              - expired
+              - archived
+              - deleted
+              - future
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              pattern: ^\[(active|expired|archived|deleted|future)(,(active|expired|archived|deleted|future))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `active` - Can be applied to a subscription.
+
+                * `expired` - Cannot be applied to a subscription. A coupon may expire due to exceeding [max_redemptions](/docs/api/coupons?#coupon_max_redemptions) or [valid_till](/docs/api/coupons?#coupon_valid_till) date is past. Existing associations remain unaffected.
+
+                * `archived` - Cannot be applied to a subscription. Existing associations remain unaffected.
+
+                * `deleted` - Indicates the coupon has been deleted.
+
+                * `future` - The coupon is scheduled to start at a future date and cannot be applied to a subscription. From the valid_from date, the status changes to active.
+
+                '
+              enum:
+              - active
+              - expired
+              - archived
+              - deleted
+              - future
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              pattern: ^\[(active|expired|archived|deleted|future)(,(active|expired|archived|deleted|future))*\]$
+              example: null
+      - name: apply_on
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The amount on the invoice to which the coupon is applied.
+          example: invoice_amount
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: coupons
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 7
+          properties:
+            is:
+              type: string
+              description: "* `invoice_amount` - The coupon is applied to the invoice `sub_total`.\n* `specified_items_total` - **(Deprecated)** Discount will be applied to the total of plan and addon items specified.\n* `each_specified_item` -\n  The coupon is applied to the `invoice.line_item.amount` that corresponds to the item price specified by `item_price_id`.  \n  The coupon is applied to the `invoice.line_item.amount` that corresponds to the plan or addon specified by `plan_ids` and `addon_ids`.\n* `each_unit_of_specified_items` - **(Deprecated)** Discount will be applied to each unit of plan and addon items specified.\n"
+              enum:
+              - invoice_amount
+              - specified_items_total
+              - each_specified_item
+              - each_unit_of_specified_items
+              x-cb-deprecated-enum-values: specified_items_total,each_unit_of_specified_items
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ApplyOn
+              example: null
+            is_not:
+              type: string
+              description: "* `invoice_amount` - The coupon is applied to the invoice `sub_total`.\n* `specified_items_total` - **(Deprecated)** Discount will be applied to the total of plan and addon items specified.\n* `each_specified_item` -\n  The coupon is applied to the `invoice.line_item.amount` that corresponds to the item price specified by `item_price_id`.  \n  The coupon is applied to the `invoice.line_item.amount` that corresponds to the plan or addon specified by `plan_ids` and `addon_ids`.\n* `each_unit_of_specified_items` - **(Deprecated)** Discount will be applied to each unit of plan and addon items specified.\n"
+              enum:
+              - invoice_amount
+              - specified_items_total
+              - each_specified_item
+              - each_unit_of_specified_items
+              x-cb-deprecated-enum-values: specified_items_total,each_unit_of_specified_items
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ApplyOn
+              example: null
+            in:
+              type: string
+              description: "* `invoice_amount` - The coupon is applied to the invoice `sub_total`.\n* `specified_items_total` - **(Deprecated)** Discount will be applied to the total of plan and addon items specified.\n* `each_specified_item` -\n  The coupon is applied to the `invoice.line_item.amount` that corresponds to the item price specified by `item_price_id`.  \n  The coupon is applied to the `invoice.line_item.amount` that corresponds to the plan or addon specified by `plan_ids` and `addon_ids`.\n* `each_unit_of_specified_items` - **(Deprecated)** Discount will be applied to each unit of plan and addon items specified.\n"
+              enum:
+              - invoice_amount
+              - specified_items_total
+              - each_specified_item
+              - each_unit_of_specified_items
+              x-cb-deprecated-enum-values: specified_items_total,each_unit_of_specified_items
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ApplyOn
+              pattern: ^\[(invoice_amount|specified_items_total|each_specified_item|each_unit_of_specified_items)(,(invoice_amount|specified_items_total|each_specified_item|each_unit_of_specified_items))*\]$
+              example: null
+            not_in:
+              type: string
+              description: "* `invoice_amount` - The coupon is applied to the invoice `sub_total`.\n* `specified_items_total` - **(Deprecated)** Discount will be applied to the total of plan and addon items specified.\n* `each_specified_item` -\n  The coupon is applied to the `invoice.line_item.amount` that corresponds to the item price specified by `item_price_id`.  \n  The coupon is applied to the `invoice.line_item.amount` that corresponds to the plan or addon specified by `plan_ids` and `addon_ids`.\n* `each_unit_of_specified_items` - **(Deprecated)** Discount will be applied to each unit of plan and addon items specified.\n"
+              enum:
+              - invoice_amount
+              - specified_items_total
+              - each_specified_item
+              - each_unit_of_specified_items
+              x-cb-deprecated-enum-values: specified_items_total,each_unit_of_specified_items
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ApplyOn
+              pattern: ^\[(invoice_amount|specified_items_total|each_specified_item|each_unit_of_specified_items)(,(invoice_amount|specified_items_total|each_specified_item|each_unit_of_specified_items))*\]$
+              example: null
+      - name: created_at
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Timestamp indicating when this coupon is created.
+          example: '145222875'
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: coupons
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 8
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: updated_at
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: To filter based on updated at. This attribute will be present only if the resource has been updated after 2016-11-09.
+          example: '1243545465'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: coupons
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 9
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: sort_by
+        in: query
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: true
+          x-cb-sort-order: 14
+          properties:
+            asc:
+              type: string
+              enum:
+              - created_at
+              example: null
+            desc:
+              type: string
+              enum:
+              - created_at
+              example: null
+          example: null
+      - name: currency_code
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'The currency code ([ISO 4217 format](https://www.chargebee.com/docs/supported-currencies.html)) of the coupon. Applicable for *fixed_amount* coupons alone.
+
+            '
+          example: USD
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 15
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: applicable_item_price_ids
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: List of itemPrice ids for which these coupons are applicable.
+          example: day-pass-USD
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 17
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        coupon:
+                          $ref: '#/components/schemas/Coupon'
+                          description: Resource object representing coupon
+                      required:
+                      - coupon
+                      example: null
+                    example: null
+                  next_offset:
+                    type: string
+                    description: This attribute is returned only if more resources are present. To fetch the next set of resources use this value for the input parameter `offset`.
+                    maxLength: 1000
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: coupon
+      x-cb-sort-order: 3
+      x-cb-module: product-catalog
+      x-cb-operation-is-list: true
+      x-cb-is-custom-fields-supported: true
+      x-cb-operation-method-name: list
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: list
+      tags:
+      - Coupons
+    post:
+      summary: Create a coupon
+      operationId: create_a_coupon
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 100
+                  example: null
+                name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 50
+                  example: null
+                invoice_name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  maxLength: 100
+                  example: null
+                discount_type:
+                  type: string
+                  default: percentage
+                  deprecated: false
+                  enum:
+                  - fixed_amount
+                  - percentage
+                  - offer_quantity
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: DiscountType
+                  x-cb-sort-order: 3
+                  example: null
+                discount_amount:
+                  type: integer
+                  format: int64
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-money-column: true
+                  x-cb-sort-order: 4
+                  minimum: 0
+                  example: null
+                currency_code:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required if Multicurrency is enabled
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 5
+                  maxLength: 3
+                  example: null
+                discount_percentage:
+                  type: number
+                  format: double
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 6
+                  maximum: 100
+                  minimum: 0.01
+                  example: null
+                discount_quantity:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 7
+                  minimum: 1
+                  example: null
+                apply_on:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - invoice_amount
+                  - specified_items_total
+                  - each_specified_item
+                  - each_unit_of_specified_items
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-deprecated-enum-values: specified_items_total,each_unit_of_specified_items
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: ApplyOn
+                  x-cb-sort-order: 8
+                  example: null
+                duration_type:
+                  type: string
+                  default: forever
+                  deprecated: false
+                  enum:
+                  - one_time
+                  - forever
+                  - limited_period
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: DurationType
+                  x-cb-sort-order: 9
+                  example: null
+                duration_month:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 10
+                  maximum: 240
+                  minimum: 1
+                  example: null
+                valid_till:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 12
+                  example: null
+                max_redemptions:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 13
+                  minimum: 1
+                  example: null
+                invoice_notes:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 14
+                  maxLength: 2000
+                  example: null
+                meta_data:
+                  type: object
+                  additionalProperties: true
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 15
+                  example: null
+                included_in_mrr:
+                  type: boolean
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 1
+                  x-cb-sort-order: 16
+                  example: null
+                period:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 17
+                  minimum: 1
+                  example: null
+                period_unit:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - day
+                  - week
+                  - month
+                  - year
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: true
+                  x-cb-is-external-enum: true
+                  x-cb-is-gen-separate: true
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: PeriodUnit
+                  x-cb-global-enum-reference: ./schemas/enums/PeriodUnit.yaml
+                  x-cb-sort-order: 18
+                  example: null
+                plan_constraint:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - none
+                  - all
+                  - specific
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: PlanConstraint
+                  x-cb-sort-order: 19
+                  example: null
+                addon_constraint:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - none
+                  - all
+                  - specific
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: AddonConstraint
+                  x-cb-sort-order: 20
+                  example: null
+                plan_ids:
+                  type: array
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 1
+                  x-cb-sort-order: 21
+                  items:
+                    type: string
+                    deprecated: false
+                    x-cb-parameter-blank-option: as_null
+                    x-cb-attribute-meta-comment: optional
+                    x-cb-is-api-column: true
+                    maxLength: 100
+                    example: null
+                  example: null
+                addon_ids:
+                  type: array
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 1
+                  x-cb-sort-order: 22
+                  items:
+                    type: string
+                    deprecated: false
+                    x-cb-parameter-blank-option: as_null
+                    x-cb-attribute-meta-comment: optional
+                    x-cb-is-api-column: true
+                    maxLength: 100
+                    example: null
+                  example: null
+                status:
+                  type: string
+                  default: active
+                  deprecated: false
+                  enum:
+                  - active
+                  - archived
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Status
+                  x-cb-sort-order: 23
+                  example: null
+              required:
+              - apply_on
+              - id
+              - name
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coupon:
+                    $ref: '#/components/schemas/Coupon'
+                    description: Resource object representing coupon
+                required:
+                - coupon
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: coupon
+      x-cb-sort-order: 0
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: create
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: create
+      tags:
+      - Coupons
+  /coupons/{coupon-id}/update_for_items:
+    post:
+      summary: Update a coupon for items
+      operationId: update_a_coupon_for_items
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/coupon-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: true
+              x-cb-is-custom-fields-supported: true
+              properties:
+                name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 50
+                  example: null
+                invoice_name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 100
+                  example: null
+                discount_type:
+                  type: string
+                  default: percentage
+                  deprecated: false
+                  enum:
+                  - fixed_amount
+                  - percentage
+                  - offer_quantity
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: DiscountType
+                  x-cb-sort-order: 2
+                  example: null
+                discount_amount:
+                  type: integer
+                  format: int64
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-money-column: true
+                  x-cb-sort-order: 3
+                  minimum: 0
+                  example: null
+                currency_code:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required if Multicurrency is enabled
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 4
+                  maxLength: 3
+                  example: null
+                discount_percentage:
+                  type: number
+                  format: double
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 5
+                  maximum: 100
+                  minimum: 0.01
+                  example: null
+                discount_quantity:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 6
+                  minimum: 1
+                  example: null
+                apply_on:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - invoice_amount
+                  - specified_items_total
+                  - each_specified_item
+                  - each_unit_of_specified_items
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-deprecated-enum-values: specified_items_total,each_unit_of_specified_items
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: ApplyOn
+                  x-cb-sort-order: 7
+                  example: null
+                duration_type:
+                  type: string
+                  default: forever
+                  deprecated: false
+                  enum:
+                  - one_time
+                  - forever
+                  - limited_period
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: DurationType
+                  x-cb-sort-order: 8
+                  example: null
+                duration_month:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 9
+                  maximum: 240
+                  minimum: 1
+                  example: null
+                valid_from:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 2
+                  x-cb-sort-order: 10
+                  example: null
+                valid_till:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 11
+                  example: null
+                max_redemptions:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 12
+                  minimum: 1
+                  example: null
+                invoice_notes:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 13
+                  maxLength: 2000
+                  example: null
+                meta_data:
+                  type: object
+                  additionalProperties: true
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 14
+                  example: null
+                included_in_mrr:
+                  type: boolean
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 1
+                  x-cb-sort-order: 15
+                  example: null
+                period:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 16
+                  minimum: 1
+                  example: null
+                period_unit:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - day
+                  - week
+                  - month
+                  - year
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: true
+                  x-cb-is-external-enum: true
+                  x-cb-is-gen-separate: true
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: PeriodUnit
+                  x-cb-global-enum-reference: ./schemas/enums/PeriodUnit.yaml
+                  x-cb-sort-order: 17
+                  example: null
+                item_constraints:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    constraint:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - none
+                        - all
+                        - specific
+                        - criteria
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraints
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: Constraint
+                        x-cb-sort-order: 18
+                        example: null
+                      example: null
+                    item_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - plan
+                        - addon
+                        - charge
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraints
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: ItemType
+                        x-cb-sort-order: 19
+                        example: null
+                      example: null
+                    item_price_ids:
+                      type: array
+                      items:
+                        type: array
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraints
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 20
+                        items:
+                          example: null
+                        example: null
+                      example: null
+                  required:
+                  - constraint
+                  - item_type
+                  example: null
+                item_constraint_criteria:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    item_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - plan
+                        - addon
+                        - charge
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraint_criteria
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: ItemType
+                        x-cb-sort-order: 21
+                        example: null
+                      example: null
+                    item_family_ids:
+                      type: array
+                      items:
+                        type: array
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraint_criteria
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 22
+                        items:
+                          example: null
+                        example: null
+                      example: null
+                    currencies:
+                      type: array
+                      items:
+                        type: array
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraint_criteria
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 23
+                        items:
+                          example: null
+                        example: null
+                      example: null
+                    item_price_periods:
+                      type: array
+                      items:
+                        type: array
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraint_criteria
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 24
+                        items:
+                          example: null
+                        example: null
+                      example: null
+                  example: null
+                coupon_constraints:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    entity_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - customer
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: coupon_constraints
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: EntityType
+                        x-cb-sort-order: 25
+                        example: null
+                      example: null
+                    type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - max_redemptions
+                        - unique_by
+                        - existing_customer
+                        - new_customer
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: coupon_constraints
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: Type
+                        x-cb-sort-order: 26
+                        example: null
+                      example: null
+                    value:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: coupon_constraints
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 27
+                        maxLength: 65000
+                        example: null
+                      example: null
+                  required:
+                  - entity_type
+                  - type
+                  example: null
+              example: null
+            encoding:
+              coupon_constraints:
+                style: deepObject
+                explode: true
+              item_constraint_criteria:
+                style: deepObject
+                explode: true
+              item_constraints:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coupon:
+                    $ref: '#/components/schemas/Coupon'
+                    description: Resource object representing coupon
+                required:
+                - coupon
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: coupon
+      x-cb-sort-order: 2
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: updateForItems
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: updateForItems
+      tags:
+      - Coupons
+  /coupons/{coupon-id}/unarchive:
+    post:
+      summary: Unarchive a coupon
+      operationId: unarchive_a_coupon
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/coupon-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coupon:
+                    $ref: '#/components/schemas/Coupon'
+                    description: Resource object representing coupon
+                required:
+                - coupon
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: coupon
+      x-cb-sort-order: 8
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: unarchive
+      x-cb-sdk-method-name: unarchive
+      tags:
+      - Coupons
+  /coupons/{coupon-id}/delete:
+    post:
+      summary: Delete a coupon
+      operationId: delete_a_coupon
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/coupon-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coupon:
+                    $ref: '#/components/schemas/Coupon'
+                    description: Resource object representing coupon
+                required:
+                - coupon
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: coupon
+      x-cb-sort-order: 6
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: delete
+      x-cb-sdk-method-name: delete
+      tags:
+      - Coupons
+  /coupons/copy:
+    post:
+      summary: Copy a coupon
+      operationId: copy_a_coupon
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                from_site:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 50
+                  example: null
+                id_at_from_site:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 100
+                  example: null
+                id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  maxLength: 100
+                  example: null
+                for_site_merging:
+                  type: boolean
+                  default: false
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 3
+                  example: null
+              required:
+              - from_site
+              - id_at_from_site
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coupon:
+                    $ref: '#/components/schemas/Coupon'
+                    description: Resource object representing coupon
+                required:
+                - coupon
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: coupon
+      x-cb-sort-order: 7
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: copy
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: copy
+      tags:
+      - Coupons
+  /coupons/{coupon-id}:
+    get:
+      summary: Retrieve a coupon
+      operationId: retrieve_a_coupon
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/coupon-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coupon:
+                    $ref: '#/components/schemas/Coupon'
+                    description: Resource object representing coupon
+                required:
+                - coupon
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: coupon
+      x-cb-sort-order: 4
+      x-cb-module: product-catalog
+      x-cb-operation-method-name: retrieve
+      x-cb-sdk-method-name: retrieve
+      tags:
+      - Coupons
+    post:
+      summary: Update a coupon
+      operationId: update_a_coupon
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - $ref: '#/components/parameters/coupon-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 50
+                  example: null
+                invoice_name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 100
+                  example: null
+                discount_type:
+                  type: string
+                  default: percentage
+                  deprecated: false
+                  enum:
+                  - fixed_amount
+                  - percentage
+                  - offer_quantity
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: DiscountType
+                  x-cb-sort-order: 2
+                  example: null
+                discount_amount:
+                  type: integer
+                  format: int64
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-money-column: true
+                  x-cb-sort-order: 3
+                  minimum: 0
+                  example: null
+                currency_code:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required if Multicurrency is enabled
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 4
+                  maxLength: 3
+                  example: null
+                discount_percentage:
+                  type: number
+                  format: double
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 5
+                  maximum: 100
+                  minimum: 0.01
+                  example: null
+                discount_quantity:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 6
+                  minimum: 1
+                  example: null
+                apply_on:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - invoice_amount
+                  - specified_items_total
+                  - each_specified_item
+                  - each_unit_of_specified_items
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-deprecated-enum-values: specified_items_total,each_unit_of_specified_items
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: ApplyOn
+                  x-cb-sort-order: 7
+                  example: null
+                duration_type:
+                  type: string
+                  default: forever
+                  deprecated: false
+                  enum:
+                  - one_time
+                  - forever
+                  - limited_period
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: DurationType
+                  x-cb-sort-order: 8
+                  example: null
+                duration_month:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 9
+                  maximum: 240
+                  minimum: 1
+                  example: null
+                valid_till:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 11
+                  example: null
+                max_redemptions:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 12
+                  minimum: 1
+                  example: null
+                invoice_notes:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 13
+                  maxLength: 2000
+                  example: null
+                meta_data:
+                  type: object
+                  additionalProperties: true
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 14
+                  example: null
+                included_in_mrr:
+                  type: boolean
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 1
+                  x-cb-sort-order: 15
+                  example: null
+                period:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 16
+                  minimum: 1
+                  example: null
+                period_unit:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - day
+                  - week
+                  - month
+                  - year
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: true
+                  x-cb-is-external-enum: true
+                  x-cb-is-gen-separate: true
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: PeriodUnit
+                  x-cb-global-enum-reference: ./schemas/enums/PeriodUnit.yaml
+                  x-cb-sort-order: 17
+                  example: null
+                plan_constraint:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - none
+                  - all
+                  - specific
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: PlanConstraint
+                  x-cb-sort-order: 18
+                  example: null
+                addon_constraint:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - none
+                  - all
+                  - specific
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: AddonConstraint
+                  x-cb-sort-order: 19
+                  example: null
+                plan_ids:
+                  type: array
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 1
+                  x-cb-sort-order: 20
+                  items:
+                    type: string
+                    deprecated: false
+                    x-cb-parameter-blank-option: as_null
+                    x-cb-attribute-meta-comment: optional
+                    x-cb-is-api-column: true
+                    maxLength: 100
+                    example: null
+                  example: null
+                addon_ids:
+                  type: array
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 1
+                  x-cb-sort-order: 21
+                  items:
+                    type: string
+                    deprecated: false
+                    x-cb-parameter-blank-option: as_null
+                    x-cb-attribute-meta-comment: optional
+                    x-cb-is-api-column: true
+                    maxLength: 100
+                    example: null
+                  example: null
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coupon:
+                    $ref: '#/components/schemas/Coupon'
+                    description: Resource object representing coupon
+                required:
+                - coupon
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: coupon
+      x-cb-sort-order: 5
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: update
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: update
+      tags:
+      - Coupons
+  /coupons/create_for_items:
+    post:
+      summary: Create a coupon for items
+      operationId: create_a_coupon_for_items
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: true
+              x-cb-is-custom-fields-supported: true
+              properties:
+                id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 100
+                  example: null
+                name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 50
+                  example: null
+                invoice_name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  maxLength: 100
+                  example: null
+                discount_type:
+                  type: string
+                  default: percentage
+                  deprecated: false
+                  enum:
+                  - fixed_amount
+                  - percentage
+                  - offer_quantity
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: DiscountType
+                  x-cb-sort-order: 3
+                  example: null
+                discount_amount:
+                  type: integer
+                  format: int64
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-money-column: true
+                  x-cb-sort-order: 4
+                  minimum: 0
+                  example: null
+                currency_code:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required if Multicurrency is enabled
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 5
+                  maxLength: 3
+                  example: null
+                discount_percentage:
+                  type: number
+                  format: double
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 6
+                  maximum: 100
+                  minimum: 0.01
+                  example: null
+                discount_quantity:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 7
+                  minimum: 1
+                  example: null
+                apply_on:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - invoice_amount
+                  - specified_items_total
+                  - each_specified_item
+                  - each_unit_of_specified_items
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-deprecated-enum-values: specified_items_total,each_unit_of_specified_items
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: ApplyOn
+                  x-cb-sort-order: 8
+                  example: null
+                duration_type:
+                  type: string
+                  default: forever
+                  deprecated: false
+                  enum:
+                  - one_time
+                  - forever
+                  - limited_period
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: DurationType
+                  x-cb-sort-order: 9
+                  example: null
+                duration_month:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 10
+                  maximum: 240
+                  minimum: 1
+                  example: null
+                valid_from:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 2
+                  x-cb-sort-order: 11
+                  example: null
+                valid_till:
+                  type: integer
+                  format: unix-time
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 12
+                  example: null
+                max_redemptions:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 13
+                  minimum: 1
+                  example: null
+                invoice_notes:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 14
+                  maxLength: 2000
+                  example: null
+                meta_data:
+                  type: object
+                  additionalProperties: true
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 15
+                  example: null
+                included_in_mrr:
+                  type: boolean
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 1
+                  x-cb-sort-order: 16
+                  example: null
+                period:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 17
+                  minimum: 1
+                  example: null
+                period_unit:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - day
+                  - week
+                  - month
+                  - year
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: true
+                  x-cb-is-external-enum: true
+                  x-cb-is-gen-separate: true
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: PeriodUnit
+                  x-cb-global-enum-reference: ./schemas/enums/PeriodUnit.yaml
+                  x-cb-sort-order: 18
+                  example: null
+                status:
+                  type: string
+                  default: active
+                  deprecated: false
+                  enum:
+                  - active
+                  - archived
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: coupons
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Status
+                  x-cb-sort-order: 26
+                  example: null
+                item_constraints:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    constraint:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - none
+                        - all
+                        - specific
+                        - criteria
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraints
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: Constraint
+                        x-cb-sort-order: 19
+                        example: null
+                      example: null
+                    item_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - plan
+                        - addon
+                        - charge
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraints
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: ItemType
+                        x-cb-sort-order: 20
+                        example: null
+                      example: null
+                    item_price_ids:
+                      type: array
+                      items:
+                        type: array
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraints
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 21
+                        items:
+                          example: null
+                        example: null
+                      example: null
+                  required:
+                  - constraint
+                  - item_type
+                  example: null
+                item_constraint_criteria:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    item_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - plan
+                        - addon
+                        - charge
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraint_criteria
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: ItemType
+                        x-cb-sort-order: 22
+                        example: null
+                      example: null
+                    item_family_ids:
+                      type: array
+                      items:
+                        type: array
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraint_criteria
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 23
+                        items:
+                          example: null
+                        example: null
+                      example: null
+                    currencies:
+                      type: array
+                      items:
+                        type: array
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraint_criteria
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 24
+                        items:
+                          example: null
+                        example: null
+                      example: null
+                    item_price_periods:
+                      type: array
+                      items:
+                        type: array
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_constraint_criteria
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 25
+                        items:
+                          example: null
+                        example: null
+                      example: null
+                  example: null
+                coupon_constraints:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    entity_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - customer
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: coupon_constraints
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: EntityType
+                        x-cb-sort-order: 27
+                        example: null
+                      example: null
+                    type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - max_redemptions
+                        - unique_by
+                        - existing_customer
+                        - new_customer
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: coupon_constraints
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: Type
+                        x-cb-sort-order: 28
+                        example: null
+                      example: null
+                    value:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: coupon_constraints
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 29
+                        maxLength: 65000
+                        example: null
+                      example: null
+                  required:
+                  - entity_type
+                  - type
+                  example: null
+              required:
+              - apply_on
+              - id
+              - name
+              example: null
+            encoding:
+              coupon_constraints:
+                style: deepObject
+                explode: true
+              item_constraint_criteria:
+                style: deepObject
+                explode: true
+              item_constraints:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  coupon:
+                    $ref: '#/components/schemas/Coupon'
+                    description: Resource object representing coupon
+                required:
+                - coupon
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: coupon
+      x-cb-sort-order: 1
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: createForItems
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: createForItems
+      tags:
+      - Coupons
+components:
+  schemas:
+    '503':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `db_connection_failure` - Returned when db connection fails.
+
+            * `site_read_only_mode` - Returned when your site is temporarily unavailable for write operations due to a scheduled maintenance.
+
+            * `site_not_ready` - Returned when your site is temporarily unavailable due to a scheduled maintenance.
+
+            * `internal_temporary_error` - Returned when temporary occured in Chargebee side. The request can be re-tried, with exponential backoff in case of repeat failures.'
+          enum:
+          - db_connection_failure
+          - site_read_only_mode
+          - site_not_ready
+          - internal_temporary_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '403':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `request_blocked` - Returned when request is blocked for your site. The blocking could be only for a specific set of operation(s) . The reason would be provided as part of the message. You would have to contact support for additional details.
+
+            * `api_authorization_failed` - Returned when the API key does not have sufficient privileges to perform the particular operation.'
+          enum:
+          - request_blocked
+          - api_authorization_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '405':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `http_method_not_supported` - Returned when the ''http method'', specified in the request, is not allowed for this URL. It should not occur if you are using one of the standard client library.'
+          enum:
+          - http_method_not_supported
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    Coupon:
+      type: object
+      additionalProperties: true
+      x-cb-is-custom-fields-supported: true
+      x-cb-resource-id: coupon
+      x-cb-resource-path-name: coupons
+      x-cb-is-dependent-resource: false
+      x-cb-sort-order: 50
+      properties:
+        id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 0
+          maxLength: 100
+          example: null
+        name:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 1
+          maxLength: 50
+          example: null
+        invoice_name:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 2
+          maxLength: 100
+          example: null
+        discount_type:
+          type: string
+          default: percentage
+          deprecated: false
+          enum:
+          - fixed_amount
+          - percentage
+          - offer_quantity
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: DiscountType
+          x-cb-sort-order: 3
+          example: null
+        discount_percentage:
+          type: number
+          format: double
+          deprecated: false
+          x-cb-sort-order: 4
+          maximum: 100
+          minimum: 0.01
+          example: null
+        discount_amount:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-is-money-column: true
+          x-cb-sort-order: 5
+          minimum: 0
+          example: null
+        discount_quantity:
+          type: integer
+          format: int32
+          deprecated: false
+          x-cb-sort-order: 6
+          minimum: 1
+          example: null
+        currency_code:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 7
+          maxLength: 3
+          example: null
+        duration_type:
+          type: string
+          default: forever
+          deprecated: false
+          enum:
+          - one_time
+          - forever
+          - limited_period
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: DurationType
+          x-cb-sort-order: 8
+          example: null
+        duration_month:
+          type: integer
+          format: int32
+          deprecated: true
+          x-cb-sort-order: 9
+          maximum: 240
+          minimum: 1
+          example: null
+        valid_from:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-attribute-pcv: 2
+          x-cb-sort-order: 10
+          example: null
+        valid_till:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 11
+          example: null
+        max_redemptions:
+          type: integer
+          format: int32
+          deprecated: false
+          x-cb-sort-order: 12
+          minimum: 1
+          example: null
+        status:
+          type: string
+          default: active
+          deprecated: false
+          enum:
+          - active
+          - expired
+          - archived
+          - deleted
+          - future
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Status
+          x-cb-sort-order: 13
+          example: null
+        apply_discount_on:
+          type: string
+          default: not_applicable
+          deprecated: true
+          enum:
+          - plans
+          - plans_and_addons
+          - plans_with_quantity
+          - not_applicable
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: ApplyDiscountOn
+          x-cb-sort-order: 14
+          example: null
+        apply_on:
+          type: string
+          deprecated: false
+          enum:
+          - invoice_amount
+          - specified_items_total
+          - each_specified_item
+          - each_unit_of_specified_items
+          x-cb-deprecated-enum-values: specified_items_total,each_unit_of_specified_items
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: ApplyOn
+          x-cb-sort-order: 15
+          example: null
+        created_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 18
+          example: null
+        archived_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 19
+          example: null
+        resource_version:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-sort-order: 20
+          example: null
+        updated_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 21
+          example: null
+        period:
+          type: integer
+          format: int32
+          deprecated: false
+          x-cb-sort-order: 23
+          minimum: 1
+          example: null
+        period_unit:
+          type: string
+          deprecated: false
+          enum:
+          - day
+          - week
+          - month
+          - year
+          x-cb-is-global-enum: true
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: true
+          x-cb-is-gen-separate: true
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: PeriodUnit
+          x-cb-global-enum-reference: ./schemas/enums/PeriodUnit.yaml
+          x-cb-sort-order: 24
+          example: null
+        redemptions:
+          type: integer
+          format: int32
+          deprecated: false
+          x-cb-sort-order: 29
+          minimum: 0
+          example: null
+        invoice_notes:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 30
+          maxLength: 2000
+          example: null
+        meta_data:
+          type: object
+          additionalProperties: true
+          deprecated: false
+          x-cb-sort-order: 31
+          example: null
+        deleted:
+          type: boolean
+          deprecated: false
+          x-cb-sort-order: 33
+          example: null
+        item_constraints:
+          type: array
+          deprecated: false
+          x-cb-attribute-pcv: 2
+          x-cb-sort-order: 27
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: ItemConstraint
+            x-cb-sub-resource-parent-name: Coupon
+            properties:
+              item_type:
+                type: string
+                deprecated: false
+                enum:
+                - plan
+                - addon
+                - charge
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: ItemType
+                example: null
+              constraint:
+                type: string
+                deprecated: false
+                enum:
+                - none
+                - all
+                - specific
+                - criteria
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: Constraint
+                example: null
+              item_price_ids:
+                type: array
+                deprecated: false
+                items:
+                  example: null
+                example: null
+            required:
+            - constraint
+            - item_type
+            example: null
+          example: null
+        item_constraint_criteria:
+          type: array
+          deprecated: false
+          x-cb-attribute-pcv: 2
+          x-cb-sort-order: 28
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: ItemConstraintCriteria
+            x-cb-sub-resource-parent-name: Coupon
+            properties:
+              item_type:
+                type: string
+                deprecated: false
+                enum:
+                - plan
+                - addon
+                - charge
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: ItemType
+                example: null
+              currencies:
+                type: array
+                deprecated: false
+                items:
+                  example: null
+                example: null
+              item_family_ids:
+                type: array
+                deprecated: false
+                items:
+                  example: null
+                example: null
+              item_price_periods:
+                type: array
+                deprecated: false
+                items:
+                  example: null
+                example: null
+            required:
+            - item_type
+            example: null
+          example: null
+        coupon_constraints:
+          type: array
+          deprecated: false
+          x-cb-attribute-pcv: 2
+          x-cb-sort-order: 32
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: CouponConstraint
+            x-cb-sub-resource-parent-name: Coupon
+            properties:
+              entity_type:
+                type: string
+                deprecated: false
+                enum:
+                - customer
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: EntityType
+                example: null
+              type:
+                type: string
+                deprecated: false
+                enum:
+                - max_redemptions
+                - unique_by
+                - existing_customer
+                - new_customer
+                x-cb-is-global-enum: false
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: false
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: Type
+                example: null
+              value:
+                type: string
+                deprecated: false
+                maxLength: 65000
+                example: null
+            required:
+            - entity_type
+            - type
+            example: null
+          example: null
+        plan_ids:
+          type: array
+          deprecated: false
+          x-cb-attribute-pcv: 1
+          x-cb-sort-order: 25
+          items:
+            type: string
+            deprecated: false
+            maxLength: 100
+            example: null
+          example: null
+        addon_constraint:
+          type: string
+          deprecated: false
+          enum:
+          - none
+          - all
+          - specific
+          - not_applicable
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: AddonConstraint
+          x-cb-attribute-pcv: 1
+          x-cb-sort-order: 17
+          example: null
+        plan_constraint:
+          type: string
+          deprecated: false
+          enum:
+          - none
+          - all
+          - specific
+          - not_applicable
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: PlanConstraint
+          x-cb-attribute-pcv: 1
+          x-cb-sort-order: 16
+          example: null
+        included_in_mrr:
+          type: boolean
+          deprecated: false
+          x-cb-attribute-pcv: 1
+          x-cb-sort-order: 22
+          example: null
+        addon_ids:
+          type: array
+          deprecated: false
+          x-cb-attribute-pcv: 1
+          x-cb-sort-order: 26
+          items:
+            type: string
+            deprecated: false
+            maxLength: 100
+            example: null
+          example: null
+      required:
+      - addon_constraint
+      - apply_discount_on
+      - apply_on
+      - created_at
+      - deleted
+      - discount_type
+      - duration_type
+      - id
+      - name
+      - plan_constraint
+      example: null
+    '400':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          - payment
+          example: null
+        api_error_code:
+          type: string
+          description: '* `payment_intent_invalid_amount` - Returned when processing amount is different from payment intent amountFor example if payment intent which is passed has authorized 10$ and if the charges initiated is for 12$.
+
+            * `configuration_incompatible` - Returned when the request is not compatible with the configuration for the  site or the configuration is incomplete.
+
+            * `payment_intent_invalid` - Returned when validation or verification fails for provided payment intent.For example if payment intent which is passed is in not consumable state.
+
+            * `invalid_request` - Returned when the request has incompatible values or does not match the API specification. As it is a generic error, handling this error is recommended only in combination  with  param attribute.
+
+            * `payment_method_verification_failed` - Returned when validation or verification fails for the provided payment method. For example  if the payment method is card, this will include all card parameter validation errors and also verification failures  from the gateway.
+
+            * `payment_processing_failed` - Returned when the payment collection fails.
+
+            * `resource_limit_exhausted` - Returned when any limit constraint is violated by the request. For example this error is  thrown when the coupon provided has already expired or its maximum redemption count has been reached.
+
+            * `duplicate_entry` - Returned when the request provides a duplicate value for an attribute that is specified as unique for that site.  For example in ''create subscription api'' if you are passing  the subscription id then this error will be thrown if a subscription exists in site with the same id.
+
+            * `param_wrong_value` - Returned when the value does not meet the required specification for the parameter. For example, wrong email format. It is strongly recommended  to do the validation at your end before calling Chargebee''s API (other than specific cases like  VAT number validation).
+
+            * `payment_method_not_present` - Returned when the request requires payment collection but the ''payment method'' details (such as card) is not present for the customer. This error will not occur if auto-collection is disabled for the customer.
+
+            * `resource_limit_exceeded`
+
+            * `payment_gateway_currency_incompatible` - Returned when the payment gateway configured is incompatible with the transactional currency. This error will not occur if auto-collection is disabled for the customer.'
+          enum:
+          - payment_intent_invalid_amount
+          - configuration_incompatible
+          - payment_intent_invalid
+          - invalid_request
+          - payment_method_verification_failed
+          - payment_processing_failed
+          - resource_limit_exhausted
+          - duplicate_entry
+          - param_wrong_value
+          - payment_method_not_present
+          - resource_limit_exceeded
+          - payment_gateway_currency_incompatible
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '500':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `internal_error` - Returned when the request parameters were right but the operation couldn''t be completed due to a bug in Chargebee side.'
+          enum:
+          - internal_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '409':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `invalid_state_for_request` - Returned when the requested operation is not allowed for current state of the resource. This error will occur if the state of the resource has not been checked for the validity of the request. For example this error is returned when we try to schedule subscription changes  at ''end of term'' for canceled subscriptions.'
+          enum:
+          - invalid_state_for_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '422':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `unable_to_process_request` - Returned when the HTTP request body contains a well-formed, but semantically erroneous payload. For example this error is returned when a client attempts to reuse an idempotency key with a different request payload.'
+          enum:
+          - unable_to_process_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '404':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: "* `resource_not_found` - Returned when any of resource(s) referred in the request is not found. \n* `site_not_found` - Returned when the site is not found."
+          enum:
+          - resource_not_found
+          - site_not_found
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '401':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: '* `api_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be the api key is invalid or authentication header is not present in the request or the header''s format is invalid.
+
+            * `basic_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be that one or both of the username and password are invalid'
+          enum:
+          - api_authentication_failed
+          - basic_authentication_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '429':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `third_party_api_request_limit_exceeded` - Returned when your request is blocked temporarily at a third-party service, due to the request count exceeding their acceptable limits.
+
+            * `api_request_limit_exceeded` - Returned when requests have been blocked temporarily due to request count exceeding acceptable limits.
+
+            * `lock_timeout` - Returned when there are multiple concurrent requests to the same resource.'
+          enum:
+          - third_party_api_request_limit_exceeded
+          - api_request_limit_exceeded
+          - lock_timeout
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+  parameters:
+    chargebee-request-origin-device:
+      name: chargebee-request-origin-device
+      in: header
+      description: The device from which the customer has made the request
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The device from which the customer has made the request
+        example: Android
+    chargebee-event-actions:
+      name: chargebee-event-actions
+      in: header
+      description: skip all actions to be done on the events
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip all actions to be done on the events
+        enum:
+        - all-disabled
+    offset:
+      name: offset
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        description: Determines your position in the list for pagination. To ensure that the next page is retrieved correctly, always set 'offset' to the value of 'next_offset' obtained in the previous iteration of the API call.
+        x-cb-is-pagination-parameter: true
+        maxLength: 1000
+    chargebee-event-webhook:
+      name: chargebee-event-webhook
+      in: header
+      description: ' skip only webhooks'
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: ' skip only webhooks'
+        enum:
+        - all-disabled
+    chargebee-business-entity-id:
+      name: chargebee-business-entity-id
+      in: header
+      description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        maxLength: 50
+    limit:
+      name: limit
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+        default: 10
+        description: The number of resources to be returned.
+        x-cb-is-pagination-parameter: true
+        maximum: 100
+        minimum: 1
+    chargebee-request-origin-user:
+      name: chargebee-request-origin-user
+      in: header
+      description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        example: user@example.com
+    chargebee-request-origin-user-encoded:
+      name: chargebee-request-origin-user-encoded
+      in: header
+      description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        example: dXNlci7QutCy0ZbRgtC+0YfQutCwQGV4YW1wbGUuY29t
+    coupon-id:
+      name: coupon-id
+      in: path
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    chargebee-request-origin-ip:
+      name: chargebee-request-origin-ip
+      in: header
+      description: The IP address of the customer where the request originated
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The IP address of the customer where the request originated
+        example: 192.168.1.2
+        pattern: ^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-fA-F]|[a-fA-F][a-fA-F0-9\-]*[a-fA-F0-9])\.)*([A-Fa-f]|[A-Fa-f][A-Fa-f0-9\-]*[A-Fa-f0-9])$|^(?:(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){6})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:::(?:(?:(?:[0-9a-fA-F]{1,4})):){5})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){4})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,1}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){3})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,2}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){2})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,3}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:[0-9a-fA-F]{1,4})):)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,4}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,5}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,6}(?:(?:[0-9a-fA-F]{1,4})))?::)))))$
+    chargebee-event-email:
+      name: chargebee-event-email
+      in: header
+      description: skip only emails
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip only emails
+        enum:
+        - all-disabled
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

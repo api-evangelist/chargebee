@@ -1,0 +1,2438 @@
+openapi: 3.2.0
+info:
+  title: Chargebee Features API
+  contact:
+    name: Chargebee Support
+    url: https://www.chargebee.com
+    email: support@chargebee.com
+  version: 2026-09-24.553c79154f0075cfbab35271eeff8b63a3ed6a86
+  x-cb-product-catalog-version: 2
+  x-cb-api-version: 2
+servers:
+- url: '{protocol}://{site}.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+- url: '{protocol}://{site}-test.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+tags:
+- name: Features
+paths:
+  /features:
+    get:
+      summary: List features
+      operationId: list_features
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - name: name
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'A case-sensitive unique name for the feature. For example: `user license`, `data storage`, `Salesforce Integration`, `devices`, `UHD Streaming`, and so on. **Note:** This name is not displayed on any customer-facing documents or pages such as [invoice PDFs](invoices#retrieve_invoice_as_pdf) or [hosted pages](hosted_pages). However, in the future, it is likely to be introduced on the [Self-Serve Portal](portal_sessions).
+
+            '
+          example: User licenses
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: features
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 2
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'A unique and immutable identifier for the feature. You can set it yourself, in which case it is recommended that a human-readable format (or slug) be used. For example, `number-of-users-ccjht01`. When not provided, a random value is automatically set.
+
+            '
+          example: fea-user-licenses
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: features
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 3
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: status
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The current status of the feature.
+          example: active
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: features
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 4
+          properties:
+            is:
+              type: string
+              description: '* `active` - A `draft` or an `archived` feature can be changed to `active`. Any [item](item_entitlements) or [subscription entitlements](subscription_entitlements) defined for the feature take effect immediately.
+
+                * `archived` - An `active` feature can be changed to `archived`. Once `archived`, no **new** [item](item_entitlements) or [subscription entitlements](subscription_entitlements) can be created for the feature. However, any pre-existing item or subscription entitlements from the time that the feature was `active`, remain effective.
+
+                * `draft` - The feature is in an unpublished state. [Item](item_entitlements) and [subscription entitlements](subscription_entitlements) can be created for a draft feature but they are not effective until the feature is active. A feature `status` cannot be changed back to `draft` once it is in `active` or `archived` `status`.
+
+                '
+              enum:
+              - active
+              - archived
+              - draft
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              example: null
+            is_not:
+              type: string
+              description: '* `active` - A `draft` or an `archived` feature can be changed to `active`. Any [item](item_entitlements) or [subscription entitlements](subscription_entitlements) defined for the feature take effect immediately.
+
+                * `archived` - An `active` feature can be changed to `archived`. Once `archived`, no **new** [item](item_entitlements) or [subscription entitlements](subscription_entitlements) can be created for the feature. However, any pre-existing item or subscription entitlements from the time that the feature was `active`, remain effective.
+
+                * `draft` - The feature is in an unpublished state. [Item](item_entitlements) and [subscription entitlements](subscription_entitlements) can be created for a draft feature but they are not effective until the feature is active. A feature `status` cannot be changed back to `draft` once it is in `active` or `archived` `status`.
+
+                '
+              enum:
+              - active
+              - archived
+              - draft
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              example: null
+            in:
+              type: string
+              description: '* `active` - A `draft` or an `archived` feature can be changed to `active`. Any [item](item_entitlements) or [subscription entitlements](subscription_entitlements) defined for the feature take effect immediately.
+
+                * `archived` - An `active` feature can be changed to `archived`. Once `archived`, no **new** [item](item_entitlements) or [subscription entitlements](subscription_entitlements) can be created for the feature. However, any pre-existing item or subscription entitlements from the time that the feature was `active`, remain effective.
+
+                * `draft` - The feature is in an unpublished state. [Item](item_entitlements) and [subscription entitlements](subscription_entitlements) can be created for a draft feature but they are not effective until the feature is active. A feature `status` cannot be changed back to `draft` once it is in `active` or `archived` `status`.
+
+                '
+              enum:
+              - active
+              - archived
+              - draft
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              pattern: ^\[(active|archived|draft)(,(active|archived|draft))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `active` - A `draft` or an `archived` feature can be changed to `active`. Any [item](item_entitlements) or [subscription entitlements](subscription_entitlements) defined for the feature take effect immediately.
+
+                * `archived` - An `active` feature can be changed to `archived`. Once `archived`, no **new** [item](item_entitlements) or [subscription entitlements](subscription_entitlements) can be created for the feature. However, any pre-existing item or subscription entitlements from the time that the feature was `active`, remain effective.
+
+                * `draft` - The feature is in an unpublished state. [Item](item_entitlements) and [subscription entitlements](subscription_entitlements) can be created for a draft feature but they are not effective until the feature is active. A feature `status` cannot be changed back to `draft` once it is in `active` or `archived` `status`.
+
+                '
+              enum:
+              - active
+              - archived
+              - draft
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              pattern: ^\[(active|archived|draft)(,(active|archived|draft))*\]$
+              example: null
+      - name: type
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The type of feature.
+          example: boolean
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: features
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 5
+          properties:
+            is:
+              type: string
+              description: '* `switch` - A switch or toggle is a feature that an item or subscription can be either fully entitled to or not entitled to at all.
+
+                * `custom` - The entitlement levels available for this feature are defined as a set of custom values. For example, a feature `Email Support` can have entitlement levels as `24×7` and `24×5`.
+
+                * `quantity` - The feature is quantity-based and entitlement levels available for it are a set of predefined number of quantity units. For example, a feature with `name` such as `number of users` can have entitlement levels of say, `5`, `20`, `50`, and `100`. `levels[is_unlimited]` is used for specifying the "unlimited" entitlement level.
+
+                * `range` - The feature is quantity-based and the entitlement levels available for it are the set of whole numbers within a range. The range is defined by a minimum and a maximum value. For example, a feature such as `number of users` can have entitlement levels starting at `5` users and go up to `50000`. `levels[is_unlimited]` is used for specifying the "unlimited" entitlement level.
+
+                '
+              enum:
+              - switch
+              - custom
+              - quantity
+              - range
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              example: null
+            is_not:
+              type: string
+              description: '* `switch` - A switch or toggle is a feature that an item or subscription can be either fully entitled to or not entitled to at all.
+
+                * `custom` - The entitlement levels available for this feature are defined as a set of custom values. For example, a feature `Email Support` can have entitlement levels as `24×7` and `24×5`.
+
+                * `quantity` - The feature is quantity-based and entitlement levels available for it are a set of predefined number of quantity units. For example, a feature with `name` such as `number of users` can have entitlement levels of say, `5`, `20`, `50`, and `100`. `levels[is_unlimited]` is used for specifying the "unlimited" entitlement level.
+
+                * `range` - The feature is quantity-based and the entitlement levels available for it are the set of whole numbers within a range. The range is defined by a minimum and a maximum value. For example, a feature such as `number of users` can have entitlement levels starting at `5` users and go up to `50000`. `levels[is_unlimited]` is used for specifying the "unlimited" entitlement level.
+
+                '
+              enum:
+              - switch
+              - custom
+              - quantity
+              - range
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              example: null
+            in:
+              type: string
+              description: '* `switch` - A switch or toggle is a feature that an item or subscription can be either fully entitled to or not entitled to at all.
+
+                * `custom` - The entitlement levels available for this feature are defined as a set of custom values. For example, a feature `Email Support` can have entitlement levels as `24×7` and `24×5`.
+
+                * `quantity` - The feature is quantity-based and entitlement levels available for it are a set of predefined number of quantity units. For example, a feature with `name` such as `number of users` can have entitlement levels of say, `5`, `20`, `50`, and `100`. `levels[is_unlimited]` is used for specifying the "unlimited" entitlement level.
+
+                * `range` - The feature is quantity-based and the entitlement levels available for it are the set of whole numbers within a range. The range is defined by a minimum and a maximum value. For example, a feature such as `number of users` can have entitlement levels starting at `5` users and go up to `50000`. `levels[is_unlimited]` is used for specifying the "unlimited" entitlement level.
+
+                '
+              enum:
+              - switch
+              - custom
+              - quantity
+              - range
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              pattern: ^\[(switch|custom|quantity|range)(,(switch|custom|quantity|range))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `switch` - A switch or toggle is a feature that an item or subscription can be either fully entitled to or not entitled to at all.
+
+                * `custom` - The entitlement levels available for this feature are defined as a set of custom values. For example, a feature `Email Support` can have entitlement levels as `24×7` and `24×5`.
+
+                * `quantity` - The feature is quantity-based and entitlement levels available for it are a set of predefined number of quantity units. For example, a feature with `name` such as `number of users` can have entitlement levels of say, `5`, `20`, `50`, and `100`. `levels[is_unlimited]` is used for specifying the "unlimited" entitlement level.
+
+                * `range` - The feature is quantity-based and the entitlement levels available for it are the set of whole numbers within a range. The range is defined by a minimum and a maximum value. For example, a feature such as `number of users` can have entitlement levels starting at `5` users and go up to `50000`. `levels[is_unlimited]` is used for specifying the "unlimited" entitlement level.
+
+                '
+              enum:
+              - switch
+              - custom
+              - quantity
+              - range
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              pattern: ^\[(switch|custom|quantity|range)(,(switch|custom|quantity|range))*\]$
+              example: null
+      - name: metered
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Determines if feature is metered or not
+          example: 'true'
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: features
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: BooleanFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 6
+          properties:
+            is:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        feature:
+                          $ref: '#/components/schemas/Feature'
+                          description: Resource object representing feature
+                      required:
+                      - feature
+                      example: null
+                    example: null
+                  next_offset:
+                    type: string
+                    description: This attribute is returned only if more resources are present. To fetch the next set of resources use this value for the input parameter `offset`.
+                    maxLength: 1000
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: feature
+      x-cb-sort-order: 0
+      x-cb-module: entitlements
+      x-cb-operation-is-list: true
+      x-cb-is-custom-fields-supported: true
+      x-cb-operation-method-name: list
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: list
+      tags:
+      - Features
+    post:
+      summary: Create a feature
+      operationId: create_a_feature
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: true
+              x-cb-is-custom-fields-supported: true
+              properties:
+                id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: features
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 50
+                  example: null
+                name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: features
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 50
+                  example: null
+                description:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: features
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  maxLength: 500
+                  example: null
+                type:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - switch
+                  - custom
+                  - quantity
+                  - range
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: features
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Type
+                  x-cb-sort-order: 3
+                  example: null
+                unit:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: features
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 5
+                  maxLength: 50
+                  example: null
+                levels:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    name:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: levels
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 7
+                        maxLength: 100
+                        example: null
+                      example: null
+                    value:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: levels
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 8
+                        maxLength: 50
+                        example: null
+                      example: null
+                    is_unlimited:
+                      type: array
+                      items:
+                        type: boolean
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: levels
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 9
+                        example: null
+                      example: null
+                    level:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: levels
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 10
+                        example: null
+                      example: null
+                  example: null
+              required:
+              - name
+              example: null
+            encoding:
+              levels:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  feature:
+                    $ref: '#/components/schemas/Feature'
+                    description: Resource object representing feature
+                required:
+                - feature
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: feature
+      x-cb-sort-order: 1
+      x-cb-module: entitlements
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: create
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: create
+      tags:
+      - Features
+  /features/{feature-id}/delete:
+    post:
+      summary: Delete a feature
+      operationId: delete_a_feature
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/feature-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  feature:
+                    $ref: '#/components/schemas/Feature'
+                    description: Resource object representing feature
+                required:
+                - feature
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: feature
+      x-cb-sort-order: 4
+      x-cb-module: entitlements
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: delete
+      x-cb-sdk-method-name: delete
+      tags:
+      - Features
+  /features/{feature-id}:
+    get:
+      summary: Retrieve a feature
+      operationId: retrieve_a_feature
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/feature-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  feature:
+                    $ref: '#/components/schemas/Feature'
+                    description: Resource object representing feature
+                required:
+                - feature
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: feature
+      x-cb-sort-order: 3
+      x-cb-module: entitlements
+      x-cb-operation-method-name: retrieve
+      x-cb-sdk-method-name: retrieve
+      tags:
+      - Features
+    post:
+      summary: Update a feature
+      operationId: update_a_feature
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/feature-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: true
+              x-cb-is-custom-fields-supported: true
+              properties:
+                name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: features
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 50
+                  example: null
+                description:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: features
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 500
+                  example: null
+                unit:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: features
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 3
+                  maxLength: 50
+                  example: null
+                levels:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    name:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: levels
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 4
+                        maxLength: 100
+                        example: null
+                      example: null
+                    value:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: levels
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 5
+                        maxLength: 50
+                        example: null
+                      example: null
+                    is_unlimited:
+                      type: array
+                      items:
+                        type: boolean
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: levels
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 6
+                        example: null
+                      example: null
+                    level:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: levels
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 7
+                        example: null
+                      example: null
+                  example: null
+              example: null
+            encoding:
+              levels:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  feature:
+                    $ref: '#/components/schemas/Feature'
+                    description: Resource object representing feature
+                required:
+                - feature
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: feature
+      x-cb-sort-order: 2
+      x-cb-module: entitlements
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: update
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: update
+      tags:
+      - Features
+  /features/{feature-id}/archive_command:
+    post:
+      summary: Archive a feature
+      operationId: archive_a_feature
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/feature-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  feature:
+                    $ref: '#/components/schemas/Feature'
+                    description: Resource object representing feature
+                required:
+                - feature
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: feature
+      x-cb-sort-order: 6
+      x-cb-module: entitlements
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: archive
+      x-cb-sdk-method-name: archive
+      tags:
+      - Features
+  /features/{feature-id}/activate_command:
+    post:
+      summary: Activate a feature
+      operationId: activate_a_feature
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/feature-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  feature:
+                    $ref: '#/components/schemas/Feature'
+                    description: Resource object representing feature
+                required:
+                - feature
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: feature
+      x-cb-sort-order: 5
+      x-cb-module: entitlements
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: activate
+      x-cb-sdk-method-name: activate
+      tags:
+      - Features
+  /features/{feature-id}/reactivate_command:
+    post:
+      summary: Reactivate a feature
+      operationId: reactivate_a_feature
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/feature-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  feature:
+                    $ref: '#/components/schemas/Feature'
+                    description: Resource object representing feature
+                required:
+                - feature
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: feature
+      x-cb-sort-order: 7
+      x-cb-module: entitlements
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: reactivate
+      x-cb-sdk-method-name: reactivate
+      tags:
+      - Features
+  /features/{feature-id}/item_entitlements:
+    get:
+      summary: List item entitlements for a feature
+      operationId: list_item_entitlements_for_a_feature
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/feature-id'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - name: include_drafts
+        in: query
+        required: false
+        deprecated: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+          deprecated: true
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-api-column: true
+          x-cb-sort-order: 2
+          example: null
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        item_entitlement:
+                          $ref: '#/components/schemas/ItemEntitlement'
+                          description: Resource object representing item_entitlement
+                      required:
+                      - item_entitlement
+                      example: null
+                    example: null
+                  next_offset:
+                    type: string
+                    description: This attribute is returned only if more resources are present. To fetch the next set of resources use this value for the input parameter `offset`.
+                    maxLength: 1000
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: item_entitlement
+      x-cb-sort-order: 1
+      x-cb-module: entitlements
+      x-cb-operation-is-list: true
+      x-cb-operation-method-name: itemEntitlementsForFeature
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: itemEntitlementsForFeature
+      tags:
+      - Features
+    post:
+      summary: Upsert or remove item entitlements for a feature
+      operationId: upsert_or_remove_item_entitlements_for_a_feature
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/feature-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - upsert
+                  - remove
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: true
+                  x-cb-is-external-enum: true
+                  x-cb-is-gen-separate: true
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Action
+                  x-cb-global-enum-reference: ./schemas/enums/Action.yaml
+                  x-cb-sort-order: 0
+                  example: null
+                item_entitlements:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    item_id:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_entitlements
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 1
+                        maxLength: 100
+                        example: null
+                      example: null
+                    item_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - plan
+                        - addon
+                        - charge
+                        - subscription
+                        - item
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_entitlements
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: false
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: false
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: ItemType
+                        x-cb-sort-order: 2
+                        example: null
+                      example: null
+                    value:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_entitlements
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 3
+                        maxLength: 50
+                        example: null
+                      example: null
+                  required:
+                  - item_id
+                  example: null
+              required:
+              - action
+              example: null
+            encoding:
+              item_entitlements:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        item_entitlement:
+                          $ref: '#/components/schemas/ItemEntitlement'
+                          description: Resource object representing item_entitlement
+                      required:
+                      - item_entitlement
+                      example: null
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: item_entitlement
+      x-cb-sort-order: 2
+      x-cb-module: entitlements
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: addItemEntitlements
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: addItemEntitlements
+      tags:
+      - Features
+components:
+  schemas:
+    '503':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `db_connection_failure` - Returned when db connection fails.
+
+            * `site_read_only_mode` - Returned when your site is temporarily unavailable for write operations due to a scheduled maintenance.
+
+            * `site_not_ready` - Returned when your site is temporarily unavailable due to a scheduled maintenance.
+
+            * `internal_temporary_error` - Returned when temporary occured in Chargebee side. The request can be re-tried, with exponential backoff in case of repeat failures.'
+          enum:
+          - db_connection_failure
+          - site_read_only_mode
+          - site_not_ready
+          - internal_temporary_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    Feature:
+      type: object
+      additionalProperties: true
+      x-cb-is-custom-fields-supported: true
+      x-cb-resource-id: feature
+      x-cb-resource-path-name: features
+      x-cb-is-dependent-resource: false
+      x-cb-sort-order: 88
+      x-cb-product-catalog-version: 2
+      properties:
+        id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 0
+          maxLength: 50
+          example: null
+        name:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 2
+          maxLength: 50
+          example: null
+        description:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 3
+          maxLength: 500
+          example: null
+        status:
+          type: string
+          deprecated: false
+          enum:
+          - active
+          - archived
+          - draft
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Status
+          x-cb-sort-order: 4
+          example: null
+        type:
+          type: string
+          deprecated: false
+          enum:
+          - switch
+          - custom
+          - quantity
+          - range
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Type
+          x-cb-sort-order: 5
+          example: null
+        unit:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 6
+          maxLength: 50
+          example: null
+        resource_version:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-sort-order: 7
+          example: null
+        updated_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 8
+          example: null
+        created_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 9
+          example: null
+        metered:
+          type: boolean
+          deprecated: false
+          x-cb-sort-order: 10
+          example: null
+        levels:
+          type: array
+          deprecated: false
+          x-cb-sort-order: 11
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: Level
+            x-cb-sub-resource-parent-name: Feature
+            properties:
+              name:
+                type: string
+                deprecated: false
+                maxLength: 100
+                example: null
+              value:
+                type: string
+                deprecated: false
+                maxLength: 50
+                example: null
+              level:
+                type: integer
+                format: int32
+                deprecated: false
+                example: null
+              is_unlimited:
+                type: boolean
+                deprecated: false
+                example: null
+            required:
+            - is_unlimited
+            - level
+            - value
+            example: null
+          example: null
+      required:
+      - created_at
+      - id
+      - metered
+      - name
+      example: null
+    '403':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `request_blocked` - Returned when request is blocked for your site. The blocking could be only for a specific set of operation(s) . The reason would be provided as part of the message. You would have to contact support for additional details.
+
+            * `api_authorization_failed` - Returned when the API key does not have sufficient privileges to perform the particular operation.'
+          enum:
+          - request_blocked
+          - api_authorization_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '405':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `http_method_not_supported` - Returned when the ''http method'', specified in the request, is not allowed for this URL. It should not occur if you are using one of the standard client library.'
+          enum:
+          - http_method_not_supported
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '400':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          - payment
+          example: null
+        api_error_code:
+          type: string
+          description: '* `payment_intent_invalid_amount` - Returned when processing amount is different from payment intent amountFor example if payment intent which is passed has authorized 10$ and if the charges initiated is for 12$.
+
+            * `configuration_incompatible` - Returned when the request is not compatible with the configuration for the  site or the configuration is incomplete.
+
+            * `payment_intent_invalid` - Returned when validation or verification fails for provided payment intent.For example if payment intent which is passed is in not consumable state.
+
+            * `invalid_request` - Returned when the request has incompatible values or does not match the API specification. As it is a generic error, handling this error is recommended only in combination  with  param attribute.
+
+            * `payment_method_verification_failed` - Returned when validation or verification fails for the provided payment method. For example  if the payment method is card, this will include all card parameter validation errors and also verification failures  from the gateway.
+
+            * `payment_processing_failed` - Returned when the payment collection fails.
+
+            * `resource_limit_exhausted` - Returned when any limit constraint is violated by the request. For example this error is  thrown when the coupon provided has already expired or its maximum redemption count has been reached.
+
+            * `duplicate_entry` - Returned when the request provides a duplicate value for an attribute that is specified as unique for that site.  For example in ''create subscription api'' if you are passing  the subscription id then this error will be thrown if a subscription exists in site with the same id.
+
+            * `param_wrong_value` - Returned when the value does not meet the required specification for the parameter. For example, wrong email format. It is strongly recommended  to do the validation at your end before calling Chargebee''s API (other than specific cases like  VAT number validation).
+
+            * `payment_method_not_present` - Returned when the request requires payment collection but the ''payment method'' details (such as card) is not present for the customer. This error will not occur if auto-collection is disabled for the customer.
+
+            * `resource_limit_exceeded`
+
+            * `payment_gateway_currency_incompatible` - Returned when the payment gateway configured is incompatible with the transactional currency. This error will not occur if auto-collection is disabled for the customer.'
+          enum:
+          - payment_intent_invalid_amount
+          - configuration_incompatible
+          - payment_intent_invalid
+          - invalid_request
+          - payment_method_verification_failed
+          - payment_processing_failed
+          - resource_limit_exhausted
+          - duplicate_entry
+          - param_wrong_value
+          - payment_method_not_present
+          - resource_limit_exceeded
+          - payment_gateway_currency_incompatible
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '500':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `internal_error` - Returned when the request parameters were right but the operation couldn''t be completed due to a bug in Chargebee side.'
+          enum:
+          - internal_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '409':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `invalid_state_for_request` - Returned when the requested operation is not allowed for current state of the resource. This error will occur if the state of the resource has not been checked for the validity of the request. For example this error is returned when we try to schedule subscription changes  at ''end of term'' for canceled subscriptions.'
+          enum:
+          - invalid_state_for_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '422':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `unable_to_process_request` - Returned when the HTTP request body contains a well-formed, but semantically erroneous payload. For example this error is returned when a client attempts to reuse an idempotency key with a different request payload.'
+          enum:
+          - unable_to_process_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '404':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: "* `resource_not_found` - Returned when any of resource(s) referred in the request is not found. \n* `site_not_found` - Returned when the site is not found."
+          enum:
+          - resource_not_found
+          - site_not_found
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '401':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: '* `api_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be the api key is invalid or authentication header is not present in the request or the header''s format is invalid.
+
+            * `basic_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be that one or both of the username and password are invalid'
+          enum:
+          - api_authentication_failed
+          - basic_authentication_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    ItemEntitlement:
+      type: object
+      x-cb-resource-id: item_entitlement
+      x-cb-resource-path-name: item_entitlements
+      x-cb-is-dependent-resource: false
+      x-cb-sort-order: 103
+      x-cb-product-catalog-version: 2
+      properties:
+        id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 0
+          maxLength: 100
+          example: null
+        item_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 1
+          maxLength: 100
+          example: null
+        item_type:
+          type: string
+          deprecated: false
+          enum:
+          - plan
+          - addon
+          - charge
+          - subscription
+          - item
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: ItemType
+          x-cb-sort-order: 2
+          example: null
+        feature_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 3
+          maxLength: 50
+          example: null
+        feature_name:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 4
+          maxLength: 50
+          example: null
+        value:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 5
+          maxLength: 50
+          example: null
+        name:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 6
+          maxLength: 50
+          example: null
+      required:
+      - id
+      example: null
+    '429':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `third_party_api_request_limit_exceeded` - Returned when your request is blocked temporarily at a third-party service, due to the request count exceeding their acceptable limits.
+
+            * `api_request_limit_exceeded` - Returned when requests have been blocked temporarily due to request count exceeding acceptable limits.
+
+            * `lock_timeout` - Returned when there are multiple concurrent requests to the same resource.'
+          enum:
+          - third_party_api_request_limit_exceeded
+          - api_request_limit_exceeded
+          - lock_timeout
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+  parameters:
+    chargebee-request-origin-device:
+      name: chargebee-request-origin-device
+      in: header
+      description: The device from which the customer has made the request
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The device from which the customer has made the request
+        example: Android
+    chargebee-event-actions:
+      name: chargebee-event-actions
+      in: header
+      description: skip all actions to be done on the events
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip all actions to be done on the events
+        enum:
+        - all-disabled
+    offset:
+      name: offset
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        description: Determines your position in the list for pagination. To ensure that the next page is retrieved correctly, always set 'offset' to the value of 'next_offset' obtained in the previous iteration of the API call.
+        x-cb-is-pagination-parameter: true
+        maxLength: 1000
+    chargebee-event-webhook:
+      name: chargebee-event-webhook
+      in: header
+      description: ' skip only webhooks'
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: ' skip only webhooks'
+        enum:
+        - all-disabled
+    feature-id:
+      name: feature-id
+      in: path
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    chargebee-business-entity-id:
+      name: chargebee-business-entity-id
+      in: header
+      description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        maxLength: 50
+    limit:
+      name: limit
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+        default: 10
+        description: The number of resources to be returned.
+        x-cb-is-pagination-parameter: true
+        maximum: 100
+        minimum: 1
+    chargebee-request-origin-user:
+      name: chargebee-request-origin-user
+      in: header
+      description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        example: user@example.com
+    chargebee-request-origin-user-encoded:
+      name: chargebee-request-origin-user-encoded
+      in: header
+      description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        example: dXNlci7QutCy0ZbRgtC+0YfQutCwQGV4YW1wbGUuY29t
+    chargebee-request-origin-ip:
+      name: chargebee-request-origin-ip
+      in: header
+      description: The IP address of the customer where the request originated
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The IP address of the customer where the request originated
+        example: 192.168.1.2
+        pattern: ^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-fA-F]|[a-fA-F][a-fA-F0-9\-]*[a-fA-F0-9])\.)*([A-Fa-f]|[A-Fa-f][A-Fa-f0-9\-]*[A-Fa-f0-9])$|^(?:(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){6})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:::(?:(?:(?:[0-9a-fA-F]{1,4})):){5})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){4})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,1}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){3})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,2}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){2})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,3}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:[0-9a-fA-F]{1,4})):)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,4}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,5}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,6}(?:(?:[0-9a-fA-F]{1,4})))?::)))))$
+    chargebee-event-email:
+      name: chargebee-event-email
+      in: header
+      description: skip only emails
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip only emails
+        enum:
+        - all-disabled
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

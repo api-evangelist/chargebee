@@ -1,57 +1,4518 @@
 openapi: 3.2.0
 info:
-  title: Chargebee API v2 Items API
-  version: '2'
-  description: 'REST API for Chargebee subscription billing covering customers,
-
-    subscriptions, invoices, payments, and product catalog. Authenticates with
-
-    HTTP Basic Auth using a site-scoped API key as the username and an empty
-
-    password. Authoritative OpenAPI spec is published at
-
-    https://github.com/chargebee/openapi (see /spec).'
+  title: Chargebee Items API
   contact:
-    name: Chargebee API Support
-    url: https://www.chargebee.com/docs/api
+    name: Chargebee Support
+    url: https://www.chargebee.com
+    email: support@chargebee.com
+  version: 2026-09-24.553c79154f0075cfbab35271eeff8b63a3ed6a86
+  x-cb-product-catalog-version: 2
+  x-cb-api-version: 2
 servers:
-- url: https://{site}.chargebee.com/api/v2
-  description: Site-scoped Chargebee API base URL
+- url: '{protocol}://{site}.{environment}:{port}/api/v2'
   variables:
+    protocol:
+      default: https
+      enum:
+      - https
     site:
-      default: yoursite
-      description: Your Chargebee site subdomain
-security:
-- basicAuth: []
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
+- url: '{protocol}://{site}-test.{environment}:{port}/api/v2'
+  variables:
+    protocol:
+      default: https
+      enum:
+      - https
+    site:
+      default: demo
+    environment:
+      default: chargebee.com
+      enum:
+      - chargebee.com
+    port:
+      default: '443'
+      enum:
+      - '443'
 tags:
 - name: Items
 paths:
   /items:
     get:
-      tags:
-      - Items
-      summary: List items (Product Catalog v2)
-      operationId: listItems
+      summary: List items
+      operationId: list_items
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - name: id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Filter items based on item id.
+          example: basic
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 2
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: item_family_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'Filter items based on `item_family_id`.
+
+            '
+          example: acme
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 3
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: type
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'Filter items based on item `type`.
+
+            '
+          example: plan
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 4
+          properties:
+            is:
+              type: string
+              description: '* `plan` - An essential component of a subscription. Every subscription has exactly one plan. It has a recurring charge and its period defines the billing period of the subscription.
+
+                * `addon` - A recurring component that can be added to a subscription in addition to its plan.
+
+                * `charge` - A non-recurring component that can be added to a subscription in addition to its plan. An charge can also be applied to a customer [directly](./invoices?prod_cat_ver=2#create_invoice_for_a_charge-item) without being applied to a subscription.
+
+                '
+              enum:
+              - plan
+              - addon
+              - charge
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              example: null
+            is_not:
+              type: string
+              description: '* `plan` - An essential component of a subscription. Every subscription has exactly one plan. It has a recurring charge and its period defines the billing period of the subscription.
+
+                * `addon` - A recurring component that can be added to a subscription in addition to its plan.
+
+                * `charge` - A non-recurring component that can be added to a subscription in addition to its plan. An charge can also be applied to a customer [directly](./invoices?prod_cat_ver=2#create_invoice_for_a_charge-item) without being applied to a subscription.
+
+                '
+              enum:
+              - plan
+              - addon
+              - charge
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              example: null
+            in:
+              type: string
+              description: '* `plan` - An essential component of a subscription. Every subscription has exactly one plan. It has a recurring charge and its period defines the billing period of the subscription.
+
+                * `addon` - A recurring component that can be added to a subscription in addition to its plan.
+
+                * `charge` - A non-recurring component that can be added to a subscription in addition to its plan. An charge can also be applied to a customer [directly](./invoices?prod_cat_ver=2#create_invoice_for_a_charge-item) without being applied to a subscription.
+
+                '
+              enum:
+              - plan
+              - addon
+              - charge
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              pattern: ^\[(plan|addon|charge)(,(plan|addon|charge))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `plan` - An essential component of a subscription. Every subscription has exactly one plan. It has a recurring charge and its period defines the billing period of the subscription.
+
+                * `addon` - A recurring component that can be added to a subscription in addition to its plan.
+
+                * `charge` - A non-recurring component that can be added to a subscription in addition to its plan. An charge can also be applied to a customer [directly](./invoices?prod_cat_ver=2#create_invoice_for_a_charge-item) without being applied to a subscription.
+
+                '
+              enum:
+              - plan
+              - addon
+              - charge
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              pattern: ^\[(plan|addon|charge)(,(plan|addon|charge))*\]$
+              example: null
+      - name: name
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'Filter items based on item `name`.
+
+            '
+          example: basic
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 5
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+      - name: item_applicability
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'Filter items based on `item_applicability`.
+
+            '
+          example: all
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 6
+          properties:
+            is:
+              type: string
+              description: '* `all` - all addon-items and charge-items are applicable to this plan-item.
+
+                * `restricted` - only the addon-items or charge-items provided in `applicable_items` can be applied to this plan-item.
+
+                '
+              enum:
+              - all
+              - restricted
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ItemApplicability
+              example: null
+            is_not:
+              type: string
+              description: '* `all` - all addon-items and charge-items are applicable to this plan-item.
+
+                * `restricted` - only the addon-items or charge-items provided in `applicable_items` can be applied to this plan-item.
+
+                '
+              enum:
+              - all
+              - restricted
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ItemApplicability
+              example: null
+            in:
+              type: string
+              description: '* `all` - all addon-items and charge-items are applicable to this plan-item.
+
+                * `restricted` - only the addon-items or charge-items provided in `applicable_items` can be applied to this plan-item.
+
+                '
+              enum:
+              - all
+              - restricted
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ItemApplicability
+              pattern: ^\[(all|restricted)(,(all|restricted))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `all` - all addon-items and charge-items are applicable to this plan-item.
+
+                * `restricted` - only the addon-items or charge-items provided in `applicable_items` can be applied to this plan-item.
+
+                '
+              enum:
+              - all
+              - restricted
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: ItemApplicability
+              pattern: ^\[(all|restricted)(,(all|restricted))*\]$
+              example: null
+      - name: status
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'Filter items based on item `status`.
+
+            '
+          example: active
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 7
+          properties:
+            is:
+              type: string
+              description: '* `active` - The item can be used to create new item prices.
+
+                * `archived` - The item is no longer active and no new item prices can be created
+
+                * `deleted` - Indicates that the item has been [deleted](./items?prod_cat_ver=2#delete_an_item). The `id` and `name` can be reused. Deleted items can be retrieved using [List items](./items?prod_cat_ver=2#list_items).
+
+                '
+              enum:
+              - active
+              - archived
+              - deleted
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              example: null
+            is_not:
+              type: string
+              description: '* `active` - The item can be used to create new item prices.
+
+                * `archived` - The item is no longer active and no new item prices can be created
+
+                * `deleted` - Indicates that the item has been [deleted](./items?prod_cat_ver=2#delete_an_item). The `id` and `name` can be reused. Deleted items can be retrieved using [List items](./items?prod_cat_ver=2#list_items).
+
+                '
+              enum:
+              - active
+              - archived
+              - deleted
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              example: null
+            in:
+              type: string
+              description: '* `active` - The item can be used to create new item prices.
+
+                * `archived` - The item is no longer active and no new item prices can be created
+
+                * `deleted` - Indicates that the item has been [deleted](./items?prod_cat_ver=2#delete_an_item). The `id` and `name` can be reused. Deleted items can be retrieved using [List items](./items?prod_cat_ver=2#list_items).
+
+                '
+              enum:
+              - active
+              - archived
+              - deleted
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              pattern: ^\[(active|archived|deleted)(,(active|archived|deleted))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `active` - The item can be used to create new item prices.
+
+                * `archived` - The item is no longer active and no new item prices can be created
+
+                * `deleted` - Indicates that the item has been [deleted](./items?prod_cat_ver=2#delete_an_item). The `id` and `name` can be reused. Deleted items can be retrieved using [List items](./items?prod_cat_ver=2#list_items).
+
+                '
+              enum:
+              - active
+              - archived
+              - deleted
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Status
+              pattern: ^\[(active|archived|deleted)(,(active|archived|deleted))*\]$
+              example: null
+      - name: is_giftable
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Specifies if gift subscriptions can be created for this item.
+          example: 'true'
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: BooleanFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 8
+          properties:
+            is:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+      - name: updated_at
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Filter items based on when the items were last updated.
+          example: '1243545465'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 9
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      - name: enabled_for_checkout
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'Allow the plan to subscribed to via Checkout. Applies only for plan-items. **Note:** Only the in-app version of Checkout is supported for Product Catalog v2.
+
+            '
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: BooleanFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 10
+          properties:
+            is:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+          example: null
+      - name: enabled_in_portal
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'Allow customers to change their subscription to this plan via the [Self-Serve Portal](https://www.chargebee.com/docs/2.0/inapp-self-serve-portal.html). Applies only for plan-items. This requires the Portal configuration to [allow changing subscriptions](https://www.chargebee.com/docs/2.0/inapp-self-serve-portal.html#allow-change-subscription).
+
+            '
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: BooleanFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 11
+          properties:
+            is:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+          example: null
+      - name: metered
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'Specifies whether the item undergoes metered billing. When `true`, the quantity is calculated from [usage records](/docs/api/usages?prod_cat_ver=2). When `false`, the `quantity` is as determined while adding an item price to the subscription. Applicable only for items of `type` `plan` or `addon` and when [Metered Billing](https://www.chargebee.com/docs/2.0/metered_billing.html) is enabled. The value of this attribute cannot be changed.
+
+            '
+          example: 'true'
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: BooleanFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 12
+          properties:
+            is:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+      - name: usage_calculation
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'How the quantity is calculated from usage data for the item prices belonging to this item. Only applicable when the item is `metered`. This value overrides the one [set at the site level](https://www.chargebee.com/docs/2.0/metered_billing.html#configuring-metered-billing).
+
+            '
+          example: SUM_OF_USAGES
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 13
+          properties:
+            is:
+              type: string
+              description: '* `sum_of_usages` - the net quantity is the sum of the `quantity` of all usages for the current term.
+
+                * `last_usage` - from among the usage records for the [item price](/docs/api/subscriptions?prod_cat_ver=2#subscription_subscription_items_item_price_id) with `usage_date` within the relevant billing period, the `quantity` of the usage record with the most recent `usage_date` is taken as the net quantity consumed.
+
+                * `max_usage` - from among the usage records for the [item price](/docs/api/subscriptions?prod_cat_ver=2#subscription_subscription_items_item_price_id) with `usage_date` within the relevant billing period, the `quantity` of the usage record with the maximum value is taken as the net quantity consumed.
+
+                '
+              enum:
+              - sum_of_usages
+              - last_usage
+              - max_usage
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: UsageCalculation
+              example: null
+            is_not:
+              type: string
+              description: '* `sum_of_usages` - the net quantity is the sum of the `quantity` of all usages for the current term.
+
+                * `last_usage` - from among the usage records for the [item price](/docs/api/subscriptions?prod_cat_ver=2#subscription_subscription_items_item_price_id) with `usage_date` within the relevant billing period, the `quantity` of the usage record with the most recent `usage_date` is taken as the net quantity consumed.
+
+                * `max_usage` - from among the usage records for the [item price](/docs/api/subscriptions?prod_cat_ver=2#subscription_subscription_items_item_price_id) with `usage_date` within the relevant billing period, the `quantity` of the usage record with the maximum value is taken as the net quantity consumed.
+
+                '
+              enum:
+              - sum_of_usages
+              - last_usage
+              - max_usage
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: UsageCalculation
+              example: null
+            in:
+              type: string
+              description: '* `sum_of_usages` - the net quantity is the sum of the `quantity` of all usages for the current term.
+
+                * `last_usage` - from among the usage records for the [item price](/docs/api/subscriptions?prod_cat_ver=2#subscription_subscription_items_item_price_id) with `usage_date` within the relevant billing period, the `quantity` of the usage record with the most recent `usage_date` is taken as the net quantity consumed.
+
+                * `max_usage` - from among the usage records for the [item price](/docs/api/subscriptions?prod_cat_ver=2#subscription_subscription_items_item_price_id) with `usage_date` within the relevant billing period, the `quantity` of the usage record with the maximum value is taken as the net quantity consumed.
+
+                '
+              enum:
+              - sum_of_usages
+              - last_usage
+              - max_usage
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: UsageCalculation
+              pattern: ^\[(sum_of_usages|last_usage|max_usage)(,(sum_of_usages|last_usage|max_usage))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `sum_of_usages` - the net quantity is the sum of the `quantity` of all usages for the current term.
+
+                * `last_usage` - from among the usage records for the [item price](/docs/api/subscriptions?prod_cat_ver=2#subscription_subscription_items_item_price_id) with `usage_date` within the relevant billing period, the `quantity` of the usage record with the most recent `usage_date` is taken as the net quantity consumed.
+
+                * `max_usage` - from among the usage records for the [item price](/docs/api/subscriptions?prod_cat_ver=2#subscription_subscription_items_item_price_id) with `usage_date` within the relevant billing period, the `quantity` of the usage record with the maximum value is taken as the net quantity consumed.
+
+                '
+              enum:
+              - sum_of_usages
+              - last_usage
+              - max_usage
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: UsageCalculation
+              pattern: ^\[(sum_of_usages|last_usage|max_usage)(,(sum_of_usages|last_usage|max_usage))*\]$
+              example: null
+      - name: channel
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: The subscription channel this object originated from and is maintained in.
+          example: APP STORE
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 15
+          properties:
+            is:
+              type: string
+              description: "* `web` - The object was created (and is maintained) for the web channel directly in Chargebee via API or UI.\n* `app_store` - The object data is synchronized with data from [in-app subscription(s)](https://apidocs.chargebee.com/docs/api/in_app_subscriptions) created in Apple App Store. Direct manipulation of this object via UI or API is disallowed.\n* `play_store` -\n  The object data is synchronized with data from [in-app subscription(s)](https://apidocs.chargebee.com/docs/api/in_app_subscriptions) created in Google Play Store. Direct manipulation of this object via UI or API is disallowed.  \n  In-App Subscriptions is currently in early access. Contact [eap@chargebee.com](mailto:eap@chargebee.com) for more information.\n"
+              enum:
+              - web
+              - app_store
+              - play_store
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: Channel
+              example: null
+            is_not:
+              type: string
+              description: "* `web` - The object was created (and is maintained) for the web channel directly in Chargebee via API or UI.\n* `app_store` - The object data is synchronized with data from [in-app subscription(s)](https://apidocs.chargebee.com/docs/api/in_app_subscriptions) created in Apple App Store. Direct manipulation of this object via UI or API is disallowed.\n* `play_store` -\n  The object data is synchronized with data from [in-app subscription(s)](https://apidocs.chargebee.com/docs/api/in_app_subscriptions) created in Google Play Store. Direct manipulation of this object via UI or API is disallowed.  \n  In-App Subscriptions is currently in early access. Contact [eap@chargebee.com](mailto:eap@chargebee.com) for more information.\n"
+              enum:
+              - web
+              - app_store
+              - play_store
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: Channel
+              example: null
+            in:
+              type: string
+              description: "* `web` - The object was created (and is maintained) for the web channel directly in Chargebee via API or UI.\n* `app_store` - The object data is synchronized with data from [in-app subscription(s)](https://apidocs.chargebee.com/docs/api/in_app_subscriptions) created in Apple App Store. Direct manipulation of this object via UI or API is disallowed.\n* `play_store` -\n  The object data is synchronized with data from [in-app subscription(s)](https://apidocs.chargebee.com/docs/api/in_app_subscriptions) created in Google Play Store. Direct manipulation of this object via UI or API is disallowed.  \n  In-App Subscriptions is currently in early access. Contact [eap@chargebee.com](mailto:eap@chargebee.com) for more information.\n"
+              enum:
+              - web
+              - app_store
+              - play_store
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: Channel
+              pattern: ^\[(web|app_store|play_store)(,(web|app_store|play_store))*\]$
+              example: null
+            not_in:
+              type: string
+              description: "* `web` - The object was created (and is maintained) for the web channel directly in Chargebee via API or UI.\n* `app_store` - The object data is synchronized with data from [in-app subscription(s)](https://apidocs.chargebee.com/docs/api/in_app_subscriptions) created in Apple App Store. Direct manipulation of this object via UI or API is disallowed.\n* `play_store` -\n  The object data is synchronized with data from [in-app subscription(s)](https://apidocs.chargebee.com/docs/api/in_app_subscriptions) created in Google Play Store. Direct manipulation of this object via UI or API is disallowed.  \n  In-App Subscriptions is currently in early access. Contact [eap@chargebee.com](mailto:eap@chargebee.com) for more information.\n"
+              enum:
+              - web
+              - app_store
+              - play_store
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: Channel
+              pattern: ^\[(web|app_store|play_store)(,(web|app_store|play_store))*\]$
+              example: null
+      - name: business_entity_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: "The unique ID of the [business entity](/docs/api?prod_cat_ver=2#mbe) of this subscription. This is always the same as the [business entity](/docs/api/subscriptions?prod_cat_ver=2#subscription_customer_id) of the customer.  \nThe ID of the business entity created for the site. For Product Catalog 1.0, all the site data is tied to this business entity.  \n**Note**\n\n[Multiple Business Entities](/docs/api?prod_cat_ver=2#mbe) is a feature available only on Product Catalog 2.0.\n"
+          example: business_entity_id
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-presence-operator-supported: true
+          x-cb-is-filter-parameter: true
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 16
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_present:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+      - name: include_site_level_resources
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: BooleanFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 17
+          properties:
+            is:
+              type: string
+              format: boolean
+              enum:
+              - 'true'
+              - 'false'
+              example: null
+          example: null
+      - name: sort_by
+        in: query
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: true
+          x-cb-sort-order: 19
+          properties:
+            asc:
+              type: string
+              enum:
+              - name
+              - id
+              - updated_at
+              example: null
+            desc:
+              type: string
+              enum:
+              - name
+              - id
+              - updated_at
+              example: null
+          example: null
+      - name: bundle_configuration
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Parameters for bundle_configuration
+          x-cb-sort-order: -1
+          properties:
+            type:
+              type: object
+              deprecated: false
+              description: Type of the bundle
+              example: fixed
+              x-cb-parameter-blank-option: as_null
+              x-cb-attribute-meta-comment: optional
+              x-cb-is-sub-resource: true
+              x-cb-is-filter-parameter: true
+              x-cb-meta-model-name: bundle_configurations
+              x-cb-is-api-column: true
+              x-cb-sdk-filter-name: EnumFilter
+              x-cb-is-multi-value-attribute: false
+              properties:
+                is:
+                  type: string
+                  description: '* `fixed` - Fixed `bundle_configurations.type` appears when you create a bundle plan that cannot be updated during checkout or subscription creation.
+
+                    '
+                  enum:
+                  - fixed
+                  x-cb-is-external-enum: false
+                  x-cb-is-api-column: true
+                  x-cb-is-gen-separate: false
+                  x-cb-sdk-enum-api-name: Type
+                  example: null
+                is_not:
+                  type: string
+                  description: '* `fixed` - Fixed `bundle_configurations.type` appears when you create a bundle plan that cannot be updated during checkout or subscription creation.
+
+                    '
+                  enum:
+                  - fixed
+                  x-cb-is-external-enum: false
+                  x-cb-is-api-column: true
+                  x-cb-is-gen-separate: false
+                  x-cb-sdk-enum-api-name: Type
+                  example: null
+                in:
+                  type: string
+                  description: '* `fixed` - Fixed `bundle_configurations.type` appears when you create a bundle plan that cannot be updated during checkout or subscription creation.
+
+                    '
+                  enum:
+                  - fixed
+                  x-cb-is-external-enum: false
+                  x-cb-is-api-column: true
+                  x-cb-is-gen-separate: false
+                  x-cb-sdk-enum-api-name: Type
+                  pattern: ^\[(fixed)(,(fixed))*\]$
+                  example: null
+                not_in:
+                  type: string
+                  description: '* `fixed` - Fixed `bundle_configurations.type` appears when you create a bundle plan that cannot be updated during checkout or subscription creation.
+
+                    '
+                  enum:
+                  - fixed
+                  x-cb-is-external-enum: false
+                  x-cb-is-api-column: true
+                  x-cb-is-gen-separate: false
+                  x-cb-sdk-enum-api-name: Type
+                  pattern: ^\[(fixed)(,(fixed))*\]$
+                  example: null
+          example: null
       responses:
         '200':
-          description: List of items
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GenericList'
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        item:
+                          $ref: '#/components/schemas/Item'
+                          description: Resource object representing item
+                      required:
+                      - item
+                      example: null
+                    example: null
+                  next_offset:
+                    type: string
+                    description: This attribute is returned only if more resources are present. To fetch the next set of resources use this value for the input parameter `offset`.
+                    maxLength: 1000
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: item
+      x-cb-sort-order: 3
+      x-cb-module: product-catalog
+      x-cb-operation-is-list: true
+      x-cb-operation-method-name: list
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: list
+      tags:
+      - Items
+    post:
+      summary: Create an item
+      operationId: create_an_item
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: true
+              x-cb-is-custom-fields-supported: true
+              properties:
+                id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 100
+                  example: null
+                name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 100
+                  example: null
+                type:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - plan
+                  - addon
+                  - charge
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Type
+                  x-cb-sort-order: 2
+                  example: null
+                description:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 3
+                  maxLength: 2000
+                  example: null
+                item_family_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 4
+                  maxLength: 100
+                  example: null
+                is_giftable:
+                  type: boolean
+                  default: false
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 5
+                  example: null
+                is_shippable:
+                  type: boolean
+                  default: false
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 6
+                  example: null
+                external_name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 7
+                  maxLength: 100
+                  example: null
+                enabled_in_portal:
+                  type: boolean
+                  default: true
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 8
+                  example: null
+                redirect_url:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 9
+                  maxLength: 500
+                  example: null
+                enabled_for_checkout:
+                  type: boolean
+                  default: true
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 10
+                  example: null
+                item_applicability:
+                  type: string
+                  default: all
+                  deprecated: false
+                  enum:
+                  - all
+                  - restricted
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: ItemApplicability
+                  x-cb-sort-order: 11
+                  example: null
+                applicable_items:
+                  type: array
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 12
+                  items:
+                    type: string
+                    deprecated: false
+                    x-cb-parameter-blank-option: as_null
+                    x-cb-attribute-meta-comment: optional
+                    x-cb-is-api-column: true
+                    maxLength: 100
+                    example: null
+                  example: null
+                unit:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 15
+                  maxLength: 30
+                  example: null
+                gift_claim_redirect_url:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 16
+                  maxLength: 500
+                  example: null
+                included_in_mrr:
+                  type: boolean
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 17
+                  example: null
+                metered:
+                  type: boolean
+                  default: false
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 18
+                  example: null
+                usage_calculation:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - sum_of_usages
+                  - last_usage
+                  - max_usage
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: UsageCalculation
+                  x-cb-sort-order: 19
+                  example: null
+                is_percentage_pricing:
+                  type: boolean
+                  default: false
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 20
+                  example: null
+                metadata:
+                  type: object
+                  additionalProperties: true
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 2
+                  x-cb-sort-order: 22
+                  example: null
+                business_entity_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 23
+                  maxLength: 50
+                  example: null
+                bundle_configuration:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-hidden-from-client-sdk: false
+                  x-cb-is-multi-value-attribute: false
+                  x-cb-is-sub-resource: true
+                  properties:
+                    type:
+                      type: string
+                      deprecated: false
+                      enum:
+                      - fixed
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: bundle_configurations
+                      x-cb-is-api-column: true
+                      x-cb-is-global-enum: false
+                      x-cb-is-external-enum: false
+                      x-cb-is-gen-separate: false
+                      x-cb-is-ignore-generation: false
+                      x-cb-sdk-enum-api-name: Type
+                      x-cb-sort-order: 13
+                      example: null
+                  example: null
+                bundle_items_to_add:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    item_id:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_add
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 24
+                        maxLength: 100
+                        example: null
+                      example: null
+                    item_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - plan
+                        - addon
+                        - charge
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_add
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: true
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: true
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: ItemType
+                        x-cb-global-enum-reference: ./schemas/enums/ItemType.yaml
+                        x-cb-sort-order: 25
+                        example: null
+                      example: null
+                    quantity:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                        default: 1
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_add
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 26
+                        minimum: 1
+                        example: null
+                      example: null
+                    price_allocation:
+                      type: array
+                      items:
+                        type: number
+                        format: decimal
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_add
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 27
+                        maximum: 100
+                        minimum: 0
+                        example: null
+                      example: null
+                  example: null
+              required:
+              - id
+              - item_family_id
+              - name
+              - type
+              example: null
+            encoding:
+              bundle_configuration:
+                style: deepObject
+                explode: true
+              bundle_items_to_add:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/Item'
+                    description: Resource object representing item
+                required:
+                - item
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: item
+      x-cb-sort-order: 0
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: create
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: create
+      tags:
+      - Items
+  /items/{item-id}/delete:
+    post:
+      summary: Delete an item
+      operationId: delete_an_item
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/item-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/Item'
+                    description: Resource object representing item
+                required:
+                - item
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: item
+      x-cb-sort-order: 5
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: delete
+      x-cb-sdk-method-name: delete
+      tags:
+      - Items
+  /items/{item-id}:
+    get:
+      summary: Retrieve an item
+      operationId: retrieve_an_item
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/item-id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/Item'
+                    description: Resource object representing item
+                required:
+                - item
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: item
+      x-cb-sort-order: 1
+      x-cb-module: product-catalog
+      x-cb-operation-method-name: retrieve
+      x-cb-sdk-method-name: retrieve
+      tags:
+      - Items
+    post:
+      summary: Update an item
+      operationId: update_an_item
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/item-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              additionalProperties: true
+              x-cb-is-custom-fields-supported: true
+              properties:
+                name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 100
+                  example: null
+                description:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 2000
+                  example: null
+                is_shippable:
+                  type: boolean
+                  default: false
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  example: null
+                external_name:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 3
+                  maxLength: 100
+                  example: null
+                item_family_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 4
+                  maxLength: 100
+                  example: null
+                enabled_in_portal:
+                  type: boolean
+                  default: true
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 5
+                  example: null
+                redirect_url:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 6
+                  maxLength: 500
+                  example: null
+                enabled_for_checkout:
+                  type: boolean
+                  default: true
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 7
+                  example: null
+                item_applicability:
+                  type: string
+                  default: all
+                  deprecated: false
+                  enum:
+                  - all
+                  - restricted
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: ItemApplicability
+                  x-cb-sort-order: 8
+                  example: null
+                clear_applicable_items:
+                  type: boolean
+                  default: false
+                  deprecated: true
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 9
+                  example: null
+                applicable_items:
+                  type: array
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 10
+                  items:
+                    type: string
+                    deprecated: false
+                    x-cb-parameter-blank-option: as_null
+                    x-cb-attribute-meta-comment: optional
+                    x-cb-is-api-column: true
+                    maxLength: 100
+                    example: null
+                  example: null
+                unit:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 13
+                  maxLength: 30
+                  example: null
+                gift_claim_redirect_url:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 14
+                  maxLength: 500
+                  example: null
+                metadata:
+                  type: object
+                  additionalProperties: true
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-attribute-pcv: 2
+                  x-cb-sort-order: 15
+                  example: null
+                included_in_mrr:
+                  type: boolean
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 16
+                  example: null
+                status:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - active
+                  - archived
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Status
+                  x-cb-sort-order: 17
+                  example: null
+                is_percentage_pricing:
+                  type: boolean
+                  default: false
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 18
+                  example: null
+                bundle_configuration:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-hidden-from-client-sdk: false
+                  x-cb-is-multi-value-attribute: false
+                  x-cb-is-sub-resource: true
+                  properties:
+                    type:
+                      type: string
+                      deprecated: false
+                      enum:
+                      - fixed
+                      x-cb-parameter-blank-option: as_null
+                      x-cb-attribute-meta-comment: optional
+                      x-cb-is-sub-resource: true
+                      x-cb-meta-model-name: bundle_configurations
+                      x-cb-is-api-column: true
+                      x-cb-is-global-enum: false
+                      x-cb-is-external-enum: false
+                      x-cb-is-gen-separate: false
+                      x-cb-is-ignore-generation: false
+                      x-cb-sdk-enum-api-name: Type
+                      x-cb-sort-order: 11
+                      example: null
+                  example: null
+                bundle_items_to_add:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    item_id:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_add
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 20
+                        maxLength: 100
+                        example: null
+                      example: null
+                    item_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - plan
+                        - addon
+                        - charge
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_add
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: true
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: true
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: ItemType
+                        x-cb-global-enum-reference: ./schemas/enums/ItemType.yaml
+                        x-cb-sort-order: 21
+                        example: null
+                      example: null
+                    quantity:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                        default: 1
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_add
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 22
+                        minimum: 1
+                        example: null
+                      example: null
+                    price_allocation:
+                      type: array
+                      items:
+                        type: number
+                        format: decimal
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_add
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 23
+                        maximum: 100
+                        minimum: 0
+                        example: null
+                      example: null
+                  example: null
+                bundle_items_to_update:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    item_id:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_update
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 24
+                        maxLength: 100
+                        example: null
+                      example: null
+                    item_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - plan
+                        - addon
+                        - charge
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_update
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: true
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: true
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: ItemType
+                        x-cb-global-enum-reference: ./schemas/enums/ItemType.yaml
+                        x-cb-sort-order: 25
+                        example: null
+                      example: null
+                    quantity:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                        default: 1
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_update
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 26
+                        minimum: 1
+                        example: null
+                      example: null
+                    price_allocation:
+                      type: array
+                      items:
+                        type: number
+                        format: decimal
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_update
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 27
+                        maximum: 100
+                        minimum: 0
+                        example: null
+                      example: null
+                  example: null
+                bundle_items_to_remove:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    item_id:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: not_allowed
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_remove
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 28
+                        maxLength: 100
+                        example: null
+                      example: null
+                    item_type:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        enum:
+                        - plan
+                        - addon
+                        - charge
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: bundle_items_to_remove
+                        x-cb-is-api-column: true
+                        x-cb-is-global-enum: true
+                        x-cb-is-external-enum: false
+                        x-cb-is-gen-separate: true
+                        x-cb-is-ignore-generation: false
+                        x-cb-sdk-enum-api-name: ItemType
+                        x-cb-global-enum-reference: ./schemas/enums/ItemType.yaml
+                        x-cb-sort-order: 29
+                        example: null
+                      example: null
+                  example: null
+              example: null
+            encoding:
+              bundle_configuration:
+                style: deepObject
+                explode: true
+              bundle_items_to_add:
+                style: deepObject
+                explode: true
+              bundle_items_to_remove:
+                style: deepObject
+                explode: true
+              bundle_items_to_update:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/Item'
+                    description: Resource object representing item
+                required:
+                - item
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: item
+      x-cb-sort-order: 2
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: update
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: update
+      tags:
+      - Items
+  /items/{item-id}/attached_items:
+    get:
+      summary: List attached items
+      operationId: list_attached_items
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/item-id'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - name: id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Filter attached items based on their id.
+          example: bec0c324-adb6-44d3-ad4f-694f449be97c
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: attached_items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 2
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: item_id
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'Filter attached items based on the `item_id` of the item being attached.
+
+            '
+          example: basic
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-multi-value-attribute: true
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: attached_items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: StringFilter
+          x-cb-sort-order: 3
+          properties:
+            is:
+              type: string
+              minLength: 1
+              example: null
+            is_not:
+              type: string
+              minLength: 1
+              example: null
+            starts_with:
+              type: string
+              minLength: 1
+              example: null
+            in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+            not_in:
+              type: string
+              pattern: ^\[(.*)(,.*)*\]$
+              example: null
+      - name: type
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'Filter attached items based on the `type` of attached item. Possible values are : `recommended`, `mandatory`, `optional`.
+
+            '
+          example: mandatory
+          x-cb-parameter-blank-option: not_allowed
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: attached_items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 4
+          properties:
+            is:
+              type: string
+              description: '* `recommended` - The addon is recommended to go with the plan-item when using [Checkout](https://www.chargebee.com/docs/2.0/configure-inapp.html#fundamental-settings_recommending-addons-in-checkout) or [Portal](https://www.chargebee.com/docs/2.0/inapp-self-serve-portal.html#allow-change-subscription).
+
+                * `mandatory` - The addon is attached automatically to the subscription for the plan-item unless [explicitly removed](./subscriptions?prod_cat_ver=2) via API.
+
+                * `optional` - The addon is neither mandatory, nor recommended. This allows you to attach an addon so you can specify a `quantity` and `billing_cycles` for the addon, for when it is applied to subscriptions with the plan.
+
+                '
+              enum:
+              - recommended
+              - mandatory
+              - optional
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              example: null
+            is_not:
+              type: string
+              description: '* `recommended` - The addon is recommended to go with the plan-item when using [Checkout](https://www.chargebee.com/docs/2.0/configure-inapp.html#fundamental-settings_recommending-addons-in-checkout) or [Portal](https://www.chargebee.com/docs/2.0/inapp-self-serve-portal.html#allow-change-subscription).
+
+                * `mandatory` - The addon is attached automatically to the subscription for the plan-item unless [explicitly removed](./subscriptions?prod_cat_ver=2) via API.
+
+                * `optional` - The addon is neither mandatory, nor recommended. This allows you to attach an addon so you can specify a `quantity` and `billing_cycles` for the addon, for when it is applied to subscriptions with the plan.
+
+                '
+              enum:
+              - recommended
+              - mandatory
+              - optional
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              example: null
+            in:
+              type: string
+              description: '* `recommended` - The addon is recommended to go with the plan-item when using [Checkout](https://www.chargebee.com/docs/2.0/configure-inapp.html#fundamental-settings_recommending-addons-in-checkout) or [Portal](https://www.chargebee.com/docs/2.0/inapp-self-serve-portal.html#allow-change-subscription).
+
+                * `mandatory` - The addon is attached automatically to the subscription for the plan-item unless [explicitly removed](./subscriptions?prod_cat_ver=2) via API.
+
+                * `optional` - The addon is neither mandatory, nor recommended. This allows you to attach an addon so you can specify a `quantity` and `billing_cycles` for the addon, for when it is applied to subscriptions with the plan.
+
+                '
+              enum:
+              - recommended
+              - mandatory
+              - optional
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              pattern: ^\[(recommended|mandatory|optional)(,(recommended|mandatory|optional))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `recommended` - The addon is recommended to go with the plan-item when using [Checkout](https://www.chargebee.com/docs/2.0/configure-inapp.html#fundamental-settings_recommending-addons-in-checkout) or [Portal](https://www.chargebee.com/docs/2.0/inapp-self-serve-portal.html#allow-change-subscription).
+
+                * `mandatory` - The addon is attached automatically to the subscription for the plan-item unless [explicitly removed](./subscriptions?prod_cat_ver=2) via API.
+
+                * `optional` - The addon is neither mandatory, nor recommended. This allows you to attach an addon so you can specify a `quantity` and `billing_cycles` for the addon, for when it is applied to subscriptions with the plan.
+
+                '
+              enum:
+              - recommended
+              - mandatory
+              - optional
+              x-cb-is-external-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: false
+              x-cb-sdk-enum-api-name: Type
+              pattern: ^\[(recommended|mandatory|optional)(,(recommended|mandatory|optional))*\]$
+              example: null
+      - name: item_type
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: 'To filter based on the type of of the attached item. Possible values are : `addon`, `charge`.
+
+            '
+          example: plan
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 5
+          properties:
+            is:
+              type: string
+              description: '* `plan` - An essential component of a subscription. Every subscription has exactly one plan. It has a recurring charge and its period defines the billing period of the subscription.
+
+                * `addon` - A recurring component that can be added to a subscription in addition to its plan.
+
+                * `charge` - A non-recurring component that can be added to a subscription in addition to its plan. An charge can also be applied to a customer [directly](./invoices?prod_cat_ver=2#create_invoice_for_a_charge-item) without being applied to a subscription.
+
+                '
+              enum:
+              - plan
+              - addon
+              - charge
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: ItemType
+              example: null
+            is_not:
+              type: string
+              description: '* `plan` - An essential component of a subscription. Every subscription has exactly one plan. It has a recurring charge and its period defines the billing period of the subscription.
+
+                * `addon` - A recurring component that can be added to a subscription in addition to its plan.
+
+                * `charge` - A non-recurring component that can be added to a subscription in addition to its plan. An charge can also be applied to a customer [directly](./invoices?prod_cat_ver=2#create_invoice_for_a_charge-item) without being applied to a subscription.
+
+                '
+              enum:
+              - plan
+              - addon
+              - charge
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: ItemType
+              example: null
+            in:
+              type: string
+              description: '* `plan` - An essential component of a subscription. Every subscription has exactly one plan. It has a recurring charge and its period defines the billing period of the subscription.
+
+                * `addon` - A recurring component that can be added to a subscription in addition to its plan.
+
+                * `charge` - A non-recurring component that can be added to a subscription in addition to its plan. An charge can also be applied to a customer [directly](./invoices?prod_cat_ver=2#create_invoice_for_a_charge-item) without being applied to a subscription.
+
+                '
+              enum:
+              - plan
+              - addon
+              - charge
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: ItemType
+              pattern: ^\[(plan|addon|charge)(,(plan|addon|charge))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `plan` - An essential component of a subscription. Every subscription has exactly one plan. It has a recurring charge and its period defines the billing period of the subscription.
+
+                * `addon` - A recurring component that can be added to a subscription in addition to its plan.
+
+                * `charge` - A non-recurring component that can be added to a subscription in addition to its plan. An charge can also be applied to a customer [directly](./invoices?prod_cat_ver=2#create_invoice_for_a_charge-item) without being applied to a subscription.
+
+                '
+              enum:
+              - plan
+              - addon
+              - charge
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: ItemType
+              pattern: ^\[(plan|addon|charge)(,(plan|addon|charge))*\]$
+              example: null
+      - name: charge_on_event
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Indicates when the item is charged. This attribute only applies to charge-items.
+          example: subscription_creation
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: attached_items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: EnumFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 6
+          properties:
+            is:
+              type: string
+              description: '* `subscription_creation` - the time of creation of the subscription.
+
+                * `subscription_trial_start` - the time when the trial period of the subscription begins.
+
+                * `plan_activation` - same as subscription activation, but also includes the case when the plan-item of the subscription is changed.
+
+                * `subscription_activation` - the moment a subscription enters an `active` or `non-renewing` state. Also includes reactivations of canceled subscriptions.
+
+                * `contract_termination` - when a contract term is [terminated](./subscriptions?prod_cat_ver=2#cancel_subscription_for_items_contract_term_cancel_option).
+
+                * `on_demand` - Item can be charged on demand
+
+                '
+              enum:
+              - subscription_creation
+              - subscription_trial_start
+              - plan_activation
+              - subscription_activation
+              - contract_termination
+              - on_demand
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: ChargeOnEvent
+              example: null
+            is_not:
+              type: string
+              description: '* `subscription_creation` - the time of creation of the subscription.
+
+                * `subscription_trial_start` - the time when the trial period of the subscription begins.
+
+                * `plan_activation` - same as subscription activation, but also includes the case when the plan-item of the subscription is changed.
+
+                * `subscription_activation` - the moment a subscription enters an `active` or `non-renewing` state. Also includes reactivations of canceled subscriptions.
+
+                * `contract_termination` - when a contract term is [terminated](./subscriptions?prod_cat_ver=2#cancel_subscription_for_items_contract_term_cancel_option).
+
+                * `on_demand` - Item can be charged on demand
+
+                '
+              enum:
+              - subscription_creation
+              - subscription_trial_start
+              - plan_activation
+              - subscription_activation
+              - contract_termination
+              - on_demand
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: ChargeOnEvent
+              example: null
+            in:
+              type: string
+              description: '* `subscription_creation` - the time of creation of the subscription.
+
+                * `subscription_trial_start` - the time when the trial period of the subscription begins.
+
+                * `plan_activation` - same as subscription activation, but also includes the case when the plan-item of the subscription is changed.
+
+                * `subscription_activation` - the moment a subscription enters an `active` or `non-renewing` state. Also includes reactivations of canceled subscriptions.
+
+                * `contract_termination` - when a contract term is [terminated](./subscriptions?prod_cat_ver=2#cancel_subscription_for_items_contract_term_cancel_option).
+
+                * `on_demand` - Item can be charged on demand
+
+                '
+              enum:
+              - subscription_creation
+              - subscription_trial_start
+              - plan_activation
+              - subscription_activation
+              - contract_termination
+              - on_demand
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: ChargeOnEvent
+              pattern: ^\[(subscription_creation|subscription_trial_start|plan_activation|subscription_activation|contract_termination|on_demand)(,(subscription_creation|subscription_trial_start|plan_activation|subscription_activation|contract_termination|on_demand))*\]$
+              example: null
+            not_in:
+              type: string
+              description: '* `subscription_creation` - the time of creation of the subscription.
+
+                * `subscription_trial_start` - the time when the trial period of the subscription begins.
+
+                * `plan_activation` - same as subscription activation, but also includes the case when the plan-item of the subscription is changed.
+
+                * `subscription_activation` - the moment a subscription enters an `active` or `non-renewing` state. Also includes reactivations of canceled subscriptions.
+
+                * `contract_termination` - when a contract term is [terminated](./subscriptions?prod_cat_ver=2#cancel_subscription_for_items_contract_term_cancel_option).
+
+                * `on_demand` - Item can be charged on demand
+
+                '
+              enum:
+              - subscription_creation
+              - subscription_trial_start
+              - plan_activation
+              - subscription_activation
+              - contract_termination
+              - on_demand
+              x-cb-is-external-enum: true
+              x-cb-is-api-column: true
+              x-cb-is-gen-separate: true
+              x-cb-sdk-enum-api-name: ChargeOnEvent
+              pattern: ^\[(subscription_creation|subscription_trial_start|plan_activation|subscription_activation|contract_termination|on_demand)(,(subscription_creation|subscription_trial_start|plan_activation|subscription_activation|contract_termination|on_demand))*\]$
+              example: null
+      - name: updated_at
+        in: query
+        required: false
+        deprecated: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          deprecated: false
+          description: Filter attached items based on when the attached items were last updated.
+          example: '1243545465'
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-filter-parameter: true
+          x-cb-meta-model-name: attached_items
+          x-cb-is-api-column: true
+          x-cb-sdk-filter-name: TimestampFilter
+          x-cb-is-multi-value-attribute: false
+          x-cb-sort-order: 7
+          properties:
+            after:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            before:
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            'on':
+              type: string
+              format: unix-time
+              pattern: ^\d{10}$
+              example: null
+            between:
+              type: string
+              pattern: ^\[\d{10},\d{10}\]$
+              example: null
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        attached_item:
+                          $ref: '#/components/schemas/AttachedItem'
+                          description: Resource object representing attached_item
+                      required:
+                      - attached_item
+                      example: null
+                    example: null
+                  next_offset:
+                    type: string
+                    description: This attribute is returned only if more resources are present. To fetch the next set of resources use this value for the input parameter `offset`.
+                    maxLength: 1000
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: attached_item
+      x-cb-sort-order: 4
+      x-cb-module: product-catalog
+      x-cb-operation-is-list: true
+      x-cb-operation-method-name: list
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: list
+      tags:
+      - Items
+    post:
+      summary: Create an attached item
+      operationId: create_an_attached_item
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/item-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                item_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: attached_items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 100
+                  example: null
+                type:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - recommended
+                  - mandatory
+                  - optional
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: attached_items
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: false
+                  x-cb-is-external-enum: false
+                  x-cb-is-gen-separate: false
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Type
+                  x-cb-sort-order: 1
+                  example: null
+                billing_cycles:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: attached_items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  minimum: 1
+                  example: null
+                quantity:
+                  type: integer
+                  format: int32
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: attached_items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 3
+                  minimum: 1
+                  example: null
+                quantity_in_decimal:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: attached_items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 4
+                  maxLength: 33
+                  example: null
+                charge_on_event:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - subscription_creation
+                  - subscription_trial_start
+                  - plan_activation
+                  - subscription_activation
+                  - contract_termination
+                  - on_demand
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: attached_items
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: true
+                  x-cb-is-external-enum: true
+                  x-cb-is-gen-separate: true
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: ChargeOnEvent
+                  x-cb-global-enum-reference: ./schemas/enums/ChargeOnEvent.yaml
+                  x-cb-sort-order: 5
+                  example: null
+                charge_once:
+                  type: boolean
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: attached_items
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 6
+                  example: null
+                business_entity_id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 7
+                  maxLength: 50
+                  example: null
+              required:
+              - item_id
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  attached_item:
+                    $ref: '#/components/schemas/AttachedItem'
+                    description: Resource object representing attached_item
+                required:
+                - attached_item
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: attached_item
+      x-cb-sort-order: 0
+      x-cb-module: product-catalog
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: create
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: create
+      tags:
+      - Items
+  /items/{item-id}/item_entitlements:
+    get:
+      summary: List item entitlements for an item
+      operationId: list_item_entitlements_for_an_item
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/item-id'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/offset'
+      - name: include_drafts
+        in: query
+        required: false
+        deprecated: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+          default: false
+          deprecated: true
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-api-column: true
+          x-cb-sort-order: 2
+          example: null
+      - name: embed
+        in: query
+        required: false
+        deprecated: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          deprecated: true
+          x-cb-parameter-blank-option: as_null
+          x-cb-attribute-meta-comment: optional
+          x-cb-is-api-column: true
+          x-cb-sort-order: 3
+          maxLength: 1000
+          example: null
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        item_entitlement:
+                          $ref: '#/components/schemas/ItemEntitlement'
+                          description: Resource object representing item_entitlement
+                      required:
+                      - item_entitlement
+                      example: null
+                    example: null
+                  next_offset:
+                    type: string
+                    description: This attribute is returned only if more resources are present. To fetch the next set of resources use this value for the input parameter `offset`.
+                    maxLength: 1000
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: item_entitlement
+      x-cb-sort-order: 0
+      x-cb-module: entitlements
+      x-cb-operation-is-list: true
+      x-cb-operation-method-name: itemEntitlementsForItem
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: itemEntitlementsForItem
+      tags:
+      - Items
+    post:
+      summary: Upsert or remove item entitlements for an item
+      operationId: upsert_or_remove_item_entitlements_for_an_item
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/item-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  deprecated: false
+                  enum:
+                  - upsert
+                  - remove
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-is-api-column: true
+                  x-cb-is-global-enum: true
+                  x-cb-is-external-enum: true
+                  x-cb-is-gen-separate: true
+                  x-cb-is-ignore-generation: false
+                  x-cb-sdk-enum-api-name: Action
+                  x-cb-global-enum-reference: ./schemas/enums/Action.yaml
+                  x-cb-sort-order: 0
+                  example: null
+                item_entitlements:
+                  type: object
+                  deprecated: false
+                  x-cb-sort-order: -1
+                  x-cb-is-composite-array-request-body: true
+                  x-cb-hidden-from-client-sdk: false
+                  properties:
+                    feature_id:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: required
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_entitlements
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 1
+                        maxLength: 50
+                        example: null
+                      example: null
+                    value:
+                      type: array
+                      items:
+                        type: string
+                        deprecated: false
+                        x-cb-parameter-blank-option: as_null
+                        x-cb-attribute-meta-comment: optional
+                        x-cb-is-sub-resource: true
+                        x-cb-meta-model-name: item_entitlements
+                        x-cb-is-api-column: true
+                        x-cb-sort-order: 2
+                        maxLength: 50
+                        example: null
+                      example: null
+                  required:
+                  - feature_id
+                  example: null
+              required:
+              - action
+              example: null
+            encoding:
+              item_entitlements:
+                style: deepObject
+                explode: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        item_entitlement:
+                          $ref: '#/components/schemas/ItemEntitlement'
+                          description: Resource object representing item_entitlement
+                      required:
+                      - item_entitlement
+                      example: null
+                    example: null
+                required:
+                - list
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: item_entitlement
+      x-cb-sort-order: 3
+      x-cb-module: entitlements
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: upsertOrRemoveItemEntitlementsForItem
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: upsertOrRemoveItemEntitlementsForItem
+      tags:
+      - Items
+  /items/{item-id}/media:
+    post:
+      summary: associate media object to an item
+      operationId: associate_media_object_to_an_item
+      parameters:
+      - description: The device from which the customer has made the request
+        $ref: '#/components/parameters/chargebee-request-origin-device'
+      - description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        $ref: '#/components/parameters/chargebee-request-origin-user'
+      - description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        $ref: '#/components/parameters/chargebee-request-origin-user-encoded'
+      - description: The IP address of the customer where the request originated
+        $ref: '#/components/parameters/chargebee-request-origin-ip'
+      - description: skip all actions to be done on the events
+        $ref: '#/components/parameters/chargebee-event-actions'
+      - description: skip only emails
+        $ref: '#/components/parameters/chargebee-event-email'
+      - description: ' skip only webhooks'
+        $ref: '#/components/parameters/chargebee-event-webhook'
+      - description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        $ref: '#/components/parameters/chargebee-business-entity-id'
+      - $ref: '#/components/parameters/item-id'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: required
+                  x-cb-meta-model-name: medias
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 0
+                  maxLength: 512
+                  minLength: 10
+                  example: null
+                id:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: not_allowed
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: medias
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 1
+                  maxLength: 42
+                  minLength: 8
+                  example: null
+                alt_text:
+                  type: string
+                  deprecated: false
+                  x-cb-parameter-blank-option: as_null
+                  x-cb-attribute-meta-comment: optional
+                  x-cb-meta-model-name: medias
+                  x-cb-is-api-column: true
+                  x-cb-sort-order: 2
+                  maxLength: 128
+                  minLength: 2
+                  example: null
+              required:
+              - url
+              example: null
+            encoding: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  media:
+                    $ref: '#/components/schemas/Media'
+                    description: Resource object representing media
+                required:
+                - media
+                example: null
+        '400':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/400'
+        '401':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/401'
+        '403':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/403'
+        '404':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/404'
+        '405':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/405'
+        '409':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/409'
+        '422':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/422'
+        '429':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/429'
+        '500':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/500'
+        '503':
+          description: on error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/503'
+      deprecated: false
+      security:
+      - BasicAuth: []
+      x-cb-resource-id: media
+      x-cb-sort-order: 0
+      x-cb-module: product-catalog
+      x-cb-internal: true
+      x-cb-operation-is-idempotent: true
+      x-cb-operation-method-name: createMediaAndAttachToItem
+      x-cb-is-operation-needs-input-object: true
+      x-cb-sdk-method-name: createMediaAndAttachToItem
+      tags:
+      - Items
 components:
+  parameters:
+    item-id:
+      name: item-id
+      in: path
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    chargebee-request-origin-device:
+      name: chargebee-request-origin-device
+      in: header
+      description: The device from which the customer has made the request
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The device from which the customer has made the request
+        example: Android
+    chargebee-event-actions:
+      name: chargebee-event-actions
+      in: header
+      description: skip all actions to be done on the events
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip all actions to be done on the events
+        enum:
+        - all-disabled
+    offset:
+      name: offset
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        description: Determines your position in the list for pagination. To ensure that the next page is retrieved correctly, always set 'offset' to the value of 'next_offset' obtained in the previous iteration of the API call.
+        x-cb-is-pagination-parameter: true
+        maxLength: 1000
+    chargebee-event-webhook:
+      name: chargebee-event-webhook
+      in: header
+      description: ' skip only webhooks'
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: ' skip only webhooks'
+        enum:
+        - all-disabled
+    chargebee-business-entity-id:
+      name: chargebee-business-entity-id
+      in: header
+      description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: If the site has multiple business entities, you can use this custom HTTP header to specify the business entity for which Chargebee should perform the operation.
+        maxLength: 50
+    limit:
+      name: limit
+      in: query
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        format: int32
+        default: 10
+        description: The number of resources to be returned.
+        x-cb-is-pagination-parameter: true
+        maximum: 100
+        minimum: 1
+    chargebee-request-origin-user:
+      name: chargebee-request-origin-user
+      in: header
+      description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The email address of your customer/user. Use this when the email address has only ASCII characters.
+        example: user@example.com
+    chargebee-request-origin-user-encoded:
+      name: chargebee-request-origin-user-encoded
+      in: header
+      description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: email
+        description: The Base64-encoded email address of your customer/user. Use this if the email address has UTF-8 characters. When this header is provided, the header chargebee-request-origin-user is ignored.
+        example: dXNlci7QutCy0ZbRgtC+0YfQutCwQGV4YW1wbGUuY29t
+    chargebee-request-origin-ip:
+      name: chargebee-request-origin-ip
+      in: header
+      description: The IP address of the customer where the request originated
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: The IP address of the customer where the request originated
+        example: 192.168.1.2
+        pattern: ^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([a-fA-F]|[a-fA-F][a-fA-F0-9\-]*[a-fA-F0-9])\.)*([A-Fa-f]|[A-Fa-f][A-Fa-f0-9\-]*[A-Fa-f0-9])$|^(?:(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){6})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:::(?:(?:(?:[0-9a-fA-F]{1,4})):){5})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){4})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,1}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){3})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,2}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:(?:[0-9a-fA-F]{1,4})):){2})(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,3}(?:(?:[0-9a-fA-F]{1,4})))?::(?:(?:[0-9a-fA-F]{1,4})):)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,4}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9]))\.){3}(?:(?:25[0-5]|(?:[1-9]|1[0-9]|2[0-4])?[0-9])))))))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,5}(?:(?:[0-9a-fA-F]{1,4})))?::)(?:(?:[0-9a-fA-F]{1,4})))|(?:(?:(?:(?:(?:(?:[0-9a-fA-F]{1,4})):){0,6}(?:(?:[0-9a-fA-F]{1,4})))?::)))))$
+    chargebee-event-email:
+      name: chargebee-event-email
+      in: header
+      description: skip only emails
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+        description: skip only emails
+        enum:
+        - all-disabled
   schemas:
-    GenericList:
+    '503':
       type: object
       properties:
-        list:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `db_connection_failure` - Returned when db connection fails.
+
+            * `site_read_only_mode` - Returned when your site is temporarily unavailable for write operations due to a scheduled maintenance.
+
+            * `site_not_ready` - Returned when your site is temporarily unavailable due to a scheduled maintenance.
+
+            * `internal_temporary_error` - Returned when temporary occured in Chargebee side. The request can be re-tried, with exponential backoff in case of repeat failures.'
+          enum:
+          - db_connection_failure
+          - site_read_only_mode
+          - site_not_ready
+          - internal_temporary_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '403':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `request_blocked` - Returned when request is blocked for your site. The blocking could be only for a specific set of operation(s) . The reason would be provided as part of the message. You would have to contact support for additional details.
+
+            * `api_authorization_failed` - Returned when the API key does not have sufficient privileges to perform the particular operation.'
+          enum:
+          - request_blocked
+          - api_authorization_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '405':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `http_method_not_supported` - Returned when the ''http method'', specified in the request, is not allowed for this URL. It should not occur if you are using one of the standard client library.'
+          enum:
+          - http_method_not_supported
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '400':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          - payment
+          example: null
+        api_error_code:
+          type: string
+          description: '* `payment_intent_invalid_amount` - Returned when processing amount is different from payment intent amountFor example if payment intent which is passed has authorized 10$ and if the charges initiated is for 12$.
+
+            * `configuration_incompatible` - Returned when the request is not compatible with the configuration for the  site or the configuration is incomplete.
+
+            * `payment_intent_invalid` - Returned when validation or verification fails for provided payment intent.For example if payment intent which is passed is in not consumable state.
+
+            * `invalid_request` - Returned when the request has incompatible values or does not match the API specification. As it is a generic error, handling this error is recommended only in combination  with  param attribute.
+
+            * `payment_method_verification_failed` - Returned when validation or verification fails for the provided payment method. For example  if the payment method is card, this will include all card parameter validation errors and also verification failures  from the gateway.
+
+            * `payment_processing_failed` - Returned when the payment collection fails.
+
+            * `resource_limit_exhausted` - Returned when any limit constraint is violated by the request. For example this error is  thrown when the coupon provided has already expired or its maximum redemption count has been reached.
+
+            * `duplicate_entry` - Returned when the request provides a duplicate value for an attribute that is specified as unique for that site.  For example in ''create subscription api'' if you are passing  the subscription id then this error will be thrown if a subscription exists in site with the same id.
+
+            * `param_wrong_value` - Returned when the value does not meet the required specification for the parameter. For example, wrong email format. It is strongly recommended  to do the validation at your end before calling Chargebee''s API (other than specific cases like  VAT number validation).
+
+            * `payment_method_not_present` - Returned when the request requires payment collection but the ''payment method'' details (such as card) is not present for the customer. This error will not occur if auto-collection is disabled for the customer.
+
+            * `resource_limit_exceeded`
+
+            * `payment_gateway_currency_incompatible` - Returned when the payment gateway configured is incompatible with the transactional currency. This error will not occur if auto-collection is disabled for the customer.'
+          enum:
+          - payment_intent_invalid_amount
+          - configuration_incompatible
+          - payment_intent_invalid
+          - invalid_request
+          - payment_method_verification_failed
+          - payment_processing_failed
+          - resource_limit_exhausted
+          - duplicate_entry
+          - param_wrong_value
+          - payment_method_not_present
+          - resource_limit_exceeded
+          - payment_gateway_currency_incompatible
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    Media:
+      type: object
+      x-cb-resource-id: media
+      x-cb-resource-path-name: medias
+      x-cb-is-dependent-resource: false
+      x-cb-sort-order: 114
+      x-cb-product-catalog-version: 2
+      properties:
+        id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 0
+          maxLength: 42
+          minLength: 8
+          example: null
+        url:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 1
+          maxLength: 512
+          minLength: 10
+          example: null
+        alt_text:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 2
+          maxLength: 128
+          minLength: 2
+          example: null
+        media_type:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 3
+          maxLength: 20
+          example: null
+      required:
+      - id
+      example: null
+    '500':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `internal_error` - Returned when the request parameters were right but the operation couldn''t be completed due to a bug in Chargebee side.'
+          enum:
+          - internal_error
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '409':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `invalid_state_for_request` - Returned when the requested operation is not allowed for current state of the resource. This error will occur if the state of the resource has not been checked for the validity of the request. For example this error is returned when we try to schedule subscription changes  at ''end of term'' for canceled subscriptions.'
+          enum:
+          - invalid_state_for_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '422':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          example: null
+        api_error_code:
+          type: string
+          description: '* `unable_to_process_request` - Returned when the HTTP request body contains a well-formed, but semantically erroneous payload. For example this error is returned when a client attempts to reuse an idempotency key with a different request payload.'
+          enum:
+          - unable_to_process_request
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    '404':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - invalid_request
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: "* `resource_not_found` - Returned when any of resource(s) referred in the request is not found. \n* `site_not_found` - Returned when the site is not found."
+          enum:
+          - resource_not_found
+          - site_not_found
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    Item:
+      type: object
+      additionalProperties: true
+      x-cb-is-custom-fields-supported: true
+      x-cb-resource-id: item
+      x-cb-resource-path-name: items
+      x-cb-is-dependent-resource: false
+      x-cb-sort-order: 75
+      x-cb-product-catalog-version: 2
+      properties:
+        id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 0
+          maxLength: 100
+          example: null
+        name:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 1
+          maxLength: 100
+          example: null
+        external_name:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 2
+          maxLength: 100
+          example: null
+        description:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 3
+          maxLength: 2000
+          example: null
+        status:
+          type: string
+          deprecated: false
+          enum:
+          - active
+          - archived
+          - deleted
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Status
+          x-cb-sort-order: 4
+          example: null
+        resource_version:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-sort-order: 5
+          example: null
+        updated_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 6
+          example: null
+        item_family_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 7
+          maxLength: 100
+          example: null
+        type:
+          type: string
+          deprecated: false
+          enum:
+          - plan
+          - addon
+          - charge
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Type
+          x-cb-sort-order: 8
+          example: null
+        is_shippable:
+          type: boolean
+          default: false
+          deprecated: false
+          x-cb-sort-order: 9
+          example: null
+        is_giftable:
+          type: boolean
+          default: false
+          deprecated: false
+          x-cb-sort-order: 10
+          example: null
+        redirect_url:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 11
+          maxLength: 500
+          example: null
+        enabled_for_checkout:
+          type: boolean
+          default: true
+          deprecated: false
+          x-cb-sort-order: 12
+          example: null
+        enabled_in_portal:
+          type: boolean
+          default: true
+          deprecated: false
+          x-cb-sort-order: 13
+          example: null
+        included_in_mrr:
+          type: boolean
+          deprecated: false
+          x-cb-sort-order: 14
+          example: null
+        item_applicability:
+          type: string
+          default: all
+          deprecated: false
+          enum:
+          - all
+          - restricted
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: ItemApplicability
+          x-cb-sort-order: 15
+          example: null
+        gift_claim_redirect_url:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 16
+          maxLength: 500
+          example: null
+        unit:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 17
+          maxLength: 30
+          example: null
+        metered:
+          type: boolean
+          default: false
+          deprecated: false
+          x-cb-sort-order: 18
+          example: null
+        usage_calculation:
+          type: string
+          deprecated: false
+          enum:
+          - sum_of_usages
+          - last_usage
+          - max_usage
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: UsageCalculation
+          x-cb-sort-order: 20
+          example: null
+        is_percentage_pricing:
+          type: boolean
+          default: false
+          deprecated: false
+          x-cb-sort-order: 21
+          example: null
+        archived_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 22
+          example: null
+        channel:
+          type: string
+          deprecated: false
+          enum:
+          - web
+          - app_store
+          - play_store
+          x-cb-is-global-enum: true
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: true
+          x-cb-is-gen-separate: true
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Channel
+          x-cb-global-enum-reference: ./schemas/enums/Channel.yaml
+          x-cb-sort-order: 23
+          example: null
+        metadata:
+          type: object
+          additionalProperties: true
+          deprecated: false
+          x-cb-attribute-pcv: 2
+          x-cb-sort-order: 31
+          example: null
+        deleted:
+          type: boolean
+          deprecated: false
+          x-cb-sort-order: 37
+          example: null
+        business_entity_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 39
+          maxLength: 50
+          example: null
+        applicable_items:
           type: array
+          deprecated: false
+          x-cb-sort-order: 28
           items:
             type: object
-        next_offset:
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: ApplicableItem
+            x-cb-sub-resource-parent-name: Item
+            properties:
+              id:
+                type: string
+                deprecated: false
+                maxLength: 100
+                example: null
+            example: null
+          example: null
+        bundle_items:
+          type: array
+          deprecated: false
+          x-cb-sort-order: 29
+          items:
+            type: object
+            deprecated: false
+            x-cb-is-sub-resource: true
+            x-cb-sub-resource-name: BundleItem
+            x-cb-sub-resource-parent-name: Item
+            properties:
+              item_id:
+                type: string
+                deprecated: false
+                maxLength: 100
+                example: null
+              item_type:
+                type: string
+                deprecated: false
+                enum:
+                - plan
+                - addon
+                - charge
+                x-cb-is-global-enum: true
+                x-cb-is-api-column: true
+                x-cb-is-external-enum: false
+                x-cb-is-gen-separate: true
+                x-cb-is-ignore-generation: false
+                x-cb-sdk-enum-api-name: ItemType
+                example: null
+              quantity:
+                type: integer
+                format: int32
+                default: 1
+                deprecated: false
+                minimum: 1
+                example: null
+              price_allocation:
+                type: number
+                format: decimal
+                deprecated: false
+                maximum: 100
+                minimum: 0
+                example: null
+            required:
+            - item_id
+            example: null
+          example: null
+        bundle_configuration:
+          type: object
+          deprecated: false
+          x-cb-is-sub-resource: true
+          x-cb-sub-resource-name: BundleConfiguration
+          x-cb-sub-resource-parent-name: Item
+          x-cb-sort-order: 30
+          properties:
+            type:
+              type: string
+              deprecated: false
+              enum:
+              - fixed
+              x-cb-is-global-enum: false
+              x-cb-is-api-column: true
+              x-cb-is-external-enum: false
+              x-cb-is-gen-separate: false
+              x-cb-is-ignore-generation: false
+              x-cb-sdk-enum-api-name: Type
+              example: null
+          example: null
+      required:
+      - deleted
+      - enabled_for_checkout
+      - enabled_in_portal
+      - id
+      - is_giftable
+      - metered
+      - name
+      - type
+      example: null
+    '401':
+      type: object
+      properties:
+        message:
           type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - untyped
+          example: null
+        api_error_code:
+          type: string
+          description: '* `api_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be the api key is invalid or authentication header is not present in the request or the header''s format is invalid.
+
+            * `basic_authentication_failed` - Returned when authentication failed for the request. The possible reasons could be that one or both of the username and password are invalid'
+          enum:
+          - api_authentication_failed
+          - basic_authentication_failed
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
+    AttachedItem:
+      type: object
+      x-cb-resource-id: attached_item
+      x-cb-resource-path-name: attached_items
+      x-cb-is-dependent-resource: false
+      x-cb-sort-order: 85
+      x-cb-product-catalog-version: 2
+      properties:
+        id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 0
+          maxLength: 100
+          example: null
+        parent_item_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 1
+          maxLength: 100
+          example: null
+        item_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 2
+          maxLength: 100
+          example: null
+        type:
+          type: string
+          deprecated: false
+          enum:
+          - recommended
+          - mandatory
+          - optional
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Type
+          x-cb-sort-order: 3
+          example: null
+        status:
+          type: string
+          deprecated: false
+          enum:
+          - active
+          - archived
+          - deleted
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Status
+          x-cb-sort-order: 4
+          example: null
+        quantity:
+          type: integer
+          format: int32
+          deprecated: false
+          x-cb-sort-order: 5
+          minimum: 1
+          example: null
+        quantity_in_decimal:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 6
+          maxLength: 33
+          example: null
+        billing_cycles:
+          type: integer
+          format: int32
+          deprecated: false
+          x-cb-sort-order: 7
+          minimum: 1
+          example: null
+        charge_on_event:
+          type: string
+          deprecated: false
+          enum:
+          - subscription_creation
+          - subscription_trial_start
+          - plan_activation
+          - subscription_activation
+          - contract_termination
+          - on_demand
+          x-cb-is-global-enum: true
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: true
+          x-cb-is-gen-separate: true
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: ChargeOnEvent
+          x-cb-global-enum-reference: ./schemas/enums/ChargeOnEvent.yaml
+          x-cb-sort-order: 8
+          example: null
+        charge_once:
+          type: boolean
+          deprecated: false
+          x-cb-sort-order: 9
+          example: null
+        created_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 10
+          example: null
+        resource_version:
+          type: integer
+          format: int64
+          deprecated: false
+          x-cb-sort-order: 11
+          example: null
+        updated_at:
+          type: integer
+          format: unix-time
+          deprecated: false
+          x-cb-sort-order: 12
+          example: null
+        channel:
+          type: string
+          deprecated: false
+          enum:
+          - web
+          - app_store
+          - play_store
+          x-cb-is-global-enum: true
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: true
+          x-cb-is-gen-separate: true
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: Channel
+          x-cb-global-enum-reference: ./schemas/enums/Channel.yaml
+          x-cb-sort-order: 13
+          example: null
+        business_entity_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 14
+          maxLength: 50
+          example: null
+        deleted:
+          type: boolean
+          deprecated: false
+          x-cb-sort-order: 15
+          example: null
+      required:
+      - created_at
+      - deleted
+      - id
+      - item_id
+      - parent_item_id
+      - type
+      example: null
+    ItemEntitlement:
+      type: object
+      x-cb-resource-id: item_entitlement
+      x-cb-resource-path-name: item_entitlements
+      x-cb-is-dependent-resource: false
+      x-cb-sort-order: 103
+      x-cb-product-catalog-version: 2
+      properties:
+        id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 0
+          maxLength: 100
+          example: null
+        item_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 1
+          maxLength: 100
+          example: null
+        item_type:
+          type: string
+          deprecated: false
+          enum:
+          - plan
+          - addon
+          - charge
+          - subscription
+          - item
+          x-cb-is-global-enum: false
+          x-cb-is-api-column: true
+          x-cb-is-external-enum: false
+          x-cb-is-gen-separate: false
+          x-cb-is-ignore-generation: false
+          x-cb-sdk-enum-api-name: ItemType
+          x-cb-sort-order: 2
+          example: null
+        feature_id:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 3
+          maxLength: 50
+          example: null
+        feature_name:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 4
+          maxLength: 50
+          example: null
+        value:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 5
+          maxLength: 50
+          example: null
+        name:
+          type: string
+          deprecated: false
+          x-cb-sort-order: 6
+          maxLength: 50
+          example: null
+      required:
+      - id
+      example: null
+    '429':
+      type: object
+      properties:
+        message:
+          type: string
+          example: null
+        param:
+          type: string
+          example: null
+        type:
+          type: string
+          enum:
+          - operation_failed
+          example: null
+        api_error_code:
+          type: string
+          description: '* `third_party_api_request_limit_exceeded` - Returned when your request is blocked temporarily at a third-party service, due to the request count exceeding their acceptable limits.
+
+            * `api_request_limit_exceeded` - Returned when requests have been blocked temporarily due to request count exceeding acceptable limits.
+
+            * `lock_timeout` - Returned when there are multiple concurrent requests to the same resource.'
+          enum:
+          - third_party_api_request_limit_exceeded
+          - api_request_limit_exceeded
+          - lock_timeout
+          example: null
+      required:
+      - api_error_code
+      - message
+      - type
+      example: null
   securitySchemes:
-    basicAuth:
+    BasicAuth:
       type: http
       scheme: basic
-      description: HTTP Basic Auth. Username is your Chargebee site API key; password is empty.
