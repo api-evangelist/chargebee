@@ -25,6 +25,8 @@ checked:
 - okta/integrations/okta-integration-edges.yml
 - slack/integrations/slack-integration-edges.yml
 - zendesk/integrations/zendesk-integration-edges.yml
+- bigcommerce/integrations/bigcommerce-integration-edges.yml
+- salesforce-commerce-cloud/integrations/salesforce-commerce-cloud-integration-edges.yml
 marketplace_apps:
 - marketplace: own
   channel: partner-built
@@ -740,6 +742,36 @@ edges:
     builder: Pipedream repo (component)
   detected_by: sweep-workflow-automation.py
   first_seen: '2026-10-15'
+- partner_name: Cloud Security Alliance STAR Registry
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://cloudsecurityalliance.org/star/registry/chargebee-inc/services/chargebee
+  category: Cloud security assurance
+  contract_reference:
+    register: CSA STAR Registry (cloudsecurityalliance.org/star/registry)
+    spec_file: null
+    standard: CSA STAR
+    role: star-level-1
+    registered_name: Chargebee Inc.
+    registry_id: chargebee-inc
+    service_url: https://www.chargebee.com/
+    matched_domain: chargebee.com
+    matched_by: domain
+    identity_source: the service URL the organisation filed on its STAR listing (no lookup)
+    levels:
+    - STAR Level 1
+    certified_products: []
+    signal_note: STAR Level 1 (CAIQ self-assessment) = participation; certified_products = one entry per STAR Level
+      2 / STAR for AI Level 2 assessment TYPE (third-party certification, attestation, C-STAR, ValidAIted); lapsed
+      = every instance marked (Deprecated) by the registry; service counts never recorded
+    detected_by: sweep-compliance-assurance.py
+    detected: '2026-10-20'
+  detected_by: sweep-compliance-assurance.py
+  first_seen: '2026-10-20'
 - partner_name: Okta (own)
   partner: okta
   partner_match: mirror
@@ -800,34 +832,38 @@ edges:
   detected: '2026-10-20'
   detected_by: mirror-platform-listings.py
   category: eComm and Payments
-- partner_name: Cloud Security Alliance STAR Registry
-  partner: null
-  partner_match: register
-  type: register
-  channel: standard-directory
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://cloudsecurityalliance.org/star/registry/chargebee-inc/services/chargebee
-  category: Cloud security assurance
-  contract_reference:
-    register: CSA STAR Registry (cloudsecurityalliance.org/star/registry)
-    spec_file: null
-    standard: CSA STAR
-    role: star-level-1
-    registered_name: Chargebee Inc.
-    registry_id: chargebee-inc
-    service_url: https://www.chargebee.com/
-    matched_domain: chargebee.com
-    matched_by: domain
-    identity_source: the service URL the organisation filed on its STAR listing (no lookup)
-    levels:
-    - STAR Level 1
-    certified_products: []
-    signal_note: STAR Level 1 (CAIQ self-assessment) = participation; certified_products = one entry per STAR Level
-      2 / STAR for AI Level 2 assessment TYPE (third-party certification, attestation, C-STAR, ValidAIted); lapsed
-      = every instance marked (Deprecated) by the registry; service counts never recorded
-    detected_by: sweep-compliance-assurance.py
-    detected: '2026-10-20'
-  detected_by: sweep-compliance-assurance.py
-  first_seen: '2026-10-20'
+- partner_name: BigCommerce (own)
+  partner: bigcommerce
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.bigcommerce.com/apps/chargebee/
+  mirror_of: bigcommerce/integrations/bigcommerce-integration-edges.yml
+  apps:
+  - Chargebee
+  listing_count: 1
+  detected: '2026-10-20'
+  detected_by: mirror-platform-listings.py
+  category: Payments & Security, Recurring Billing & Subscriptions
+- partner_name: Salesforce Commerce Cloud (own)
+  partner: salesforce-commerce-cloud
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://appexchange.salesforce.com/appxListingDetail?listingId=a0N3A00000FHCdzUAH
+  mirror_of: salesforce-commerce-cloud/integrations/salesforce-commerce-cloud-integration-edges.yml
+  apps:
+  - Chargebee | CPQ, Subscription and Billing Management
+  listing_count: 1
+  detected: '2026-10-20'
+  detected_by: mirror-platform-listings.py
+  category: contractManagement, paymentsProcessing, subscriptions
 source: https://hightouch.com/docs/destinations/chargebee
