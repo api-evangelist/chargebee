@@ -909,3 +909,16 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: chargebee-xero-own
+  label: Xero (own)
+  partner: xero
+  partner_name: Xero (own)
+  category: Payments
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://apps.xero.com/nz/app/chargebee
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
