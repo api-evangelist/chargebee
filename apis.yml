@@ -634,6 +634,8 @@ apis:
   humanURL: https://apidocs.chargebee.com/docs/api
   baseURL: https://{site}.chargebee.com/api/v2
   tags:
+  - Currency
+  tags_raw:
   - Currencies
   properties:
   - type: OpenAPI
@@ -697,6 +699,8 @@ apis:
   humanURL: https://apidocs.chargebee.com/docs/api
   baseURL: https://{site}.chargebee.com/api/v2
   tags:
+  - EInvoices
+  tags_raw:
   - Einvoices
   properties:
   - type: OpenAPI
@@ -760,6 +764,8 @@ apis:
   humanURL: https://apidocs.chargebee.com/docs/api
   baseURL: https://{site}.chargebee.com/api/v2
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -781,6 +787,8 @@ apis:
   humanURL: https://apidocs.chargebee.com/docs/api
   baseURL: https://{site}.chargebee.com/api/v2
   tags:
+  - Export
+  tags_raw:
   - Exports
   properties:
   - type: OpenAPI
@@ -1461,6 +1469,8 @@ apis:
   humanURL: https://apidocs.chargebee.com/docs/api
   baseURL: https://{site}.chargebee.com/api/v2
   tags:
+  - Product
+  tags_raw:
   - Products
   properties:
   - type: OpenAPI
@@ -1780,6 +1790,8 @@ apis:
   humanURL: https://apidocs.chargebee.com/docs/api
   baseURL: https://{site}.chargebee.com/api/v2
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
@@ -1992,6 +2004,8 @@ apis:
   humanURL: https://apidocs.chargebee.com/docs/api
   baseURL: https://{site}.chargebee.com/api/v2
   tags:
+  - Addons
+  tags_raw:
   - Add Ons
   properties:
   - type: OpenAPI
