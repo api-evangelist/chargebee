@@ -1,4 +1,4 @@
-# Chargebee (chargebee)
+# Chargebee
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,79 +66,171 @@
 
 Chargebee is a subscription billing and revenue management platform that enables SaaS and subscription businesses to automate recurring billing, invoicing, payments, dunning, and revenue recognition. The Chargebee REST API v2 provides programmatic access to subscriptions, customers, invoices, payments, plans, addons, coupons, and usage metering, with HTTP Basic Auth using API keys scoped to each Chargebee site.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/apis.yml)
+**Areas:** Billing · Subscription · Recurring Billing · Revenue · Payments · Software-as-a-Service
 
-## Scope
+## Chargebee on APIs.io
 
-- **Type:** Index
+Everything profiled for Chargebee is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/chargebee/](https://apis.io/providers/chargebee/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (8)
 
-- Billing
-- Subscriptions
-- Recurring Billing
-- Revenue
-- Payments
-- SaaS
+- [Chargebee Customers API](https://apis.io/apis/chargebee/chargebee-customers-api/) — The Customers API from Chargebee — 2 operation(s) for customers.
+- [Chargebee Invoices API](https://apis.io/apis/chargebee/chargebee-invoices-api/) — The Invoices API from Chargebee — 2 operation(s) for invoices.
+- [Chargebee Items API](https://apis.io/apis/chargebee/chargebee-items-api/) — The Items API from Chargebee — 1 operation(s) for items.
+- [Chargebee Orders API](https://apis.io/apis/chargebee/chargebee-orders-api/) — The Orders API from Chargebee — 1 operation(s) for orders.
+- [Chargebee Payments API](https://apis.io/apis/chargebee/chargebee-payments-api/) — The Payments API from Chargebee — 1 operation(s) for payments.
+- [Chargebee Plans API](https://apis.io/apis/chargebee/chargebee-plans-api/) — The Plans API from Chargebee — 1 operation(s) for plans.
+- [Chargebee Quotes API](https://apis.io/apis/chargebee/chargebee-quotes-api/) — The Quotes API from Chargebee — 1 operation(s) for quotes.
+- [Chargebee Subscriptions API](https://apis.io/apis/chargebee/chargebee-subscriptions-api/) — The Subscriptions API from Chargebee — 2 operation(s) for subscriptions.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-05-11
-- **Modified:** 2026-05-30
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### AsyncAPI (1)
 
-### Chargebee API v2
+Event-driven and webhook contracts.
 
-REST API for managing subscriptions, customers, invoices, payments, product catalog, coupons, usage metering, and revenue recognition. Authentication uses HTTP Basic Auth with a site-scoped API key as the username and an empty password.
+- [Chargebee Webhooks](https://apis.io/asyncapis/chargebee/chargebee-asyncapi/)
 
-- **Human URL:** [https://apidocs.chargebee.com/docs/api](https://apidocs.chargebee.com/docs/api)
-- **Base URL:** `https://{site}.chargebee.com/api/v2`
+#### Event channels (27)
 
-#### Tags
+Individual events and webhooks the provider emits.
 
-- Billing
-- Subscriptions
-- Invoicing
-- Payments
-- Revenue
+- [business_entity](https://apis.io/channels/chargebee/business-entity/)
+- [contract_term](https://apis.io/channels/chargebee/contract-term/)
+- [coupon](https://apis.io/channels/chargebee/coupon/)
+- [credit_note](https://apis.io/channels/chargebee/credit-note/)
+- [customer](https://apis.io/channels/chargebee/customer/)
+- [entitlement_override](https://apis.io/channels/chargebee/entitlement-override/)
+- [feature](https://apis.io/channels/chargebee/feature/)
+- [gift](https://apis.io/channels/chargebee/gift/)
+- [invoice](https://apis.io/channels/chargebee/invoice/)
+- [item](https://apis.io/channels/chargebee/item/)
+- [omnichannel](https://apis.io/channels/chargebee/omnichannel/)
+- [order](https://apis.io/channels/chargebee/order/)
+- [payment](https://apis.io/channels/chargebee/payment/)
+- [payment_schedule](https://apis.io/channels/chargebee/payment-schedule/)
+- [payment_source](https://apis.io/channels/chargebee/payment-source/)
+- [promotional_credits](https://apis.io/channels/chargebee/promotional-credits/)
+- [purchase](https://apis.io/channels/chargebee/purchase/)
+- [quote](https://apis.io/channels/chargebee/quote/)
+- [rule](https://apis.io/channels/chargebee/rule/)
+- [site_signals](https://apis.io/channels/chargebee/site-signals/)
+- [subscription](https://apis.io/channels/chargebee/subscription/)
+- [tax_withheld](https://apis.io/channels/chargebee/tax-withheld/)
+- [token](https://apis.io/channels/chargebee/token/)
+- [transaction](https://apis.io/channels/chargebee/transaction/)
+- [unbilled_charges](https://apis.io/channels/chargebee/unbilled-charges/)
+- …and 2 more published on APIs.io
 
-#### Properties
+#### MCP servers (1)
 
-- [Documentation](https://apidocs.chargebee.com/docs/api)
-- [OpenAPI](https://github.com/chargebee/openapi) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [OpenAPI](https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/openapi/chargebee-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [AsyncAPI](https://raw.githubusercontent.com/api-evangelist/chargebee/refs/heads/main/asyncapi/chargebee-asyncapi.yml) — [AsyncAPI Specification](https://www.asyncapi.com/docs/reference/specification/latest)
-- [Webhooks](https://apidocs.chargebee.com/docs/api/events)
-- [Event Types](https://apidocs.chargebee.com/docs/api/events/event-types)
-- [Getting Started](https://www.chargebee.com/docs/api/getting-started.html)
-- [Postman Collection](collections/chargebee.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/chargebee.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Model Context Protocol servers that expose the API to agents.
 
-## Common Properties
+- [chargebee](https://apis.io/servers/chargebee/chargebee/)
 
-- [LinkedIn](https://www.linkedin.com/company/chargebee)
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Chargebee Agentic Access](https://apis.io/agentic-access/chargebee/chargebee-agentic-access/)
+
+#### Collections (9)
+
+Postman and Open Collection request collections.
+
+- [Chargebee API v2](https://apis.io/collections/chargebee/open-chargebee/)
+- [Chargebee API v2 Customers API](https://apis.io/collections/chargebee/open-chargebee-customers-api/)
+- [Chargebee API v2 Customers Invoices API](https://apis.io/collections/chargebee/open-chargebee-invoices-api/)
+- [Chargebee API v2 Customers Items API](https://apis.io/collections/chargebee/open-chargebee-items-api/)
+- [Chargebee API v2 Customers Orders API](https://apis.io/collections/chargebee/open-chargebee-orders-api/)
+- [Chargebee API v2 Customers Payments API](https://apis.io/collections/chargebee/open-chargebee-payments-api/)
+- [Chargebee API v2 Customers Plans API](https://apis.io/collections/chargebee/open-chargebee-plans-api/)
+- [Chargebee API v2 Customers Quotes API](https://apis.io/collections/chargebee/open-chargebee-quotes-api/)
+- [Chargebee API v2 Customers Subscriptions API](https://apis.io/collections/chargebee/open-chargebee-subscriptions-api/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Chargebee — asyncapi rules](https://apis.io/rules/chargebee/chargebee-asyncapi-spectral-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Chargebee Authentication](https://apis.io/security/chargebee/chargebee-authentication/)
+- [Chargebee Domain Security](https://apis.io/security/chargebee/chargebee-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.chargebee.com)
 - [Documentation](https://www.chargebee.com/docs)
-- [API Reference](https://apidocs.chargebee.com/docs/api)
+- [Getting started](https://www.chargebee.com/tutorials)
+- [API reference](https://apidocs.chargebee.com/docs/api)
 - [Pricing](https://www.chargebee.com/pricing/)
-- [Sign Up](https://www.chargebee.com/trial-signup/)
-- [Login](https://app.chargebee.com/login)
-- [Authentication](https://apidocs.chargebee.com/docs/api/auth)
-- [Rate Limits](https://apidocs.chargebee.com/docs/api/api-rate-limits)
-- [Status Page](https://status.chargebee.com)
 - [Support](https://support.chargebee.com)
-- [GitHub Organization](https://github.com/chargebee)
-- [Open A P I  Source](https://github.com/chargebee/openapi)
-- [Node.js  S D K](https://github.com/chargebee/chargebee-node)
-- [Python  S D K](https://github.com/chargebee/chargebee-python)
-- [P H P  S D K](https://github.com/chargebee/chargebee-php)
-- [Java  S D K](https://github.com/chargebee/chargebee-java)
-- [Ruby  S D K](https://github.com/chargebee/chargebee-ruby)
-- [Go  S D K](https://github.com/chargebee/chargebee-go)
-- [. N E T  S D K](https://github.com/chargebee/chargebee-dotnet)
+- [Changelog](https://release-notes.chargebee.com/)
+- [Blog](https://www.chargebee.com/blog/feed/)
+- [Terms of service](https://www.chargebee.com/company/terms/)
+- [Privacy policy](https://www.chargebee.com/privacy/)
+- [GitHub](https://github.com/chargebee)
+- [Status](https://status.chargebee.com)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 50.4** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 58.2 |
+| Contract governance | 11.4 |
+| Operational transparency | 42.1 |
+| Developer ergonomics | 71.4 |
+| Access clarity | 38.2 |
+
+**Agent readiness 50.0** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 21.4** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/chargebee/](https://apis.io/providers/chargebee/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Chargebee: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/chargebee/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
